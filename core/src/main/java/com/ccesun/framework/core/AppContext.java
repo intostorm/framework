@@ -20,7 +20,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * <p>AppContext内部维护一个Map<String, Object> contextMap，用来保存配置项
  * <p>配置值的来源有两个，一是从/config.properties在初始化时加载，二是在运行期动态存入
  * <p>
- * <p>使用方法：
+ * <p>使用方法：1 2
  * <p>
  * <p>AppContext apptext = AppContext.getInstance();
  * <p>String charset = apptext.getString("app.Charset"); //写在/config.properties内的配置
