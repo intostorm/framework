@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/app-context.xml"})
 public class SysFuncServiceTest {
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private SysFuncService sysFuncService;
 	
