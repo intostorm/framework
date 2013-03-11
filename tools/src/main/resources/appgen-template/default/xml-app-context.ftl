@@ -11,4 +11,9 @@
 
 	<import resource="classpath:spring/root-context.xml"/>
 	
+<#if !basePackage?starts_with('com.ccesun')>
+	<context:component-scan base-package="com.ccesun, ${basePackage}">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+</#if>
 </beans>

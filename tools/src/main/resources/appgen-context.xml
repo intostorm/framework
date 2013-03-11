@@ -25,12 +25,12 @@
 	<bean id="sample" class="com.ccesun.framework.tools.appgen.AppGenConfiguation">
 		<property name="baseOutput" value="appgen" />
 		<property name="projectName" value="sample2" />
-		<property name="basePackage" value="com.ccesun.sample" />
+		<property name="basePackage" value="org.jaronsource.sample" />
 		<property name="dataSource" ref="dataSourceSample" />
 		<property name="freemarkerConfig" ref="freemarkerConfig" />
 		<property name="hibernateDialect" value="org.hibernate.dialect.MySQL5Dialect" />
 		<property name="projectVersion" value="1.0" />
-		<property name="frameworkVersion" value="1.1.1" />
+		<property name="frameworkVersion" value="2.0.1" />
 	</bean>
 	
 	<bean id="society_v2" class="com.ccesun.framework.tools.appgen.AppGenConfiguation">
@@ -41,7 +41,7 @@
 		<property name="freemarkerConfig" ref="freemarkerConfig" />
 		<property name="hibernateDialect" value="org.hibernate.dialect.OracleDialect" />
 		<property name="projectVersion" value="1.0" />
-		<property name="frameworkVersion" value="1.1.1" />
+		<property name="frameworkVersion" value="2.0.1" />
 	</bean>
 	
 </beans>

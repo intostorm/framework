@@ -1,24 +1,3 @@
-create table `sys_area` (
-  `record_id` int(11) not null auto_increment comment '主键',
-  `areacode` varchar(15) default null comment '编码',
-  `areaname` varchar(50) default null comment '简称',
-  `full_areaname` varchar(255) default null comment '全称',
-  `is_available` int(1) default '1' comment '是否可用',
-  primary key (`record_id`)
-) engine=innodb auto_increment=4 default charset=utf8;
-
-create table `sys_dict` (
-  `record_id` int(11) not null auto_increment comment '主键',
-  `dict_type` varchar(255) default null comment '类型',
-  `dict_key` varchar(255) default null comment '键',
-  `dict_value0` varchar(255) default null comment '值0',
-  `dict_value1` varchar(255) default null comment '值1',
-  `dict_value2` varchar(255) default null comment '值2',
-  `dict_value3` varchar(255) default null comment '值3',
-  `parent_key` varchar(255) default null comment '父级KEY',
-  primary key (`record_id`)
-) engine=innodb auto_increment=5 default charset=utf8;
-
 create table `sys_user` (
   `user_id` int(11) not null auto_increment comment '主键',
   `user_name` varchar(255) default null comment '用户名',
@@ -67,4 +46,4 @@ create table `contact` (
   `areacode` varchar(255) default null comment '地区',
   `address` varchar(255) default null comment '地址',
   primary key (`record_id`)
-) engine=innodb auto_increment=380 default charset=utf8;
+) engine=innodb default charset=utf8;
