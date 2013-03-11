@@ -5,22 +5,22 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="core-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/core/core">
+        <dependent-module archiveName="core-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/core/core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="plugin-dictionary-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-dictionary/plugin-dictionary">
+        <dependent-module archiveName="plugin-dictionary-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-dictionary/plugin-dictionary">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="plugin-area-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-area/plugin-area">
+        <dependent-module archiveName="plugin-area-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-area/plugin-area">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="plugin-report-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-report/plugin-report">
+        <dependent-module archiveName="plugin-report-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-report/plugin-report">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="plugin-security-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-security/plugin-security">
+        <dependent-module archiveName="plugin-security-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-security/plugin-security">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="plugin-staticpage-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-staticpage/plugin-staticpage">
+        <dependent-module archiveName="plugin-staticpage-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-staticpage/plugin-staticpage">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/sample/target/classes"/>

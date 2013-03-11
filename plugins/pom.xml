@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>framework</artifactId>
 		<groupId>com.ccesun.framework</groupId>
-		<version>1.1.1</version>
+		<version>2.0.1</version>
 	</parent>
 	<artifactId>plugins</artifactId>
 	<name>plugins</name>
