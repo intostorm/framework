@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib
+  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN"
+  "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+
+<taglib>
+	<tlibversion>1.0</tlibversion>
+	<jspversion>1.1</jspversion>
+	<shortname>area</shortname>
+	<uri>http://www.ccesun.com/tags/area</uri>
+
+	<tag>
+		<name>lookupAreaName</name>
+		<tagclass>com.ccesun.framework.plugins.area.web.taglib.LookupAreaNameTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>areaCode</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>lookupFullAreaName</name>
+		<tagclass>com.ccesun.framework.plugins.area.web.taglib.LookupFullAreaNameTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>areaCode</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+</taglib>

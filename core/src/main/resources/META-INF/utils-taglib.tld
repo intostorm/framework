@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"    
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"    
+    version="2.0"> 
+    
+	<tlib-version>1.0</tlib-version>
+	<shortname>utils</shortname>
+	<uri>http://www.ccesun.com/tags/utils</uri>
+
+	<tag>
+		<name>appctx</name>
+		<tag-class>com.ccesun.framework.core.web.taglib.AppContextTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>var</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+	</tag>
+	<tag>
+		<name>methodInvokor</name>
+		<tag-class>com.ccesun.framework.core.web.taglib.MethodInvokorTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>className</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+		<attribute>
+			<name>methodName</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+	</tag>
+	<tag>
+		<name>miParam</name>
+		<tag-class>com.ccesun.framework.core.web.taglib.MIParamTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>type</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+	</tag>
+	
+	<function>    
+        <name>toInt</name>    
+        <!-- <function-class>com.ccesun.framework.util.NumberUtils</function-class>   -->  
+        <function-class>org.apache.commons.lang.math.NumberUtils</function-class>    
+        <function-signature>java.lang.Integer toInt(java.lang.String)</function-signature>  
+        <example>${utils.toInt('')}</example>  
+       </function>
+	
+</taglib>

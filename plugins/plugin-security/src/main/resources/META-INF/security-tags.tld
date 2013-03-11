@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE taglib
+            PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" 
+            "http://java.sun.com/j2ee/dtds/web-jsptaglib_1_1.dtd">
+<taglib>
+	<tlibversion>1.0</tlibversion>
+	<jspversion>1.1</jspversion>
+	<shortname>security</shortname>
+	<uri>http://www.ccesun.com/tags/security</uri>
+	<info>Security tag</info>
+	<tag>
+		<name>securityUser</name>
+		<tagclass>com.ccesun.framework.plugins.security.web.taglib.SecurityUserTag</tagclass>
+		<bodycontent>EMPTY</bodycontent>
+		<info>Gets current login security user</info>
+		<attribute>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>permFilter</name>
+		<tagclass>com.ccesun.framework.plugins.security.web.taglib.PermissionFilterTag</tagclass>
+		<bodycontent>EMPTY</bodycontent>
+		<info>Filter current avaliable permission list of current user.</info>
+		<attribute>
+			<name>groupCode</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>parentCode</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>permList</name>
+		<tagclass>com.ccesun.framework.plugins.security.web.taglib.PermissionListTag</tagclass>
+		<bodycontent>EMPTY</bodycontent>
+		<info>get permission list by groupCode, parentCode.</info>
+		<attribute>
+			<name>groupCode</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>parentCode</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>perm</name>
+		<tagclass>com.ccesun.framework.plugins.security.web.taglib.PermissionTag</tagclass>
+		<bodycontent>EMPTY</bodycontent>
+		<info>get permission by code.</info>
+		<attribute>
+			<name>code</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>hasPerm</name>
+		<tagclass>com.ccesun.framework.plugins.security.web.taglib.HasPermissionTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>If current user contain permission with permId.</info>
+		<attribute>
+			<name>permCode</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>noPerm</name>
+		<tagclass>com.ccesun.framework.plugins.security.web.taglib.NoPermissionTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>If current user don't contain permission with permId.</info>
+		<attribute>
+			<name>permCode</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

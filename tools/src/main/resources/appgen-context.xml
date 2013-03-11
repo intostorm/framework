@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	
+	<import resource="classpath:datasource-context.xml"/>
+	
+	<bean id="freemarkerConfig" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+		<property name="templateLoaderPaths" value="classpath:appgen-template/default, classpath:codegen-template/default" />
+		<property name="defaultEncoding" value="utf-8" />
+	</bean>
+	
+	<bean id="appGen" class="com.ccesun.framework.tools.appgen.AppGen">
+		<property name="config" ref="sample" />
+	</bean>
+	
+	<bean id="sample" class="com.ccesun.framework.tools.appgen.AppGenConfiguation">
+		<property name="baseOutput" value="appgen" />
+		<property name="projectName" value="sample2" />
+		<property name="basePackage" value="com.ccesun.sample" />
+		<property name="dataSource" ref="dataSourceSample" />
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="hibernateDialect" value="org.hibernate.dialect.MySQL5Dialect" />
+		<property name="projectVersion" value="1.0" />
+		<property name="frameworkVersion" value="1.1.1" />
+	</bean>
+	
+	<bean id="society_v2" class="com.ccesun.framework.tools.appgen.AppGenConfiguation">
+		<property name="baseOutput" value="appgen" />
+		<property name="projectName" value="society_v2" />
+		<property name="basePackage" value="com.ccesun.society" />
+		<property name="dataSource" ref="dataSourceSocietyV2" />
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="hibernateDialect" value="org.hibernate.dialect.OracleDialect" />
+		<property name="projectVersion" value="1.0" />
+		<property name="frameworkVersion" value="1.1.1" />
+	</bean>
+	
+</beans>
