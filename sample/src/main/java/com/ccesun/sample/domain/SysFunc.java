@@ -149,4 +149,14 @@ public class SysFunc implements IEntity<Integer>, IPermission {
 		return EntityUtils.isNew(this.funcId);
 	}
 
+	@Override
+	public Boolean getReadable() {
+		return Boolean.TRUE;
+	}
+
+	@Override
+	public Boolean getEditable() {
+		return Boolean.TRUE;
+	}
+
 }

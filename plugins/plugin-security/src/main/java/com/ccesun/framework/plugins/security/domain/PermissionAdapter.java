@@ -15,6 +15,10 @@ public class PermissionAdapter implements IPermission {
 	private String url;
 	
 	private Integer order;
+	
+	private Boolean readable;
+	
+	private Boolean editable;
 
 	@Override
 	public String getCode() {
@@ -69,5 +73,18 @@ public class PermissionAdapter implements IPermission {
 	public void setOrder(Integer order) {
 		this.order = order;
 	}
-	
+
+	public Boolean getReadable() {
+		return readable;
+	}
+
+	public void setReadable(Boolean readable) {
+		this.readable = readable;
+	}
+
+	@Override
+	public Boolean getEditable() {
+		return this.editable;
+	}
+
 }

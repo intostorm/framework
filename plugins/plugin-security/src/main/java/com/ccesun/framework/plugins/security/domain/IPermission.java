@@ -16,4 +16,8 @@ public interface IPermission extends Serializable {
 	
 	Integer getOrder();
 	
+	Boolean getReadable();
+	
+	Boolean getEditable();
+	
 }
