@@ -13,9 +13,9 @@
 	
 	<bean id="dataSourceSample" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/sample?characterEncoding=utf-8" />
-		<property name="username" value="root" />
-		<property name="password" value="" />
+		<property name="url" value="jdbc:mysql://instance41132.db.xeround.com:4496/sample?characterEncoding=utf-8" />
+		<property name="username" value="jaronsource" />
+		<property name="password" value="javaforme" />
 	</bean>
 	
 	<bean id="dataSourceSocietyV2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

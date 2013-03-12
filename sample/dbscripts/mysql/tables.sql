@@ -15,12 +15,14 @@ create table `sys_role` (
 ) engine=innodb default charset=utf8;
 
 create table `sys_func` (
-  `func_id` varchar(255) not null comment '主键',
+  `func_id` int(11) not null auto_increment comment '主键',
   `func_name` varchar(255) default null comment '功能名',
+  `func_groupcode` varchar(255) default null comment '功能组编码',
   `func_url` varchar(255) default null comment '功能地址',
   `func_remarks` varchar(255) default null comment '描述',
   `func_level` int(11) default null comment '功能级别',
   `parent_id` int(11) default null comment '父功能',
+  `func_order` int(11) default null comment '序号',
   primary key (`func_id`)
 ) engine=innodb default charset=utf8;
 
@@ -34,7 +36,7 @@ create table `sys_user_role` (
 create table `sys_role_func` (
   `id` int(11) not null auto_increment comment '主键',
   `role_id` int(11) default null comment '角色ID',
-  `func_id` varchar(255) default null comment '功能ID',
+  `func_id` int(11) default null comment '功能ID',
   primary key (`id`)
 ) engine=innodb default charset=utf8;
 
