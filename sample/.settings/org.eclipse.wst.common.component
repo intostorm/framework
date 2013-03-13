@@ -17,7 +17,7 @@
         <dependent-module archiveName="plugin-report-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-report/plugin-report">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="plugin-security-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-security/plugin-security">
+        <dependent-module archiveName="plugin-security-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/security/security">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="plugin-staticpage-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-staticpage/plugin-staticpage">
