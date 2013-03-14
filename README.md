@@ -14,6 +14,8 @@
 git clone https://github.com/intostorm/framework.git
 ```
 
+### 运行 framework/appendix/install-maven-jars.bat,安装第三方maven依赖
+
 ### 创建开发使用的数据库, 此处以mysql 为例
 
 ```
