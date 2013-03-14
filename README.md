@@ -69,38 +69,25 @@ mysql> create table `contact` ( \
 打开tools/src/main/resources/codegen-context.xml，添加
 
 ```
-<bean id="sample" class="com.ccesun.framework.tools.codegen.CodeGenConfiguation">
+<bean id="sample" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation">
 	<property name="freemarkerConfig" ref="freemarkerConfig" />
-	<property name="dataSource" ref="dataSourceSample" />
+	<!-- 引用 tools/src/main/resources/datasource-context.xml 中设置的dataSource -->
+	<property name="dataSource" ref="dataSourceSample" /> 
+	<!-- 
+		设成true生成全部对象， materials 中的条目会被忽略 
+		设成false生成 materials 中的条目 
+	-->
 	<property name="allArticfacts" value="false" />
+	<!-- 输出的目录 -->
 	<property name="baseOutput" value="codegen/sample" />
+	<!-- 基础包名 -->
 	<property name="basePackage" value="com.ccesun.sample" />
-	<property name="processors">
-        <list>
-	      <bean class="com.ccesun.framework.tools.codegen.GenericProcessor" />
-	      <bean class="com.ccesun.framework.tools.codegen.JavaProcessor" />
-	</list>
-        </property>
-		<property name="artifacts">
-		<list>
-	            <ref bean="jsp-list" />
-	            <ref bean="jsp-show" />
-	            <ref bean="jsp-edit" />
-	            <ref bean="xml-views" />
-	            <ref bean="java-domain" />
-	            <ref bean="java-dao" />
-	            <ref bean="java-dao-impl" />
-	            <ref bean="java-service" />
-	            <ref bean="java-service-impl" />
-	            <ref bean="java-service-test" />
-	            <ref bean="java-controller" />
-	        </list>
-        </property>
-        <property name="materials">
-	        <list> 
-	            <bean p:domainName="Contact" p:tableName="contact" class="com.ccesun.framework.tools.codegen.Material" />
-	        </list>
-        </property>
+	<!-- 指定本次生成的对象，当 allArticfacts 为false 时-->
+    <property name="materials">
+        <list> 
+            <bean p:domainName="Contact" p:tableName="contact" class="com.ccesun.framework.tools.codegen.Material" />
+        </list>
+    </property>
 </bean>
 ```
 

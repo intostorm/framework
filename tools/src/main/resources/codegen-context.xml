@@ -17,156 +17,20 @@
 		<property name="templateLoaderPath" value="classpath:codegen-template/default" />
 		<property name="defaultEncoding" value="utf-8" />
 	</bean>
-	
-	<bean id="genericProcessor" class="com.ccesun.framework.tools.codegen.GenericProcessor" />
-	<bean id="javaProcessor" class="com.ccesun.framework.tools.codegen.JavaProcessor" />
-	
-	<bean id="jsp-list" 
-		p:templateName="jsp-list.ftl" 
-		p:outputDir="{baseOutput}/views/{domainname}" 
-		p:outputFileName="{domainname}_list.jsp" 
-	    class="com.ccesun.framework.tools.codegen.SimpleGenericArtifact" />
-	    
-    <bean id="jsp-show"
-    	p:templateName="jsp-show.ftl" 
-    	p:outputDir="{baseOutput}/views/{domainname}" 
-    	p:outputFileName="{domainname}_show.jsp" 
-    	class="com.ccesun.framework.tools.codegen.SimpleGenericArtifact" />
-    	
-    <bean id="jsp-edit"
-    	p:templateName="jsp-edit.ftl" 
-    	p:outputDir="{baseOutput}/views/{domainname}" 
-    	p:outputFileName="{domainname}_edit.jsp" 
-    	class="com.ccesun.framework.tools.codegen.SimpleGenericArtifact" />
-    	
-    <bean id="xml-views"
-    	p:templateName="xml-views.ftl" 
-    	p:outputDir="{baseOutput}/views/{domainname}" 
-    	p:outputFileName="views.xml" 
-    	class="com.ccesun.framework.tools.codegen.SimpleGenericArtifact" />
-    	
-    <bean id="java-domain"
-    	p:templateName="java-domain.ftl" 
-    	p:outputDir="{baseOutput}/java/{basePackage}/{relatedPackage}" 
-    	p:outputFileName="{domainName}.java" 
-    	p:relatedPackage="domain" 
-    	class="com.ccesun.framework.tools.codegen.SimpleJavaArtifact" />
-    	
-    <bean id="java-dao"
-    	p:templateName="java-dao.ftl" 
-    	p:outputDir="{baseOutput}/java/{basePackage}/{relatedPackage}" 
-    	p:outputFileName="{domainName}Dao.java" 
-    	p:relatedPackage="dao" 
-    	class="com.ccesun.framework.tools.codegen.SimpleJavaArtifact" />
-    	
-    <bean id="java-dao-impl"
-    	p:templateName="java-dao.impl.ftl" 
-    	p:outputDir="{baseOutput}/java/{basePackage}/{relatedPackage}" 
-    	p:outputFileName="{domainName}DaoImpl.java" 
-    	p:relatedPackage="dao.impl" 
-    	class="com.ccesun.framework.tools.codegen.SimpleJavaArtifact" />
-    	
-    <bean id="java-service"
-    	p:templateName="java-service.ftl" 
-    	p:outputDir="{baseOutput}/java/{basePackage}/{relatedPackage}" 
-    	p:outputFileName="{domainName}Service.java" 
-    	p:relatedPackage="service" 
-    	class="com.ccesun.framework.tools.codegen.SimpleJavaArtifact" />
-    	
-    <bean id="java-service-impl"
-    	p:templateName="java-service.impl.ftl" 
-    	p:outputDir="{baseOutput}/java/{basePackage}/{relatedPackage}" 
-    	p:outputFileName="{domainName}ServiceImpl.java" 
-    	p:relatedPackage="service.impl" 
-    	class="com.ccesun.framework.tools.codegen.SimpleJavaArtifact" />
-    	
-    <bean id="java-service-test"
-    	p:templateName="java-serviceTest.ftl" 
-    	p:outputDir="{baseOutput}/test/{basePackage}/{relatedPackage}" 
-    	p:outputFileName="{domainName}ServiceTest.java" 
-    	p:relatedPackage="service" 
-    	class="com.ccesun.framework.tools.codegen.SimpleJavaArtifact" />
-    	
-    <bean id="java-controller"
-    	p:templateName="java-controller.ftl" 
-    	p:outputDir="{baseOutput}/java/{basePackage}/{relatedPackage}" 
-    	p:outputFileName="{domainName}Controller.java" 
-    	p:relatedPackage="web.controller" 
-	    class="com.ccesun.framework.tools.codegen.SimpleJavaArtifact" />
-	            	
-	<bean id="sample" class="com.ccesun.framework.tools.codegen.CodeGenConfiguation">
+
+	<bean id="sample" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation">
 		<property name="freemarkerConfig" ref="freemarkerConfig" />
 		<property name="dataSource" ref="dataSourceSample" />
 		<property name="allArticfacts" value="false" />
 		<property name="baseOutput" value="codegen/sample" />
 		<property name="basePackage" value="com.ccesun.sample" />
-		<property name="processors">
-        	<list>
-	            <bean class="com.ccesun.framework.tools.codegen.GenericProcessor" />
-	            <bean class="com.ccesun.framework.tools.codegen.JavaProcessor" />
-	        </list>
-        </property>
-		<property name="artifacts">
-			<list>
-	            <ref bean="jsp-list" />
-	            <ref bean="jsp-show" />
-	            <ref bean="jsp-edit" />
-	            <ref bean="xml-views" />
-	            <ref bean="java-domain" />
-	            <ref bean="java-dao" />
-	            <ref bean="java-dao-impl" />
-	            <ref bean="java-service" />
-	            <ref bean="java-service-impl" />
-	            <ref bean="java-service-test" />
-	            <ref bean="java-controller" />
-	        </list>
-        </property>
         <property name="materials">
 	        <list>
-	            <!-- <bean p:domainName="Contact" p:tableName="contact" class="com.ccesun.framework.tools.codegen.Material" /> -->
-	            <bean p:domainName="SyUser" p:tableName="sy_user" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SysUser" p:tableName="sys_user" class="com.ccesun.framework.tools.codegen.Material" />
 	        </list>
         </property>
 	</bean>
-	
-	<bean id="society_v2" class="com.ccesun.framework.tools.codegen.CodeGenConfiguation">
-		<property name="freemarkerConfig" ref="freemarkerConfig" />
-		<property name="dataSource" ref="dataSourceSocietyV2" />
-		<property name="allArticfacts" value="false" />
-		<property name="baseOutput" value="codegen/society_v2" />
-		<property name="basePackage" value="com.ccesun.society" />
-		<property name="processors">
-        	<list>
-	            <bean class="com.ccesun.framework.tools.codegen.GenericProcessor" />
-	            <bean class="com.ccesun.framework.tools.codegen.JavaProcessor" />
-	        </list>
-        </property>
-		<property name="artifacts">
-			<list>
-	            <ref bean="jsp-list" />
-	            <ref bean="jsp-show" />
-	            <ref bean="jsp-edit" />
-	            <ref bean="xml-views" />
-	            <ref bean="java-domain" />
-	            <ref bean="java-dao" />
-	            <ref bean="java-dao-impl" />
-	            <ref bean="java-service" />
-	            <ref bean="java-service-impl" />
-	            <ref bean="java-service-test" />
-	            <ref bean="java-controller" />
-	        </list>
-        </property>
-        <property name="materials">
-	        <list>
-	            <!-- <bean p:domainName="SysUser" p:tableName="sys_user" class="com.ccesun.framework.tools.codegen.Material" />
-	            <bean p:domainName="SysRole" p:tableName="sys_role" class="com.ccesun.framework.tools.codegen.Material" />
-	            <bean p:domainName="SysFunc" p:tableName="sys_func" class="com.ccesun.framework.tools.codegen.Material" />
-	            <bean p:domainName="SysDept" p:tableName="sys_dept" class="com.ccesun.framework.tools.codegen.Material" /> -->
-	            <bean p:domainName="FlowEventLevel" p:tableName="flow_eventlevel" class="com.ccesun.framework.tools.codegen.Material" />
-	        </list>
-        </property>
-	</bean>
-	
+	 
 	<bean id="codeGen" class="com.ccesun.framework.tools.codegen.CodeGen">
 		<property name="config" ref="sample" />
 	</bean>

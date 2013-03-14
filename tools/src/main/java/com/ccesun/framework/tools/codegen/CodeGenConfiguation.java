@@ -9,14 +9,14 @@ import freemarker.template.Configuration;
 
 public class CodeGenConfiguation {
 	
-	private boolean allArticfacts;
-	private String baseOutput;
-	private String basePackage;
-	private DataSource dataSource;
-	private Configuration freemarkerConfig;
-	private List<IArtifact> artifacts = new ArrayList<IArtifact>();
-	private List<Material> materials = new ArrayList<Material>();
-	private List<IProcessor> processors = new ArrayList<IProcessor>();
+	protected boolean allArticfacts;
+	protected String baseOutput;
+	protected String basePackage;
+	protected DataSource dataSource;
+	protected Configuration freemarkerConfig;
+	protected List<IArtifact> artifacts = new ArrayList<IArtifact>();
+	protected List<Material> materials = new ArrayList<Material>();
+	protected List<IProcessor> processors = new ArrayList<IProcessor>();
 	
 	public boolean isAllArticfacts() {
 		return allArticfacts;
