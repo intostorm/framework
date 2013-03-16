@@ -43,11 +43,11 @@ public class SysFunc implements IEntity<Integer>, IPermission {
 	@Column(name="func_remarks")
 	private String funcRemarks;
 	
-	/** 功能组编码 */
+	/** 功能组 */
 	@Column(name="func_groupcode")
 	private String funcGroupCode;
 	
-	/** 功能组编码 */
+	/** 序号 */
 	@Column(name="func_order")
 	private Integer funcOrder;
 	

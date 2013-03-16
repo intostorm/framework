@@ -30,9 +30,39 @@
 	        </list>
         </property>
 	</bean>
+	
+	<bean id="msneg" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation">
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="dataSource" ref="dataSourceMsneg" />
+		<property name="allArticfacts" value="false" />
+		<property name="baseOutput" value="codegen/msneg" />
+		<property name="basePackage" value="org.jaronsource.msneg" />
+		<property name="materials">
+	        <list>
+	            <bean p:domainName="SysUser" 		p:tableName="sys_user" 	class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SysDept" 		p:tableName="sys_dept" 	class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SysDict" 		p:tableName="sys_dict" 	class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SysFunc" 		p:tableName="sys_func" 	class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SysRole" 		p:tableName="sys_role" 	class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiClient" 	p:tableName="busi_client" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiItem" 		p:tableName="busi_item" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSales" 		p:tableName="busi_sales" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiStock" 		p:tableName="busi_stock" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSalesBrokerage" p:tableName="busi_sales_brokerage" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSalesMakeup" 	p:tableName="busi_sales_makeup" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSalesBrokerageItem" p:tableName="busi_sales_brokerage_item" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSalesClear" p:tableName="busi_sales_clear" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSalesItem" p:tableName="busi_sales_item" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSalesReturn" p:tableName="busi_sales_return" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSalesReturnItem" p:tableName="busi_sales_return_item" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSalesWorking" p:tableName="busi_sales_working" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="BusiSalesWorkingItem" p:tableName="busi_sales_working_item" class="com.ccesun.framework.tools.codegen.Material" />
+	        </list>
+        </property>
+	</bean>
 	 
 	<bean id="codeGen" class="com.ccesun.framework.tools.codegen.CodeGen">
-		<property name="config" ref="sample" />
+		<property name="config" ref="msneg" />
 	</bean>
 	
 </beans>

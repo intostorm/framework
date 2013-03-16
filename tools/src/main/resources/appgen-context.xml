@@ -19,7 +19,18 @@
 	</bean>
 	
 	<bean id="appGen" class="com.ccesun.framework.tools.appgen.AppGen">
-		<property name="config" ref="sample" />
+		<property name="config" ref="msneg" />
+	</bean>
+	
+	<bean id="msneg" class="com.ccesun.framework.tools.appgen.AppGenConfiguation">
+		<property name="baseOutput" value="appgen" />
+		<property name="projectName" value="msneg" />
+		<property name="basePackage" value="org.jaronsource.msneg" />
+		<property name="dataSource" ref="dataSourceMsneg" />
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="hibernateDialect" value="org.hibernate.dialect.MySQL5Dialect" />
+		<property name="projectVersion" value="1.0" />
+		<property name="frameworkVersion" value="2.0.1" />
 	</bean>
 	
 	<bean id="sample" class="com.ccesun.framework.tools.appgen.AppGenConfiguation">
