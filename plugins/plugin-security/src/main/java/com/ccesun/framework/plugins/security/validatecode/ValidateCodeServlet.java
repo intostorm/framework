@@ -49,7 +49,7 @@ public class ValidateCodeServlet extends HttpServlet {
 		response.setDateHeader("Expires", 0);
 		
 		HttpSession session = reqeust.getSession();
-		
+		 
 		ValidateCode vCode = new ValidateCode(width, height, codeCount, lineCount);
 		session.setAttribute(PluginSecurityConstants.VALIDATE_CODE, vCode.getCode());
 		vCode.write(response.getOutputStream());
