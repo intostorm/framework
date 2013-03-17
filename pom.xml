@@ -35,6 +35,7 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
 					<configuration>
+						<encoding>UTF-8</encoding>
 						<overwrite>true</overwrite>
 					</configuration>
 				</plugin>
@@ -43,6 +44,7 @@
 					<configuration>
 						<source>1.6</source>
 						<target>1.6</target>
+						<encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
 				<plugin>

@@ -32,4 +32,5 @@
 	<bean id="appGen" class="com.ccesun.framework.tools.appgen.AppGen">
 		<property name="config" ref="sample" />
 	</bean>
+		
 </beans>

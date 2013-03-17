@@ -18,27 +18,4 @@
 		<property name="password" value="javaforme" />
 	</bean>
 	
-	<bean id="dataSourceSocietyV2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="connectionProperties" value="remarksReporting=true"></property>
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@192.168.0.7:1521:orcl" />
-		<property name="username" value="society_v2" />
-		<property name="password" value="society_v2" />
-	</bean>
-	
-	<bean id="dataSourceDgtstat" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="connectionProperties" value="remarksReporting=true"></property>
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@192.168.0.7:1521:orcl" />
-		<property name="username" value="dgtstat" />
-		<property name="password" value="dgtstat" />
-	</bean>
-	
-	<bean id="dataSourceMsneg" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://127.0.0.1:3306/msneg?characterEncoding=utf-8" />
-		<property name="username" value="root" />
-		<property name="password" value="" />
-	</bean>
-	
 </beans>

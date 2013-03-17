@@ -1,6 +1,7 @@
 package ${config.basePackage}.${artifact.relatedPackage};
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
@@ -8,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Transient;
 <#if materialDetail.hasFk()>
 import javax.persistence.ManyToOne;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -42,7 +42,6 @@ public class ${materialDetail.material.domainName} implements IEntity<${material
 	<#elseif pcMapping.isFk()>
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="${pcMapping.columnName}")
-	@NotFound(action=NotFoundAction.IGNORE)
 	<#else>
 	@Column(name="${pcMapping.columnName}")
 	</#if>
