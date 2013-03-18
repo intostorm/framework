@@ -8,7 +8,7 @@ public class MIParamTag extends TagSupport {
 	private static final long serialVersionUID = 8077035430436042219L;
 	
 	private String type;
-	private Object value;
+	private Object value; 
 	
 	public String getType() {
 		return type;
