@@ -32,6 +32,12 @@ public class SearchUtils {
 
 	private static final Log logger = LogFactory.getLog(SearchUtils.class);
 	
+	/**
+	 * 获得index目录
+	 * 默认是从config.properties中读取plugin.search.searchIndexDir配置项，
+	 * 如果配置项不存在，读取临时目录
+	 * @return
+	 */
 	public static File getSearchIndexDir() {
 		String searchIndexDir = AppContext.getInstance().getString("plugin.search.searchIndexDir");
 		if (StringUtils.isBlank(searchIndexDir)) {
@@ -42,6 +48,19 @@ public class SearchUtils {
 		return new File(searchIndexDir);
 	}
 	
+	/**
+	 * 查出符合条件的分页对象
+	 * <p>示例：<br>
+	 * PageRequest pageRequest = new PageRequest(1, 10);<br>
+	 * Map<String, String> params = new HashMap<String, String>();<br>
+	 * params.put("name", "searchtest");<br>
+	 * Page<Contact> contactPage = SearchUtils.findPage(pageRequest, Contact.class, new String[] {"name", "areacode", "address"}, params);<br>
+	 * @param pageRequest 分页条件
+	 * @param clazz 待查询的对象Class
+	 * @param fieldNames 查询结果的字段定义
+	 * @param params 查询条件
+	 * @return 符合条件的分页对象
+	 */
 	public static <T> Page<T> findPage(PageRequest pageRequest, Class<T> clazz, String[] fieldNames, Map<String, String> params) {
 		
 		int pageNo = pageRequest.getPageNo();
