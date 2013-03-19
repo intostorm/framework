@@ -58,8 +58,7 @@ public class QCriteria {
 
 		if (fieldName.endsWith(SearchForm.TYPE_DATE)) {
 			try {
-				return new SimpleDateFormat(DateUtils.PATTERN_DATE)
-						.parse(value);
+				return new SimpleDateFormat(DateUtils.PATTERN_DATE).parse(value);
 			} catch (ParseException e) {
 			}
 		}
@@ -70,39 +69,17 @@ public class QCriteria {
 
 		else if (fieldName.endsWith(SearchForm.TYPE_STRING)) {
 			return String.valueOf(value);
-		} else if (fieldName.endsWith(SearchForm.TYPE_SPLITTXT1)
-				|| fieldName.endsWith(SearchForm.TYPE_SPLITTXT2)) {
-
-			// 判断用哪个字符进行截取!
-			String separatorChars = ";";
-			if (fieldName.endsWith(SearchForm.TYPE_SPLITTXT1)) {
-				separatorChars = ";";
-			} else if (fieldName.endsWith(SearchForm.TYPE_SPLITTXT2)) {
-				separatorChars = ",";
-			} else {
-				separatorChars = ";";
-			}
+		} else if (fieldName.endsWith(SearchForm.TYPE_SPLITTXT)) {
 
 			// 对内容进行split
-			String[] split = StringUtils.split(value, separatorChars);
+			String[] split = StringUtils.split(value, ",");
 			// 把内容转换为List对象
 			return Arrays.asList(split);
 
-		} else if (fieldName.endsWith(SearchForm.TYPE_SPLIT_INT1)
-				|| fieldName.endsWith(SearchForm.TYPE_SPLIT_INT2)) {
-
-			// 判断用哪个字符进行截取!
-			String separatorChars = ";";
-			if (fieldName.endsWith(SearchForm.TYPE_SPLIT_INT1)) {
-				separatorChars = ";";
-			} else if (fieldName.endsWith(SearchForm.TYPE_SPLIT_INT2)) {
-				separatorChars = ",";
-			} else {
-				separatorChars = ";";
-			}
+		} else if (fieldName.endsWith(SearchForm.TYPE_SPLIT_INT)) {
 
 			// 对内容进行split
-			String[] split = StringUtils.split(value, separatorChars);
+			String[] split = StringUtils.split(value, ",");
 			Integer[] integerArray = NumberUtils.toIntegerArray(split);
 			// 把内容转换为List对象
 			return Arrays.asList(integerArray);
@@ -258,25 +235,6 @@ public class QCriteria {
 	 */
 	public QCriteria addEntry(ParamEntry entry) {
 		this.entries.add(entry);
-		return this;
-	}
-
-	/**
-	 * 设为第一个条件
-	 * 
-	 * @deprecated 因为不会影响查询语句的优化
-	 * @param paramName
-	 *            查询对象的属性名
-	 * @param queryCase
-	 *            操作符
-	 * @param value
-	 *            属性值
-	 * @return 对象本身，为了形成链式操作
-	 */
-	public QCriteria addEntryToFirst(String paramName, String queryCase,
-			Object value) {
-		ParamEntry queryParamEntry = new ParamEntry(paramName, queryCase, value);
-		this.entries.add(0, queryParamEntry);
 		return this;
 	}
 

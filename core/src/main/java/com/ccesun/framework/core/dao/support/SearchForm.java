@@ -32,29 +32,17 @@ public class SearchForm implements Serializable, Cloneable {
 	public static final String TYPE_DATE = "_date";
 
 	/**
-	 * 对 数据进行通过';'进行split截取操作,得到一个字符串数组!
-	 * 
-	 * @author mawm at 2013-3-19 下午12:22:31
-	 */
-	public static final String TYPE_SPLITTXT1 = "_split1";
-	/**
 	 * 对 数据进行通过','进行split截取操作,得到一个字符串数组!
 	 * 
 	 * @author mawm at 2013-3-19 下午12:22:31
 	 */
-	public static final String TYPE_SPLITTXT2 = "_split2";
-	/**
-	 * 对 数据进行通过';'进行split截取操作,得到一个Integer数组!
-	 * 
-	 * @author mawm at 2013-3-19 下午12:22:31
-	 */
-	public static final String TYPE_SPLIT_INT1 = "_splitint1";
+	public static final String TYPE_SPLITTXT = "_split";
 	/**
 	 * 对 数据进行通过','进行split截取操作,得到一个Integer数组!
 	 * 
 	 * @author mawm at 2013-3-19 下午12:22:31
 	 */
-	public static final String TYPE_SPLIT_INT2 = "_splitint2";
+	public static final String TYPE_SPLIT_INT = "_splitint";
 
 	public static final String TYPE_DEFAULT = TYPE_STRING;
 

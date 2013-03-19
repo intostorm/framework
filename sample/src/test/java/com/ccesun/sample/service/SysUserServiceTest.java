@@ -46,7 +46,7 @@ public class SysUserServiceTest {
 	@Test
 	public void testCount() {
 		SearchForm searchForm = new SearchForm();
-		searchForm.addFormEntry("userId_in_splitint1", "1;2;3");
+		searchForm.addFormEntry("userId_in_splitint", "1,2,3");
 		Page<SysUser> findPage = sysUserService.findPage(searchForm);
 
 		System.out.println(findPage);
@@ -58,7 +58,7 @@ public class SysUserServiceTest {
 		// System.out.println(JsonUtils.parseJson(findPage));
 
 		searchForm = new SearchForm();
-		searchForm.addFormEntry("userName_in_split1", "aaa;bbb;3");
+		searchForm.addFormEntry("userName_in_split", "aaa,bbb,3");
 		findPage = sysUserService.findPage(searchForm);
 
 		System.out.println(findPage);
