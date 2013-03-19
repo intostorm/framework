@@ -47,144 +47,6 @@ import com.ccesun.framework.util.StringUtils;
  * 
  */
 public class QCriteria {
-	/**
-	 * 把Value转换成真实的类型
-	 * 
-	 * @param fieldName
-	 * @param value
-	 * @return
-	 */
-	public static Object converValue(String fieldName, String value) {
-
-		if (fieldName.endsWith(SearchForm.TYPE_DATE)) {
-			try {
-				return new SimpleDateFormat(DateUtils.PATTERN_DATE).parse(value);
-			} catch (ParseException e) {
-			}
-		}
-
-		else if (fieldName.endsWith(SearchForm.TYPE_INT)) {
-			return new Integer(String.valueOf(value));
-		}
-
-		else if (fieldName.endsWith(SearchForm.TYPE_STRING)) {
-			return String.valueOf(value);
-		} else if (fieldName.endsWith(SearchForm.TYPE_SPLITTXT)) {
-
-			// 对内容进行split
-			String[] split = StringUtils.split(value, ",");
-			// 把内容转换为List对象
-			return Arrays.asList(split);
-
-		} else if (fieldName.endsWith(SearchForm.TYPE_SPLIT_INT)) {
-
-			// 对内容进行split
-			String[] split = StringUtils.split(value, ",");
-			Integer[] integerArray = NumberUtils.toIntegerArray(split);
-			// 把内容转换为List对象
-			return Arrays.asList(integerArray);
-
-		}
-
-		return String.valueOf(value);
-	}
-
-	/**
-	 * 解析一个表达式
-	 * 
-	 * @param name
-	 * @param value
-	 * @return
-	 * @author mawm at 2013-3-19 下午1:16:12
-	 */
-	public static ParamEntry parseOne(String name, String value) {
-
-		if (StringUtils.isBlank(value))
-			return null;
-
-		ParamEntry e = null;
-		if (name.contains(SearchForm.OP_GT_SUFFIX)) {
-			String fieldName = StringUtils.substringBefore(name,
-					SearchForm.OP_GT_SUFFIX);
-			Object realValue = converValue(name, value);
-			e = new ParamEntry(fieldName, ">", realValue);
-		} else if (name.contains(SearchForm.OP_LT_SUFFIX)) {
-			String fieldName = StringUtils.substringBefore(name,
-					SearchForm.OP_LT_SUFFIX);
-			Object realValue = converValue(name, value);
-			e = new ParamEntry(fieldName, "<", realValue);
-		} else if (name.contains(SearchForm.OP_LIKE_SUFFIX)) {
-			String fieldName = StringUtils.substringBefore(name,
-					SearchForm.OP_LIKE_SUFFIX);
-			Object realValue = converValue(name, value);
-			e = new ParamEntry(fieldName, "like", realValue + "%");
-		} else if (name.contains(SearchForm.OP_BOTH_LIKE_SUFFIX)) {
-			String fieldName = StringUtils.substringBefore(name,
-					SearchForm.OP_BOTH_LIKE_SUFFIX);
-			Object realValue = converValue(name, value);
-			e = new ParamEntry(fieldName, "like", "%" + realValue + "%");
-		} else if (name.contains(SearchForm.OP_EQ_SUFFIX)) {
-			String fieldName = StringUtils.substringBefore(name,
-					SearchForm.OP_EQ_SUFFIX);
-			Object realValue = converValue(name, value);
-			e = new ParamEntry(fieldName, "=", realValue);
-		} else if (name.contains(SearchForm.OP_NOT_EQ_SUFFIX)) {
-			String fieldName = StringUtils.substringBefore(name,
-					SearchForm.OP_NOT_EQ_SUFFIX);
-			Object realValue = converValue(name, value);
-			e = new ParamEntry(fieldName, "<>", realValue);
-		} else if (name.contains(SearchForm.OP_EQ_AND_GT_SUFFIX)) {
-			String fieldName = StringUtils.substringBefore(name,
-					SearchForm.OP_EQ_AND_GT_SUFFIX);
-			Object realValue = converValue(name, value);
-			e = new ParamEntry(fieldName, ">=", realValue);
-		} else if (name.contains(SearchForm.OP_EQ_AND_LT_SUFFIX)) {
-			String fieldName = StringUtils.substringBefore(name,
-					SearchForm.OP_EQ_AND_LT_SUFFIX);
-			Object realValue = converValue(name, value);
-			e = new ParamEntry(fieldName, "<=", realValue);
-
-		} else if (name.contains(SearchForm.OP_IN_SUFFIX)) {
-			// 进行in操作!
-			String fieldName = StringUtils.substringBefore(name,
-					SearchForm.OP_IN_SUFFIX);
-			Object realValue = converValue(name, value);
-			e = new ParamEntry(fieldName, QCriteria.Op.IN, realValue);
-		} else {
-			return null;
-		}
-		return e;
-
-	}
-
-	/**
-	 * 解释SearchForm生成查询条件
-	 * 
-	 * @param searchForm
-	 * @return
-	 */
-	public static QCriteria parseForm(SearchForm searchForm) {
-
-		QCriteria criteria = new QCriteria();
-		Map<String, String> form = searchForm.getForm();
-
-		for (Iterator<Map.Entry<String, String>> iterator = form.entrySet()
-				.iterator(); iterator.hasNext();) {
-			Map.Entry<String, String> entry = iterator.next();
-			String name = entry.getKey();
-			String value = entry.getValue();
-
-			if (StringUtils.isBlank(value))
-				continue;
-			// 解析一个查询条件
-			ParamEntry e = parseOne(name, value);
-			if (e != null) {
-				criteria.addEntry(e);
-			}
-		}
-
-		return criteria;
-	}
 
 	private List<ParamEntry> entries = new ArrayList<ParamEntry>();
 
@@ -497,5 +359,124 @@ public class QCriteria {
 		public static final String NE = "<>";
 		public static final String LIKE = "LIKE";
 		public static final String IN = "IN";
+	}
+	
+	/**
+	 * 把Value转换成真实的类型
+	 * 
+	 * @param fieldName
+	 * @param value
+	 * @return
+	 */
+	public static Object converValue(String fieldName, String value) {
+
+		if (fieldName.endsWith(SearchForm.TYPE_DATE)) {
+			try {
+				return new SimpleDateFormat(DateUtils.PATTERN_DATE).parse(value);
+			} catch (ParseException e) {
+			}
+		}
+		else if (fieldName.endsWith(SearchForm.TYPE_INT)) {
+			return new Integer(String.valueOf(value));
+		}
+		else if (fieldName.endsWith(SearchForm.TYPE_STRING)) {
+			return String.valueOf(value);
+		} 
+		else if (fieldName.endsWith(SearchForm.TYPE_SPLITTXT)) {
+			String[] split = StringUtils.split(value, ",");
+			return Arrays.asList(split);
+		} 
+		else if (fieldName.endsWith(SearchForm.TYPE_SPLIT_INT)) {
+			String[] split = StringUtils.split(value, ",");
+			Integer[] integerArray = NumberUtils.toIntegerArray(split);
+			return Arrays.asList(integerArray);
+		}
+		return String.valueOf(value);
+	}
+
+	/**
+	 * 解析一个表达式
+	 * 
+	 * @param name
+	 * @param value
+	 * @return
+	 * @author mawm at 2013-3-19 下午1:16:12
+	 */
+	public static ParamEntry parseOne(String name, String value) {
+
+		if (StringUtils.isBlank(value))
+			return null;
+
+		ParamEntry e = null;
+		if (name.contains(SearchForm.OP_GT_SUFFIX)) {
+			String fieldName = StringUtils.substringBefore(name, SearchForm.OP_GT_SUFFIX);
+			Object realValue = converValue(name, value);
+			e = new ParamEntry(fieldName, ">", realValue);
+		} else if (name.contains(SearchForm.OP_LT_SUFFIX)) {
+			String fieldName = StringUtils.substringBefore(name, SearchForm.OP_LT_SUFFIX);
+			Object realValue = converValue(name, value);
+			e = new ParamEntry(fieldName, "<", realValue);
+		} else if (name.contains(SearchForm.OP_LIKE_SUFFIX)) {
+			String fieldName = StringUtils.substringBefore(name, SearchForm.OP_LIKE_SUFFIX);
+			Object realValue = converValue(name, value);
+			e = new ParamEntry(fieldName, "like", realValue + "%");
+		} else if (name.contains(SearchForm.OP_BOTH_LIKE_SUFFIX)) {
+			String fieldName = StringUtils.substringBefore(name, SearchForm.OP_BOTH_LIKE_SUFFIX);
+			Object realValue = converValue(name, value);
+			e = new ParamEntry(fieldName, "like", "%" + realValue + "%");
+		} else if (name.contains(SearchForm.OP_EQ_SUFFIX)) {
+			String fieldName = StringUtils.substringBefore(name, SearchForm.OP_EQ_SUFFIX);
+			Object realValue = converValue(name, value);
+			e = new ParamEntry(fieldName, "=", realValue);
+		} else if (name.contains(SearchForm.OP_NOT_EQ_SUFFIX)) {
+			String fieldName = StringUtils.substringBefore(name, SearchForm.OP_NOT_EQ_SUFFIX);
+			Object realValue = converValue(name, value);
+			e = new ParamEntry(fieldName, "<>", realValue);
+		} else if (name.contains(SearchForm.OP_EQ_AND_GT_SUFFIX)) {
+			String fieldName = StringUtils.substringBefore(name, SearchForm.OP_EQ_AND_GT_SUFFIX);
+			Object realValue = converValue(name, value);
+			e = new ParamEntry(fieldName, ">=", realValue);
+		} else if (name.contains(SearchForm.OP_EQ_AND_LT_SUFFIX)) {
+			String fieldName = StringUtils.substringBefore(name, SearchForm.OP_EQ_AND_LT_SUFFIX);
+			Object realValue = converValue(name, value);
+			e = new ParamEntry(fieldName, "<=", realValue);
+		} else if (name.contains(SearchForm.OP_IN_SUFFIX)) {
+			String fieldName = StringUtils.substringBefore(name, SearchForm.OP_IN_SUFFIX);
+			Object realValue = converValue(name, value);
+			e = new ParamEntry(fieldName, QCriteria.Op.IN, realValue);
+		} else {
+			return null;
+		}
+		return e;
+
+	}
+
+	/**
+	 * 解释SearchForm生成查询条件
+	 * 
+	 * @param searchForm
+	 * @return
+	 */
+	public static QCriteria parseForm(SearchForm searchForm) {
+
+		QCriteria criteria = new QCriteria();
+		Map<String, String> form = searchForm.getForm();
+
+		for (Iterator<Map.Entry<String, String>> iterator = form.entrySet()
+				.iterator(); iterator.hasNext();) {
+			Map.Entry<String, String> entry = iterator.next();
+			String name = entry.getKey();
+			String value = entry.getValue();
+
+			if (StringUtils.isBlank(value))
+				continue;
+			// 解析一个查询条件
+			ParamEntry e = parseOne(name, value);
+			if (e != null) {
+				criteria.addEntry(e);
+			}
+		}
+
+		return criteria;
 	}
 }
