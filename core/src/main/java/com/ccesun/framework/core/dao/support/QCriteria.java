@@ -231,7 +231,7 @@ public class QCriteria {
 		return whereEntries;
 	}
 
-	static class WhereEntry {
+	public static class WhereEntry {
 		private String whereClause;
 		
 		private List<Object> whereParams;
@@ -260,7 +260,7 @@ public class QCriteria {
 		
 	}
 
-	static class ParamEntry {
+	public static class ParamEntry {
 
         private String paramName;
         
