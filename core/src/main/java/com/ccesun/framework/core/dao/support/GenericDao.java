@@ -58,17 +58,9 @@ public class GenericDao<T extends IEntity<I>, I extends Serializable> implements
     }
 
     public int execute(String jpql, Object...params ){
-    	if(params.length > 0){
-    		int add = jpql.indexOf("?0") > -1 ? 0 : 1;
-    		Query query = entityManager.createQuery(jpql);
-    		for(int i = 0, len = params.length; i < len; i++){
-    			query.setParameter(i + add, params[i]);
-    		}
-    		return query.executeUpdate();
-    	}else{
-    		Query query = entityManager.createQuery(jpql);
-    		return query.executeUpdate();
-    	}
+		Query query = entityManager.createQuery(jpql);
+		setQueryParam(query, params);
+		return query.executeUpdate();
     }
 
     public int execute(String jpql, Map<String, ?> params ){
@@ -88,17 +80,9 @@ public class GenericDao<T extends IEntity<I>, I extends Serializable> implements
     @SuppressWarnings("unchecked")
 	@Override
 	public <X> List<X> executeQuery(String jpql, Object... params){
-		if(params.length > 0){
-			int add = jpql.indexOf("?0") > -1 ? 0 : 1;
-    		Query query = entityManager.createQuery(jpql);
-    		for(int i = 0, len = params.length; i < len; i++){
-    			query.setParameter(i+add, params[i]);
-    		}
-    		return query.getResultList();
-    	}else{
-    		Query query = entityManager.createQuery(jpql);
-    		return query.getResultList();
-    	}
+    	Query query = entityManager.createQuery(jpql);
+		setQueryParam(query, params);
+    	return query.getResultList();
 	}
     
     @SuppressWarnings("unchecked")
