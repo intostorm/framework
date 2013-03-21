@@ -24,6 +24,17 @@ public class EntityUtils {
 		return false;
 	}
 	
+	/**
+	 * 按模式加载延迟的对象
+	 * <p>用法：<br>
+	 * EntityUtils.touch(user, "dept");<br> 
+	 * dept 是user对象的字段<br>
+	 * EntityUtils.touch(item, "sale.inputUser");<br>
+	 * sale 是item对象的字段<br>
+	 * inputUser 是sale对象的字段<br>
+	 * @param source 含有延迟加截的对象
+	 * @param pattern 模式
+	 */
 	public static void touch(Object source, String pattern) {
 		
 		String[] patternFrags = StringUtils.split(pattern, ".");
