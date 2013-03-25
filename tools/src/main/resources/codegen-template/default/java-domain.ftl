@@ -17,7 +17,7 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.GenerationType;
 import javax.persistence.SequenceGenerator;
 </#if>
-
+import com.ccesun.framework.core.annotation.DocDescription;
 import com.ccesun.framework.core.dao.support.IEntity;
 import com.ccesun.framework.core.dao.support.EntityUtils;
 
@@ -28,7 +28,8 @@ public class ${materialDetail.material.domainName} implements IEntity<${material
 	private static final long serialVersionUID = ${randomNumber}L;
 <#list materialDetail.pcMappings as pcMapping>
 	
-	/** ${pcMapping.columnRemarks!''} */
+	/***/
+	@DocDescription("${pcMapping.columnRemarks!''}")
 	<#if pcMapping.isPk()>
 	<#if config.dataSource.driverClassName == 'oracle.jdbc.driver.OracleDriver'>
 	@Id
