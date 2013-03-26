@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
  *         对象的描述,对应"<description>描述的内容</description>"
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.FIELD })
+@Target({ ElementType.TYPE, ElementType.FIELD ,ElementType.METHOD})
 @Documented
 public @interface DocDescription {
 	/**
