@@ -7,7 +7,7 @@ public class StaticPageUtils {
 	public static final String REQUEST_EXT = ".do";
 	public static final String REQUEST_STATIC_EXT = ".html";
 	
-	public static String converToHtmlFileName(String requestURI) {
+	public static String convertToHtmlFileName(String requestURI) {
 		
 		if (requestURI.endsWith(REQUEST_STATIC_EXT))
 			return requestURI;
@@ -31,7 +31,7 @@ public class StaticPageUtils {
 		return result.toString();
 	}
 	
-	public static String converFromHtmlFileName(String requestURI) {
+	public static String convertFromHtmlFileName(String requestURI) {
 		
 		if (requestURI.endsWith(REQUEST_EXT))
 			return requestURI;

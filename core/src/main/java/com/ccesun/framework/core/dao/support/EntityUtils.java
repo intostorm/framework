@@ -32,7 +32,7 @@ public class EntityUtils {
 	 * EntityUtils.touch(item, "sale.inputUser");<br>
 	 * sale 是item对象的字段<br>
 	 * inputUser 是sale对象的字段<br>
-	 * @param source 含有延迟加截的对象
+	 * @param source 含有延迟加载的对象
 	 * @param pattern 模式
 	 */
 	public static void touch(Object source, String pattern) {

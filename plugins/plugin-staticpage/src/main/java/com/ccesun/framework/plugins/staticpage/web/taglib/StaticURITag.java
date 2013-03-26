@@ -25,7 +25,7 @@ public class StaticURITag extends TagSupport {
 	public int doStartTag() throws JspException {
     	
     	try {
-            this.pageContext.getOut().print(StaticPageUtils.converToHtmlFileName(requestURI));
+            this.pageContext.getOut().print(StaticPageUtils.convertToHtmlFileName(requestURI));
         } catch (IOException e) {
             if (log.isErrorEnabled())
                 log.error("IOException occurred.", e);

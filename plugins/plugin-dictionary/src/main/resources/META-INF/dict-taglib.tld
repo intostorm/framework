@@ -10,6 +10,27 @@
 	<uri>http://www.ccesun.com/tags/dict</uri>
 
 	<tag>
+		<name>lookupDict</name>
+		<tagclass>com.ccesun.framework.plugins.dictionary.web.taglib.LookupDictTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>type</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>key</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
 		<name>lookupDictValue</name>
 		<tagclass>com.ccesun.framework.plugins.dictionary.web.taglib.LookupDictValueTag</tagclass>
 		<bodycontent>JSP</bodycontent>

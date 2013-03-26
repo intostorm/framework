@@ -76,10 +76,10 @@ public class StaticPageFilter implements Filter {
 		
 		String encoding = "UTF-8";
 		
-		String tempaltePath = StaticPageUtils.converFromHtmlFileName(uri);
+		String tempaltePath = StaticPageUtils.convertFromHtmlFileName(uri);
 		String realPath = httpServletRequest.getSession().getServletContext().getRealPath(getStaticPageRoot());
 
-		String htmlName = StaticPageUtils.converToHtmlFileName(uri);
+		String htmlName = StaticPageUtils.convertToHtmlFileName(uri);
 		String cacheFileName = realPath + File.separator + htmlName;
 		
 		logger.debug("cacheFileName = " + cacheFileName);
@@ -132,7 +132,6 @@ public class StaticPageFilter implements Filter {
 				if (os.size() == 0) {
 					httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "");
 				}
-				
 				else {
 					File directory = cacheFile.getParentFile();
 					if (!directory.exists())
@@ -143,13 +142,13 @@ public class StaticPageFilter implements Filter {
 					dispatcher = httpServletRequest.getRequestDispatcher(STATIC_PAGE_ROOT + "/" + htmlName);
 					dispatcher.include(httpServletRequest, httpServletResponse);
 				}
-			} finally {
+			} 
+			finally {
 				if (fos != null) {
 					fos.close();
 				}
 			}
 		}
-		
 		else {
 			RequestDispatcher dispatcher = httpServletRequest.getRequestDispatcher(STATIC_PAGE_ROOT + "/" + htmlName);
 			dispatcher.include(httpServletRequest, httpServletResponse);
