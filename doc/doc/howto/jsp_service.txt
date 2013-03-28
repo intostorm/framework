@@ -1,0 +1,17 @@
+#title: 如何在JSP里调用Service方法
+#index:0,3
+
+-----------------------------------------------------------------------
+使用方法
+	在jsp里导入标签库
+	{{{
+	<%@ taglib prefix="utils" uri="http://www.ccesun.com/tags/utils" %>
+	}}}
+	
+	{{{
+	<utils:methodInvokor className="com.ccesun.society.security.service.SysDeptService" methodName="findByPk" var="dept" >
+		<utils:miParam type="java.io.Serializable" value="${utils:toInt(deptId) }"></utils:miParam>
+	</utils:methodInvokor>
+	}}}
+	示例中的代码，会调用com.ccesun.society.security.service.SysDeptService的findByPk方法。utils:miParam为utils:methodInvokor提供方法调用时的参数.<br/>
+	{#F00;_注意：} 能够被调用的service必须是受spring容器管理的

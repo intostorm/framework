@@ -1,0 +1,30 @@
+#title: 如何获得资源文件中的消息
+#index:0,3
+
+-----------------------------------------------------------------------
+Controller 继承 BaseController, 使用getMessage方法<br/>
+例如：
+
+资源文件messages.propertis中定义了如下消息
+
+{{{
+app.message1=操作成功
+app.message2={0}操作成功
+}}}
+
+{{{
+public class ContactController extends BaseController {
+	@RequestMapping(method = {GET, POST})
+	public String list(@ModelAttribute SearchForm searchForm, Model model) {
+		
+		...
+		String message1 = String getMessage("app.message1");
+		String message2 = String getMessage("app.message2", new Object[] {"查询"} );
+		String message3 = String getMessage("app.message1", null, "操作成功" );
+			
+		return "contact/list";
+	}
+}
+}}}
+	
+	

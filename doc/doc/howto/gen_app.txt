@@ -1,0 +1,60 @@
+#title: 如何生成工程
+#index:0,3
+
+-----------------------------------------------------------------------
+# 创建开发使用的数据库, 此处以mysql 为例
+
+	{{{
+	mysql> create database sample <br/>
+	mysql> create table `contact` ( \ <br/>
+	  `record_id` int(11) not null auto_increment comment '主键', \ <br/>
+	  `name` varchar(255) default null comment '姓名', \ <br/>
+	  `sex` varchar(255) default null comment '性别', \ <br/>
+	  `phone` varchar(255) default null comment '电话', \ <br/>
+	  `areacode` varchar(255) default null comment '地区', \ <br/>
+	  `address` varchar(255) default null comment '地址', \ <br/>
+	  primary key (`record_id`) \ <br/>
+	) engine=innodb default charset=utf8; 
+	
+	}}}
+
+# 用生成工具tools生成工程代码
+
+	打开tools/src/main/resources/datasource-context.xml，添加
+	
+	{{{
+	<bean id="dataSourceSample" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/sample?characterEncoding=utf-8" />
+		<property name="username" value="root" />
+		<property name="password" value="" />
+	</bean>
+	}}}
+
+# 打开tools/src/main/resources/appgen-context.xml，添加
+
+	{{{
+	<bean id="sample" class="com.ccesun.framework.tools.appgen.AppGenConfiguation">
+		<!-- 输出的目录 -->
+		<property name="baseOutput" value="appgen" />
+		<!-- 工程名 -->
+		<property name="projectName" value="sample" />
+		<!-- 基础包名 -->
+		<property name="basePackage" value="com.ccesun.sample" />
+		<!-- 引用 tools/src/main/resources/datasource-context.xml 中设置的dataSource -->
+		<property name="dataSource" ref="dataSourceSample" />
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<!-- 数据库方言 -->
+		<property name="hibernateDialect" value="org.hibernate.dialect.MySQL5Dialect" />
+		<!-- 工程版本号 -->
+		<property name="projectVersion" value="1.0" />
+		<!-- framework 版本号 -->
+		<property name="frameworkVersion" value="2.0.1" />
+	</bean>
+	}}}
+
+# 运行com.ccesun.framework.tools.runner.AppGenRunner
+
+# 在tools/appgen下找到生成的工程代码
+	
+	

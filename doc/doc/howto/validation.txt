@@ -1,0 +1,79 @@
+#title: 如何验证表单
+#index:0,3
+
+-----------------------------------------------------------------------
+使用方法
+	# domain类field上加入JSR303的注解
+	
+		{{{
+		@Entity
+		@Table(name="contact")
+		public class Contact implements IEntity<Integer> {
+			
+			...
+			
+			/** 姓名 */
+			@Column(name="NAME")
+			@NotBlank(message="{field.contact.name}")
+			private String name;
+			
+			...
+		}
+		}}}
+		field.contact.name 是资源文件中定义的消息，也可以使用message="姓名不能为空"的形式直接定义消息
+		
+	# Controller方法参数使用@Valid
+	
+		{{{
+		@RequestMapping(value = "/create", method = POST)
+		public String create(@Valid Contact contact, BindingResult bindingResult, Model model) {
+		    if (bindingResult.hasErrors()) {
+		        model.addAttribute("contact", contact);
+		        return "contact/create";
+		    }
+		
+		    contactService.save(contact);
+		    return "redirect:/contact/" + contact.getRecordId() + "/show";
+		}	
+		}}}	
+		
+	# jsp表单中加入<form:errors />，用于显示出错信息
+	
+		{{{
+		<form:form modelAttribute="contact" id="contactForm" method="post" class="form">
+			<fieldset>
+				...
+				
+		        <form:label path="name">姓名</form:label>
+		        <form:input path="name" />
+		        <form:errors path="name" cssClass="error" element="div" />
+		        <p/>
+		        
+		        ...
+			</fieldset>         
+		</form:form>   
+		}}}
+
+表 1. Bean Validation 中内置的 constraint
+	|| Constraint						|| 详细信息													||
+	|| @Null							|| 被注释的元素必须为 null									||
+	|| @NotNull							|| 被注释的元素必须不为 null									||
+	|| @AssertTrue						|| 被注释的元素必须为 true									||
+	|| @AssertFalse						|| 被注释的元素必须为 false									||
+	|| @Min(value)						|| 被注释的元素必须是一个数字，其值必须大于等于指定的最小值 		||
+	|| @Max(value)						|| 被注释的元素必须是一个数字，其值必须小于等于指定的最大值 		||
+	|| @DecimalMin(value)				|| 被注释的元素必须是一个数字，其值必须大于等于指定的最小值		||
+	|| @DecimalMax(value)				|| 被注释的元素必须是一个数字，其值必须小于等于指定的最大值 		||
+	|| @Size(max, min)					|| 被注释的元素的大小必须在指定的范围内 						||
+	|| @Digits (integer, fraction)		|| 被注释的元素必须是一个数字，其值必须在可接受的范围内			||
+	|| @Past							|| 被注释的元素必须是一个过去的日期 							||
+	|| @Future							|| 被注释的元素必须是一个将来的日期 							||
+	|| @Pattern(value)					|| 被注释的元素必须符合指定的正则表达式 						||
+	
+表 2. Hibernate Validator 附加的 constraint
+	|| Constraint						|| 详细信息													||
+	|| @Email							|| 被注释的元素必须是电子邮箱地址								||
+	|| @Length							|| 被注释的字符串的大小必须在指定的范围内 						||
+	|| @NotEmpty						|| 被注释的字符串的必须非空 									||
+	|| @NotBlank						|| 被注释的字符串的必须非空并且不是空字符串 					||
+	|| @Range							|| 被注释的元素必须在合适的范围内 								||

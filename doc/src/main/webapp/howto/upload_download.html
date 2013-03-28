@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>如何上传及下载文件</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">如何上传及下载文件</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div class="zdoc_folder"><span class="num">1</span><a href="#上传单个文件">上传单个文件</a></div>
+<ul>
+<li>
+<div><span class="num">1.1</span><a href="#在jsp里使用表单">在jsp里使用表单</a></div>
+</li>
+<li>
+<div><span class="num">1.2</span><a href="#Controller代码">Controller代码</a></div>
+</li>
+</ul>
+</li>
+<li>
+<div class="zdoc_folder"><span class="num">2</span><a href="#上传多个文件">上传多个文件</a></div>
+<ul>
+<li>
+<div><span class="num">2.1</span><a href="#在jsp里使用表单">在jsp里使用表单</a></div>
+</li>
+<li>
+<div><span class="num">2.2</span><a href="#Controller代码">Controller代码</a></div>
+</li>
+</ul>
+</li>
+<li>
+<div><span class="num">3</span><a href="#使用Ajax上传文件">使用Ajax上传文件</a></div>
+</li>
+<li>
+<div><span class="num">4</span><a href="#文件下载">文件下载</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="上传单个文件"></a>上传单个文件</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<h2><a name="在jsp里使用表单"></a>在jsp里使用表单</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>&lt;form id="contactForm" method="post" action="${baseUrl }" enctype="multipart/form-data"&gt;
+	&lt;fieldset&gt;
+		...
+		&lt;legend&gt;文件上传&lt;/legend&gt;
+        &lt;label name="files"&gt;选择文件1&lt;/label&gt;
+        &lt;input type="file" name="file1"/&gt;
+        ...
+    &lt;/fieldset&gt;
+&lt;/form&gt;   
+</pre>
+<h2><a name="Controller代码"></a>Controller代码</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>@RequestMapping(method = POST)
+public String fileUpload(@RequestParam CommonsMultipartFile file1) throws Exception {
+	
+	File destFile = new File("D:/tmp/file1");
+	file1.getFileItem().write(destFile);
+	
+    return "fileUpload/form";
+}	
+</pre>
+<h1><a name="上传多个文件"></a>上传多个文件	</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<h2><a name="在jsp里使用表单"></a>在jsp里使用表单</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>&lt;form id="contactForm" method="post" action="${baseUrl }" enctype="multipart/form-data"&gt;
+&lt;fieldset&gt;
+	&lt;legend&gt;文件上传&lt;/legend&gt;
+    &lt;label name="files"&gt;选择文件1&lt;/label&gt;
+    &lt;input type="file" name="files"/&gt;
+    &lt;p/&gt;
+    
+    &lt;label name="files"&gt;选择文件2&lt;/label&gt;
+    &lt;input type="file" name="files"/&gt;
+    &lt;p/&gt;
+    
+    &lt;label name="files"&gt;选择文件3&lt;/label&gt;
+    &lt;input type="file" name="files"/&gt;
+    &lt;p/&gt;
+    
+    &lt;label name="files"&gt;选择文件4&lt;/label&gt;
+    &lt;input type="file" name="files"/&gt;
+    &lt;p/&gt;
+    
+    &lt;label name="files"&gt;选择文件5&lt;/label&gt;
+    &lt;input type="file" name="files"/&gt;
+    &lt;p/&gt;
+    
+    &lt;button type="submit" class="btn"&gt;提交&lt;/button&gt;
+    &lt;button type="reset" class="btn"&gt;重置&lt;/button&gt;
+&lt;/fieldset&gt;
+&lt;/form&gt;   
+</pre>
+<h2><a name="Controller代码"></a>Controller代码</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>@RequestMapping(method = POST)
+public String fileUpload(@RequestParam CommonsMultipartFile[] files) throws Exception {
+	
+	for (CommonsMultipartFile commonsMultipartFile : files) {
+		System.out.println(commonsMultipartFile.getFileItem().getName());
+		File destFile = new File("D:/tmp/file1");
+		commonsMultipartFile.getFileItem().write(destFile);
+	}
+	
+    return "fileUpload/form";
+}	
+</pre>
+<h1><a name="使用Ajax上传文件"></a>使用Ajax上传文件</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>请参考 <a href="http://www.plupload.com">plupload</a></p>
+<h1><a name="文件下载"></a>文件下载</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>在工程web.xml里加入</p>
+<pre>&lt;servlet&gt;
+	&lt;servlet-name&gt;fileDownload&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;com.ccesun.framework.core.web.servlet.FileDownloadServlet&lt;/servlet-class&gt;
+	&lt;init-param&gt;
+		&lt;param-name&gt;basePath&lt;/param-name&gt;
+		&lt;param-value&gt;uploads&lt;/param-value&gt;
+	&lt;/init-param&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;fileDownload&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/dl&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</pre>
+<p>在jsp里加入下载链接</p>
+<pre>&lt;c:set value="/upload/file1.doc" var="fileUrl" /&gt;
+&lt;a href="${pageContext.request.contextPath }/dl?p=${fileUrl }
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

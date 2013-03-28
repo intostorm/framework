@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>如何验证表单</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">如何验证表单</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#使用方法">使用方法</a></div>
+</li>
+<li>
+<div><span class="num">2</span><a href="#表_1_Bean_Validation_中内置的_constraint">表 1. Bean Validation 中内置的 constraint</a></div>
+</li>
+<li>
+<div><span class="num">3</span><a href="#表_2_Hibernate_Validator_附加的_constraint">表 2. Hibernate Validator 附加的 constraint</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="使用方法"></a>使用方法</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<ol type="1">
+<li>domain类field上加入JSR303的注解
+<pre>@Entity
+@Table(name="contact")
+public class Contact implements IEntity&lt;Integer&gt; {
+	
+	...
+	
+	/** 姓名 */
+	@Column(name="NAME")
+	@NotBlank(message="{field.contact.name}")
+	private String name;
+	
+	...
+}
+</pre>
+<p>field.contact.name 是资源文件中定义的消息，也可以使用message="姓名不能为空"的形式直接定义消息</p>
+</li>
+<li>Controller方法参数使用@Valid
+<pre>@RequestMapping(value = "/create", method = POST)
+public String create(@Valid Contact contact, BindingResult bindingResult, Model model) {
+    if (bindingResult.hasErrors()) {
+        model.addAttribute("contact", contact);
+        return "contact/create";
+    }
+
+    contactService.save(contact);
+    return "redirect:/contact/" + contact.getRecordId() + "/show";
+}	
+</pre>
+</li>
+<li>jsp表单中加入<img src="form:errors /"/>，用于显示出错信息
+<pre>&lt;form:form modelAttribute="contact" id="contactForm" method="post" class="form"&gt;
+	&lt;fieldset&gt;
+		...
+		
+        &lt;form:label path="name"&gt;姓名&lt;/form:label&gt;
+        &lt;form:input path="name" /&gt;
+        &lt;form:errors path="name" cssClass="error" element="div" /&gt;
+        &lt;p/&gt;
+        
+        ...
+	&lt;/fieldset&gt;         
+&lt;/form:form&gt;   
+</pre>
+</li>
+</ol>
+<h1><a name="表_1_Bean_Validation_中内置的_constraint"></a>表 1. Bean Validation 中内置的 constraint</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<table border="1" cellspacing="2" cellpadding="4">
+<tr>
+<td> Constraint						</td>
+<td> 详细信息													</td>
+</tr>
+<tr>
+<td> @Null							</td>
+<td> 被注释的元素必须为 null									</td>
+</tr>
+<tr>
+<td> @NotNull							</td>
+<td> 被注释的元素必须不为 null									</td>
+</tr>
+<tr>
+<td> @AssertTrue						</td>
+<td> 被注释的元素必须为 true									</td>
+</tr>
+<tr>
+<td> @AssertFalse						</td>
+<td> 被注释的元素必须为 false									</td>
+</tr>
+<tr>
+<td> @Min(value)						</td>
+<td> 被注释的元素必须是一个数字，其值必须大于等于指定的最小值 		</td>
+</tr>
+<tr>
+<td> @Max(value)						</td>
+<td> 被注释的元素必须是一个数字，其值必须小于等于指定的最大值 		</td>
+</tr>
+<tr>
+<td> @DecimalMin(value)				</td>
+<td> 被注释的元素必须是一个数字，其值必须大于等于指定的最小值		</td>
+</tr>
+<tr>
+<td> @DecimalMax(value)				</td>
+<td> 被注释的元素必须是一个数字，其值必须小于等于指定的最大值 		</td>
+</tr>
+<tr>
+<td> @Size(max, min)					</td>
+<td> 被注释的元素的大小必须在指定的范围内 						</td>
+</tr>
+<tr>
+<td> @Digits (integer, fraction)		</td>
+<td> 被注释的元素必须是一个数字，其值必须在可接受的范围内			</td>
+</tr>
+<tr>
+<td> @Past							</td>
+<td> 被注释的元素必须是一个过去的日期 							</td>
+</tr>
+<tr>
+<td> @Future							</td>
+<td> 被注释的元素必须是一个将来的日期 							</td>
+</tr>
+<tr>
+<td> @Pattern(value)					</td>
+<td> 被注释的元素必须符合指定的正则表达式 						</td>
+</tr>
+</table>
+<h1><a name="表_2_Hibernate_Validator_附加的_constraint"></a>表 2. Hibernate Validator 附加的 constraint</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<table border="1" cellspacing="2" cellpadding="4">
+<tr>
+<td> Constraint						</td>
+<td> 详细信息													</td>
+</tr>
+<tr>
+<td> @Email							</td>
+<td> 被注释的元素必须是电子邮箱地址								</td>
+</tr>
+<tr>
+<td> @Length							</td>
+<td> 被注释的字符串的大小必须在指定的范围内 						</td>
+</tr>
+<tr>
+<td> @NotEmpty						</td>
+<td> 被注释的字符串的必须非空 									</td>
+</tr>
+<tr>
+<td> @NotBlank						</td>
+<td> 被注释的字符串的必须非空并且不是空字符串 					</td>
+</tr>
+<tr>
+<td> @Range							</td>
+<td> 被注释的元素必须在合适的范围内 								</td>
+</tr>
+</table>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

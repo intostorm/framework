@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>doc</artifactId>
 	<packaging>war</packaging>
-	<name>doc Maven Webapp</name>
+	<name>doc</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>

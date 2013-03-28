@@ -1,0 +1,105 @@
+#title: 如何上传及下载文件
+#index:0,3
+
+-----------------------------------------------------------------------
+上传单个文件
+	在jsp里使用表单
+		{{{
+		<form id="contactForm" method="post" action="${baseUrl }" enctype="multipart/form-data">
+			<fieldset>
+				...
+				<legend>文件上传</legend>
+		        <label name="files">选择文件1</label>
+		        <input type="file" name="file1"/>
+		        ...
+	        </fieldset>
+	    </form>   
+		}}}
+	
+	Controller代码
+		{{{
+		@RequestMapping(method = POST)
+	    public String fileUpload(@RequestParam CommonsMultipartFile file1) throws Exception {
+			
+			File destFile = new File("D:/tmp/file1");
+			file1.getFileItem().write(destFile);
+			
+	        return "fileUpload/form";
+		}	
+		}}}
+	
+上传多个文件	
+	
+	在jsp里使用表单
+		{{{
+		<form id="contactForm" method="post" action="${baseUrl }" enctype="multipart/form-data">
+		<fieldset>
+			<legend>文件上传</legend>
+	        <label name="files">选择文件1</label>
+	        <input type="file" name="files"/>
+	        <p/>
+	        
+	        <label name="files">选择文件2</label>
+	        <input type="file" name="files"/>
+	        <p/>
+	        
+	        <label name="files">选择文件3</label>
+	        <input type="file" name="files"/>
+	        <p/>
+	        
+	        <label name="files">选择文件4</label>
+	        <input type="file" name="files"/>
+	        <p/>
+	        
+	        <label name="files">选择文件5</label>
+	        <input type="file" name="files"/>
+	        <p/>
+	        
+	        <button type="submit" class="btn">提交</button>
+	        <button type="reset" class="btn">重置</button>
+        </fieldset>
+    </form>   
+		}}}
+	
+	Controller代码
+		{{{
+		@RequestMapping(method = POST)
+	    public String fileUpload(@RequestParam CommonsMultipartFile[] files) throws Exception {
+			
+			for (CommonsMultipartFile commonsMultipartFile : files) {
+				System.out.println(commonsMultipartFile.getFileItem().getName());
+				File destFile = new File("D:/tmp/file1");
+				commonsMultipartFile.getFileItem().write(destFile);
+			}
+			
+	        return "fileUpload/form";
+		}	
+		}}}
+		
+使用Ajax上传文件
+	请参考 [http://www.plupload.com plupload]
+	
+文件下载
+	在工程web.xml里加入
+	{{{
+	<servlet>
+		<servlet-name>fileDownload</servlet-name>
+		<servlet-class>com.ccesun.framework.core.web.servlet.FileDownloadServlet</servlet-class>
+		<init-param>
+			<param-name>basePath</param-name>
+			<param-value>uploads</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>fileDownload</servlet-name>
+		<url-pattern>/dl</url-pattern>
+	</servlet-mapping>
+	}}}
+	
+	在jsp里加入下载链接
+	
+	{{{
+	<c:set value="/upload/file1.doc" var="fileUrl" />
+	<a href="${pageContext.request.contextPath }/dl?p=${fileUrl }
+	}}}

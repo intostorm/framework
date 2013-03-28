@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>如何生成代码片段</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">如何生成代码片段</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<div class="hr"><b></b></div>
+<ol type="1">
+<li>创建开发使用的数据库, 此处以mysql 为例
+<pre>mysql&gt; create database sample &lt;br/&gt;
+mysql&gt; create table `contact` ( \ &lt;br/&gt;
+  `record_id` int(11) not null auto_increment comment '主键', \ &lt;br/&gt;
+  `name` varchar(255) default null comment '姓名', \ &lt;br/&gt;
+  `sex` varchar(255) default null comment '性别', \ &lt;br/&gt;
+  `phone` varchar(255) default null comment '电话', \ &lt;br/&gt;
+  `areacode` varchar(255) default null comment '地区', \ &lt;br/&gt;
+  `address` varchar(255) default null comment '地址', \ &lt;br/&gt;
+  primary key (`record_id`) \ &lt;br/&gt;
+) engine=innodb default charset=utf8;
+</pre>
+</li>
+<li>用生成工具tools生成代码片段（可选）
+<p>打开tools/src/main/resources/codegen-context.xml，添加</p>
+<pre>&lt;bean id="sample" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation"&gt;
+	&lt;property name="freemarkerConfig" ref="freemarkerConfig" /&gt;
+	&lt;!-- 引用 tools/src/main/resources/datasource-context.xml 中设置的dataSource --&gt;
+	&lt;property name="dataSource" ref="dataSourceSample" /&gt; 
+	&lt;!-- 
+		设成true生成全部对象， materials 中的条目会被忽略 
+		设成false生成 materials 中的条目 
+	--&gt;
+	&lt;property name="allArticfacts" value="false" /&gt;
+	&lt;!-- 输出的目录 --&gt;
+	&lt;property name="baseOutput" value="codegen/sample" /&gt;
+	&lt;!-- 基础包名 --&gt;
+	&lt;property name="basePackage" value="com.ccesun.sample" /&gt;
+	&lt;!-- 指定本次生成的对象，当 allArticfacts 为false 时--&gt;
+    &lt;property name="materials"&gt;
+        &lt;list&gt; 
+            &lt;bean p:domainName="Contact" p:tableName="contact" class="com.ccesun.framework.tools.codegen.Material" /&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</pre>
+</li>
+<li>修改<img src="bean id=&quot;codeGen&quot; class=&quot;com.ccesun.framework.tools.codegen.CodeGen&quot;"/>中<img src="property name=&quot;config&quot; ref=&quot;sample&quot; /"/>
+<pre>&lt;bean id="codeGen" class="com.ccesun.framework.tools.codegen.CodeGen"&gt;
+	&lt;property name="config" ref="sample" /&gt;
+&lt;/bean&gt;
+</pre>
+</li>
+<li>运行com.ccesun.framework.tools.runner.CodeGenRunner</li>
+<li>在tools/codegen下找到生成的代码片段</li>
+</ol>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

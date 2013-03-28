@@ -149,6 +149,13 @@
 			throws UserNotFoundException, UserNotAvailableException,
 			WrongPasswordException, WrongValidateCodeException;
 	}}}
+	
+获得当前在线用户
+	{{{
+	SysUser sysUser = (SysUser) SecurityTokenHolder.getSecurityToken().getUser();
+	}}}
+	SysUser 是本地工程对ISecurityUser接口的实现类
+	
 -----------------------------------------------------------------------
 
 在JSP中使用安全插件

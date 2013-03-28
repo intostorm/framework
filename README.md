@@ -60,7 +60,7 @@ mysql> create table `contact` ( \
 </bean>
 ```
 
-运行com.ccesun.framework.tools.runner.CodeGenRunner
+运行com.ccesun.framework.tools.runner.AppGenRunner
 
 在tools/appgen下找到生成的工程代码
 
@@ -98,6 +98,8 @@ mysql> create table `contact` ( \
 	<property name="config" ref="sample" />
 </bean>
 ```
+
+运行com.ccesun.framework.tools.runner.CodeGenRunner
 
 在tools/codegen下找到生成的代码片段
 

@@ -26,8 +26,15 @@
  	</doc>
  	
 	<doc title="HOWTO" path="howto" >
+		<doc title="如何生成工程" path="gen_app.txt" />
+		<doc title="如何生成代码片段" path="gen_code.txt" />	
 		<doc title="如何实现分页" path="pagination.txt" />
 		<doc title="如何返回历史页面" path="requesthistory.txt" />
 		<doc title="如何使用表单查询" path="searchform.txt" />
+		<doc title="如何上传及下载文件" path="upload_download.txt" />
+		<doc title="如何在JSP里调用Service方法" path="jsp_service.txt" />
+		<doc title="如何获得request|session" path="request_session.txt" />
+		<doc title="如何验证表单" path="validation.txt" />
+		<doc title="如何获得资源文件中的消息" path="get_message.txt" />
 	</doc> 
 </doc>

@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>如何在JSP里调用Service方法</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">如何在JSP里调用Service方法</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#使用方法">使用方法</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="使用方法"></a>使用方法</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>在jsp里导入标签库</p>
+<pre>&lt;%@ taglib prefix="utils" uri="http:<span class="zdoc_code_cmt">//www.ccesun.com/tags/utils" %&gt;
+</span></pre>
+<pre>&lt;utils:methodInvokor className="com.ccesun.society.security.service.SysDeptService" methodName="findByPk" var="dept" &gt;
+	&lt;utils:miParam type="java.io.Serializable" value="${utils:toInt(deptId) }"&gt;&lt;/utils:miParam&gt;
+&lt;/utils:methodInvokor&gt;
+</pre>
+<p>示例中的代码，会调用com.ccesun.society.security.service.SysDeptService的findByPk方法。utils:miParam为utils:methodInvokor提供方法调用时的参数.<img src="br/"/><span style="color:#FF0000;">注意：</span> 能够被调用的service必须是受spring容器管理的</p>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

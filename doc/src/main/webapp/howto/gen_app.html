@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>如何生成工程</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">如何生成工程</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<div class="hr"><b></b></div>
+<ol type="1">
+<li>创建开发使用的数据库, 此处以mysql 为例
+<pre>mysql&gt; create database sample &lt;br/&gt;
+mysql&gt; create table `contact` ( \ &lt;br/&gt;
+  `record_id` int(11) not null auto_increment comment '主键', \ &lt;br/&gt;
+  `name` varchar(255) default null comment '姓名', \ &lt;br/&gt;
+  `sex` varchar(255) default null comment '性别', \ &lt;br/&gt;
+  `phone` varchar(255) default null comment '电话', \ &lt;br/&gt;
+  `areacode` varchar(255) default null comment '地区', \ &lt;br/&gt;
+  `address` varchar(255) default null comment '地址', \ &lt;br/&gt;
+  primary key (`record_id`) \ &lt;br/&gt;
+) engine=innodb default charset=utf8; 
+</pre>
+</li>
+<li>用生成工具tools生成工程代码
+<p>打开tools/src/main/resources/datasource-context.xml，添加</p>
+<pre>&lt;bean id="dataSourceSample" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"&gt;
+	&lt;property name="driverClassName" value="com.mysql.jdbc.Driver" /&gt;
+	&lt;property name="url" value="jdbc:mysql:<span class="zdoc_code_cmt">//localhost:3306/sample?characterEncoding=utf-8" /&gt;
+</span>	&lt;property name="username" value="root" /&gt;
+	&lt;property name="password" value="" /&gt;
+&lt;/bean&gt;
+</pre>
+</li>
+<li>打开tools/src/main/resources/appgen-context.xml，添加
+<pre>&lt;bean id="sample" class="com.ccesun.framework.tools.appgen.AppGenConfiguation"&gt;
+	&lt;!-- 输出的目录 --&gt;
+	&lt;property name="baseOutput" value="appgen" /&gt;
+	&lt;!-- 工程名 --&gt;
+	&lt;property name="projectName" value="sample" /&gt;
+	&lt;!-- 基础包名 --&gt;
+	&lt;property name="basePackage" value="com.ccesun.sample" /&gt;
+	&lt;!-- 引用 tools/src/main/resources/datasource-context.xml 中设置的dataSource --&gt;
+	&lt;property name="dataSource" ref="dataSourceSample" /&gt;
+	&lt;property name="freemarkerConfig" ref="freemarkerConfig" /&gt;
+	&lt;!-- 数据库方言 --&gt;
+	&lt;property name="hibernateDialect" value="org.hibernate.dialect.MySQL5Dialect" /&gt;
+	&lt;!-- 工程版本号 --&gt;
+	&lt;property name="projectVersion" value="1.0" /&gt;
+	&lt;!-- framework 版本号 --&gt;
+	&lt;property name="frameworkVersion" value="2.0.1" /&gt;
+&lt;/bean&gt;
+</pre>
+</li>
+<li>运行com.ccesun.framework.tools.runner.AppGenRunner</li>
+<li>在tools/appgen下找到生成的工程代码</li>
+</ol>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

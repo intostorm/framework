@@ -1,0 +1,27 @@
+#title: 如何获得request|session
+#index:0,3
+
+-----------------------------------------------------------------------
+方法一、在Controller方法中注入
+
+	{{{
+	@RequestMapping(method = {GET, POST})
+	public String list(@ModelAttribute SearchForm searchForm, Model model, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		......
+		return "contact/list";
+	}
+	}}}
+	
+方法二、继承BaseController
+	{{{
+	public class ContactController extends BaseController {
+		@RequestMapping(method = {GET, POST})
+		public String list(@ModelAttribute SearchForm searchForm, Model model) {
+			HttpServletRequest request = getHttpServletRequest();
+			HttpSession session = getHttpSession();		
+			return "contact/list";
+		}
+	}
+	}}}

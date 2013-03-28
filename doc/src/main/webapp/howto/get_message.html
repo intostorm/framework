@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>如何获得资源文件中的消息</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">如何获得资源文件中的消息</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<div class="hr"><b></b></div>
+<p>Controller 继承 BaseController, 使用getMessage方法<img src="br/"/>例如：</p>
+<p>资源文件messages.propertis中定义了如下消息</p>
+<pre>app.message1=操作成功
+app.message2={0}操作成功
+</pre>
+<pre>public class ContactController extends BaseController {
+	@RequestMapping(method = {GET, POST})
+	public String list(@ModelAttribute SearchForm searchForm, Model model) {
+		
+		...
+		String message1 = String getMessage("app.message1");
+		String message2 = String getMessage("app.message2", new Object[] {"查询"} );
+		String message3 = String getMessage("app.message1", null, "操作成功" );
+			
+		return "contact/list";
+	}
+}
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

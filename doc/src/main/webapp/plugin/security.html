@@ -21,7 +21,10 @@
 <div><span class="num">4</span><a href="#在登录时使用验证码">在登录时使用验证码</a></div>
 </li>
 <li>
-<div><span class="num">5</span><a href="#在JSP中使用安全插件">在JSP中使用安全插件</a></div>
+<div><span class="num">5</span><a href="#获得当前在线用户">获得当前在线用户</a></div>
+</li>
+<li>
+<div><span class="num">6</span><a href="#在JSP中使用安全插件">在JSP中使用安全插件</a></div>
 </li>
 </ul>
 <div class="hr"><b></b></div>
@@ -173,6 +176,11 @@ public String logout(HttpServletResponse response) {
 		throws UserNotFoundException, UserNotAvailableException,
 		WrongPasswordException, WrongValidateCodeException;
 </pre>
+<h1><a name="获得当前在线用户"></a>获得当前在线用户</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>SysUser sysUser = (SysUser) SecurityTokenHolder.getSecurityToken().getUser();
+</pre>
+<p>SysUser 是本地工程对ISecurityUser接口的实现类</p>
 <div class="hr"><b></b></div>
 <h1><a name="在JSP中使用安全插件"></a>在JSP中使用安全插件</h1>
 <div style="float:right;"><a href="#top">Top</a></div>
