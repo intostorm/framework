@@ -31,21 +31,19 @@
 <h1><a name="安装安全插件"></a>安装安全插件</h1>
 <div style="float:right;"><a href="#top">Top</a></div>
 <ol type="1">
-<li>在工程的pom中加入</li>
-</ol>
+<li>在工程的pom中加入
 <pre>&lt;dependency&gt;
 	&lt;groupId&gt;com.ccesun.framework&lt;/groupId&gt;
 	&lt;artifactId&gt;plugin-security&lt;/artifactId&gt;
 	&lt;version&gt;${framework-version}&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
-<ol type="1">
+</li>
 <li>用户domain类实现 ISecurityUser 接口 （参考sample）</li>
 <li>功能domain类实现 IPermission 接口（参考sample）</li>
 <li>用户dao类实现ISecurityDao接口（参考sample）</li>
 <li>功能dao类实现IPermissionDao接口（参考sample）</li>
-<li>在src/main/webapp/WEB-INF/spring/app-webwvc.xml里添加拦截器</li>
-</ol>
+<li>在src/main/webapp/WEB-INF/spring/app-webwvc.xml里添加拦截器
 <pre>&lt;interceptors&gt;
 	&lt;beans:bean class="com.ccesun.framework.plugins.security.web.interceptor.SecurityInterceptor"&gt;
 		&lt;beans:property name="loginUrl" value="/login" /&gt; &lt;!-- 登录URI --&gt;
@@ -61,12 +59,13 @@
 	&lt;/beans:bean&gt;
 &lt;/interceptors&gt;
 </pre>
+</li>
+</ol>
 <div class="hr"><b></b></div>
 <h1><a name="用户登录"></a>用户登录</h1>
 <div style="float:right;"><a href="#top">Top</a></div>
 <ol type="1">
-<li>在jsp中加入表单，参考代码</li>
-</ol>
+<li>在jsp中加入表单，参考代码
 <pre>&lt;form class="form-signin" action="${pageContext.request.contextPath }/login" method="post"&gt;
 	&lt;h2 class="form-signin-heading"&gt;登录&lt;/h2&gt;
 	&lt;c:if test="${not empty errMsg}"&gt;
@@ -83,9 +82,8 @@
 	&lt;button type="submit" class="btn btn-large btn-primary"&gt;登录&lt;/button&gt;
 &lt;/form&gt;
 </pre>
-<ol type="1">
-<li>在Controller中调用ISecurityService提供的login方法， 参考代码</li>
-</ol>
+</li>
+<li>在Controller中调用ISecurityService提供的login方法， 参考代码
 <pre>@Autowired
 private ISecurityService securityService;
 
@@ -115,6 +113,8 @@ public String login(
 	return "redirect:/main";
 }
 </pre>
+</li>
+</ol>
 <h1><a name="用户退出"></a>用户退出	</h1>
 <div style="float:right;"><a href="#top">Top</a></div>
 <p>在Controller中调用ISecurityService提供的logout方法， 参考代码</p>
@@ -127,8 +127,7 @@ public String logout(HttpServletResponse response) {
 <h1><a name="在登录时使用验证码"></a>在登录时使用验证码</h1>
 <div style="float:right;"><a href="#top">Top</a></div>
 <ol type="1">
-<li>在工程web.xml里添加</li>
-</ol>
+<li>在工程web.xml里添加
 <pre>&lt;servlet&gt;
 	&lt;servlet-name&gt;validateCodeServlet&lt;/servlet-name&gt;
 	&lt;servlet-class&gt;com.ccesun.framework.plugins.security.validatecode.ValidateCodeServlet&lt;/servlet-class&gt;
@@ -155,9 +154,8 @@ public String logout(HttpServletResponse response) {
 	&lt;url-pattern&gt;*.images&lt;/url-pattern&gt;
 &lt;/servlet-mapping&gt;
 </pre>
-<ol type="1">
-<li>jsp里再添加一个字段 validateCode</li>
-</ol>
+</li>
+<li>jsp里再添加一个字段 validateCode
 <pre>&lt;form:input path="validateCode" /&gt;
 &lt;img src="${pageContext.request.contextPath }/validate.images" id="validateCodeImg" width="80" height="30"/&gt;&lt;/span&gt;
 &lt;a href="javascript: void(0)" id="changeValidateCode" &gt;看不清，换一张&lt;/a&gt;
@@ -168,14 +166,15 @@ public String logout(HttpServletResponse response) {
 </span>	});
 &lt;/script&gt;
 </pre>
-<ol type="1">
-<li>Controller里调用ISecurityService的另一个重载方法，方法定义如下</li>
-</ol>
+</li>
+<li>Controller里调用ISecurityService的另一个重载方法，方法定义如下
 <pre>SecurityToken login(HttpServletRequest request, HttpServletResponse response, String[] usernames,
 		String passwd, boolean rememberme, String validateCode)
 		throws UserNotFoundException, UserNotAvailableException,
 		WrongPasswordException, WrongValidateCodeException;
 </pre>
+</li>
+</ol>
 <h1><a name="获得当前在线用户"></a>获得当前在线用户</h1>
 <div style="float:right;"><a href="#top">Top</a></div>
 <pre>SysUser sysUser = (SysUser) SecurityTokenHolder.getSecurityToken().getUser();
