@@ -1,0 +1,46 @@
+#title: 其他方法
+#index:0,3
+
+-----------------------------------------------------------------------
+检查对象是否在数据库中存在
+	
+	假定SimpleDao是IDao的实现类
+	
+	{{{
+	int id = 1; <br>
+	simpleDao.exists(id);
+	}}}
+
+-----------------------------------------------------------------------
+
+批量执行更新或删除操作
+
+	假定SimpleDao是IDao的实现类 
+	
+	{{{
+	String jpql = "select o from Foo o where o.name like ?";<br>
+	simpleDao.execute(jpql, "name1".concat("%"));
+	}}}
+	
+	{{{
+	String jpql = "select o from Foo o where o.name like :name";<br>
+	Map<String, Object> params = new HashMap<String, Object>();
+	params.put("name", "name1".concat("%"));
+	simpleDao.execute(jpql, params);
+	}}}
+	
+-----------------------------------------------------------------------
+	
+同步持久层上下文与数据库的状态
+	假定SimpleDao是IDao的实现类 <br>
+	{{{
+	simpleDao.flush();	
+	}}}
+	
+-----------------------------------------------------------------------	
+
+得到JPA中的EntityManager
+	假定SimpleDao是IDao的实现类 <br>
+	{{{
+	EntityManager entityManager = simpleDao.getEntityManager();	
+	}}}

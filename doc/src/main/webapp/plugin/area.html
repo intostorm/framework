@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>地区插件</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">地区插件</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#安装字典插件">安装字典插件</a></div>
+</li>
+<li>
+<div><span class="num">2</span><a href="#地区插件的工作原理">地区插件的工作原理</a></div>
+</li>
+<li>
+<div><span class="num">3</span><a href="#地区表的结构">地区表的结构</a></div>
+</li>
+<li>
+<div class="zdoc_folder"><span class="num">4</span><a href="#在Java中使用地区插件">在Java中使用地区插件</a></div>
+<ul>
+<li>
+<div><span class="num">4.1</span><a href="#首先声明AreaHelper">首先声明AreaHelper</a></div>
+</li>
+<li>
+<div><span class="num">4.2</span><a href="#获得地区对象">获得地区对象</a></div>
+</li>
+<li>
+<div><span class="num">4.3</span><a href="#获得地区简称">获得地区简称</a></div>
+</li>
+<li>
+<div><span class="num">4.4</span><a href="#获得地区全称">获得地区全称</a></div>
+</li>
+<li>
+<div><span class="num">4.5</span><a href="#获得本地区及下一级地区Map">获得本地区及下一级地区Map</a></div>
+</li>
+<li>
+<div><span class="num">4.6</span><a href="#获得下一级地区Map">获得下一级地区Map</a></div>
+</li>
+<li>
+<div><span class="num">4.7</span><a href="#获得所有下级地区Map">获得所有下级地区Map</a></div>
+</li>
+<li>
+<div><span class="num">4.8</span><a href="#获得指定LEVEL之上的所有下级地区Map">获得指定LEVEL之上的所有下级地区Map</a></div>
+</li>
+</ul>
+</li>
+<li>
+<div><span class="num">5</span><a href="#在Jsp中使用地区">在Jsp中使用地区</a></div>
+</li>
+<li>
+<div><span class="num">6</span><a href="#使用地区选择树">使用地区选择树</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="安装字典插件"></a>安装字典插件</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<ol type="1">
+<li>在工程的pom中加入</li>
+</ol>
+<pre>&lt;dependency&gt;
+	&lt;groupId&gt;com.ccesun.framework&lt;/groupId&gt;
+	&lt;artifactId&gt;plugin-area&lt;/artifactId&gt;
+	&lt;version&gt;${framework-version}&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<ol type="1">
+<li>运行plug-area/appendix/dbscripts中的脚本，创建地区表</li>
+<li>向地区表中插入数据</li>
+</ol>
+<div class="hr"><b></b></div>
+<h1><a name="地区插件的工作原理"></a>地区插件的工作原理</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>地区的核心类AreaHelper接受Spring容器管理（单例），在实例化时自动调用init方法，把地区数据全部加载中对象内部的map里，使用AreaHelper对外提供的方法，完成关于地区的操作。</p>
+<h1><a name="地区表的结构"></a>地区表的结构</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>地区插件强制要求一张数据库表，在plug-area的appendix/dbscripts中能找到数据库脚本</p>
+<table border="1" cellspacing="2" cellpadding="4">
+<tr>
+<td> 字段					</td>
+<td> 描述						</td>
+</tr>
+<tr>
+<td> record_id			</td>
+<td> 主键						</td>
+</tr>
+<tr>
+<td> areacode				</td>
+<td> 编码						</td>
+</tr>
+<tr>
+<td> areaname				</td>
+<td> 简称						</td>
+</tr>
+<tr>
+<td> full_areaname		</td>
+<td> 全称						</td>
+</tr>
+<tr>
+<td> is_available			</td>
+<td> 是否可用					</td>
+</tr>
+</table>
+<p>示例数据</p>
+<table border="1" cellspacing="2" cellpadding="4">
+<tr>
+<td> record_id	</td>
+<td> areacode		</td>
+<td> areaname		</td>
+<td> full_areaname		</td>
+<td> is_available	</td>
+</tr>
+<tr>
+<td> 1			</td>
+<td> 22			</td>
+<td> 吉林省		</td>
+<td> 吉林省				</td>
+<td> 1			</td>
+</tr>
+<tr>
+<td> 2			</td>
+<td> 2201			</td>
+<td> 长春市		</td>
+<td> 吉林省长春市			</td>
+<td> 1			</td>
+</tr>
+<tr>
+<td> 3			</td>
+<td> 220101		</td>
+<td> 宽城区		</td>
+<td> 吉林省长春市宽城区		</td>
+<td> 1			</td>
+</tr>
+</table>
+<div class="hr"><b></b></div>
+<h1><a name="在Java中使用地区插件"></a>在Java中使用地区插件	</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<h2><a name="首先声明AreaHelper"></a>首先声明AreaHelper</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>@Autowired
+private AreaHelper areaHelper;
+</pre>
+<p>或</p>
+<pre>ServletContext servletContext = ...
+WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+areaHelper = applicationContext.getBean(AreaHelper.class);
+</pre>
+<h2><a name="获得地区对象"></a>获得地区对象</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>Area area = areaHelper.lookupArea("22");
+</pre>
+<h2><a name="获得地区简称"></a>获得地区简称</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>String areaName = areaHelper.lookupAreaName("22");
+</pre>
+<h2><a name="获得地区全称"></a>获得地区全称</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>String fullAreaName = areaHelper.lookupFullAreaName("22");
+</pre>
+<h2><a name="获得本地区及下一级地区Map"></a>获得本地区及下一级地区Map</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>Map&lt;String, Area&gt; areaMap = areaHelper.lookupAreaAndNextLevelAreas("22");
+</pre>
+<h2><a name="获得下一级地区Map"></a>获得下一级地区Map</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>Map&lt;String, Area&gt; areaMap = areaHelper.lookupNextLevelAreas("22");
+</pre>
+<h2><a name="获得所有下级地区Map"></a>获得所有下级地区Map</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>Map&lt;String, Area&gt; areaMap = areaHelper.lookupSubAreas("22");
+</pre>
+<h2><a name="获得指定LEVEL之上的所有下级地区Map"></a>获得指定LEVEL之上的所有下级地区Map</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>Map&lt;String, Area&gt; areaMap = areaHelper.lookupSubAreas("22", CUN_LEVEL);
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="在Jsp中使用地区"></a>在Jsp中使用地区</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>导入标签库</p>
+<pre>&lt;%@ taglib prefix="area" uri="http:<span class="zdoc_code_cmt">//www.ccesun.com/tags/area" %&gt;
+</span></pre>
+<p>输出地区简称</p>
+<pre>&lt;c:set value="22" var="areaCode" /&gt;
+&lt;dict:lookupAreaName areaCode="${areaCode}" /&gt;
+</pre>
+<p>输出地区全称</p>
+<pre>&lt;c:set value="22" var="areaCode" /&gt;
+&lt;dict:lookupFullAreaName areaCode="${areaCode}" /&gt;
+</pre>
+<h1><a name="使用地区选择树"></a>使用地区选择树</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<ol type="1">
+<li>在工程web.xml中添加</li>
+</ol>
+<pre>&lt;servlet&gt;
+	&lt;servlet-name&gt;areaTree&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;com.ccesun.framework.plugins.area.web.servlet.AreaTreeServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;areaTree&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/plugin/areaTree&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</pre>
+<ol type="1">
+<li>把plugin-area/src/main/resources/META-INF/web-resources/scripts/areaTree.js放到工程目录中</li>
+<li>在jsp中引入areaTree.js</li>
+</ol>
+<pre>&lt;script type="text/javascript" src="${pageContext.request.contextPath}/scripts/areaTree.js"&gt;&lt;/script&gt;
+</pre>
+<ol type="1">
+<li>在需要使用地区选择树的表单元素上注册事件</li>
+</ol>
+<pre>&lt;form:input path="areacode" /&gt;
+&lt;script&gt;
+	$('<span class="zdoc_code_cmt">#areacode').click(function() {
+</span>		$(this).areaTree(); 
+	});
+&lt;/script&gt;
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

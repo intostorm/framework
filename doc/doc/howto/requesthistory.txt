@@ -1,0 +1,35 @@
+#title: 如何返回历史页面
+#index:0,3
+
+-----------------------------------------------------------------------
+保存历史
+
+	在Controller的方法上使用注解@RequestHistory
+	{{{
+	@RequestMapping(value="/contact/list", method = {GET, POST})
+	@RequestHistory
+	public String list(@ModelAttribute SearchForm searchForm, Model model) {
+		
+		Page<Contact> contactPage = contactService.findPage(searchForm);
+		model.addAttribute("contactPage", contactPage);
+		
+		return "contact/list";
+	}
+	}}}
+ 	上面的代码，保存的历史绑定在/contact/list路径下，这个路径就是list方法能够响应的路径
+ 	
+返回历史
+
+	在Controller的方法内return一个已保存的历史
+	{{{
+	@RequestMapping(value = "/create", method = POST)
+    public String create(@Valid Contact contact, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("contact", contact);
+            return "contact/create";
+        }
+
+        contactService.save(contact);
+        return "history:/contact/list";
+    }	
+    }}}

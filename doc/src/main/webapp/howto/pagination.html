@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>如何实现分页</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">如何实现分页</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<div class="hr"><b></b></div>
+<p>在Controller里使用Service的findPage方法得到Page对象，并放置到model里</p>
+<pre>Page&lt;Contact&gt; contactPage = contactService.findPage(searchForm);
+model.addAttribute("contactPage", contactPage);
+</pre>
+<p>在jsp里导入pager标签库</p>
+<pre>&lt;%@ taglib prefix="pg" uri="http:<span class="zdoc_code_cmt">//www.ccesun.com/tags/pager" %&gt;
+</span></pre>
+<p>需要显示分页时使用</p>
+<pre>&lt;pg:pager url="/contact" page="${contactPage}" indexSize="7" /&gt;
+&lt;%@ include file="/include/pager-default.jsp" %&gt;
+</pre>
+<p>url是当前页面的访问URI，page是Page对象，indexSize是分页链接的最大索引数（可选）。分页模板通过include的方式引入到jsp中，模板应按需要修改。</p>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

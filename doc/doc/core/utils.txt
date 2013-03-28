@@ -1,0 +1,17 @@
+#title: 工具类
+#index:0,3
+
+-----------------------------------------------------------------------
+工具类列表
+	||类名										||功能 					||
+	||com.ccesun.framework.util.Base64 			||Base64加密工具			||
+	||com.ccesun.framework.util.BeanUtils 		||扩展apache commons		||
+	||com.ccesun.framework.util.BooleanUtils 	||扩展apache commons		||
+	||com.ccesun.framework.util.CnSpellUtils 	||生成汉字拼音的工具		||
+	||com.ccesun.framework.util.DateUtils 		||扩展apache commons		||
+	||com.ccesun.framework.util.JsonUtils 		||对象与Json的互转工具	||
+	||com.ccesun.framework.util.MapUtils 		||扩展apache commons		||
+	||com.ccesun.framework.util.MD5 			||MD5加密工具			||
+	||com.ccesun.framework.util.NumberUtils 	||扩展apache commons		||
+	||com.ccesun.framework.util.StringUtils 	||扩展apache commons		||
+ 	

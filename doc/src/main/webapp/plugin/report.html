@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>报表插件</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">报表插件</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#安装报表插件">安装报表插件</a></div>
+</li>
+<li>
+<div><span class="num">2</span><a href="#报表插件的工作原理">报表插件的工作原理</a></div>
+</li>
+<li>
+<div class="zdoc_folder"><span class="num">3</span><a href="#使用地区插件">使用地区插件</a></div>
+<ul>
+<li>
+<div><span class="num">3.1</span><a href="#DynamicReportBuilder">DynamicReportBuilder</a></div>
+</li>
+<li>
+<div><span class="num">3.2</span><a href="#JasperReportUtils">JasperReportUtils</a></div>
+</li>
+</ul>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="安装报表插件"></a>安装报表插件</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<ol type="1">
+<li>在工程的pom中加入</li>
+</ol>
+<pre>&lt;dependency&gt;
+	&lt;groupId&gt;com.ccesun.framework&lt;/groupId&gt;
+	&lt;artifactId&gt;plugin-report&lt;/artifactId&gt;
+	&lt;version&gt;${framework-version}&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="报表插件的工作原理"></a>报表插件的工作原理</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>报表插件中提供了两个工具类，DynamicReportBuilder和JasperReportUtils。DynamicReportBuilder底层使用dynamicreports，能够快捷的生成列表形式的报表。JasperReportUtils底层使用jasperreport，能够适当更多的报表场景。</p>
+<div class="hr"><b></b></div>
+<h1><a name="使用地区插件"></a>使用地区插件</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<h2><a name="DynamicReportBuilder"></a>DynamicReportBuilder</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>List&lt;Map&lt;String, String&gt;&gt; convertedList = dictionaryHelper.decodeBeansToMaps(bdFamilyPage.getContent());
+new DynamicReportBuilder()
+	.addColumn("家庭编号", "familyId", String.class, 9)
+	.addColumn("户主", "masterName", String.class, 9)
+	.addColumn("身份证号", "masterIdcard", String.class, 20)
+	.addColumn("家庭类型", "familyType", String.class, 9)
+	.addColumn("房屋间数", "roomAmount", String.class, 9)
+	.addColumn("家庭人口", "personAmount", String.class, 9)
+	.addColumn("建造结构", "houseStructure", String.class, 9)
+	.addColumn("地址", "nativePlace", String.class, 9)
+	.outputPdf(response, convertedList, "家庭基础信息", "family.pdf");
+</pre>
+<p>addColumn的最后一个参数是此列的权重，影响报表中的列宽</p>
+<h2><a name="JasperReportUtils"></a>JasperReportUtils</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>List&lt;DdPerson&gt; list = ddPersonService.find(q);
+list = dictionaryHelper.decodeBeans(list);
+
+Map paramMap = new HashMap();
+
+paramMap.put("zihaizl", dictionaryHelper.lookupDictValue0("ZAIHZL", WebUtils.getConfigDdBase().getDisKind()));
+paramMap.put("currDate",DateUtils.currentDate());
+
+String path = request.getSession().getServletContext().getRealPath("print/rp_detail_01.jasper");
+String path2 =  request.getSession().getServletContext().getRealPath("taizhang/"+rpId+".xls");
+File file = new File(path2);
+
+FileOutputStream fos = new FileOutputStream(file);
+JasperReportUtils.exportExcel(fos, path, paramMap, list, "report");
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

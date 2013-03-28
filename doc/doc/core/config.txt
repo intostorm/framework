@@ -1,0 +1,41 @@
+#title: 全局配置
+#index:0,3
+
+-----------------------------------------------------------------------
+说明
+	全局配置com.ccesun.framework.core.AppContext是个单例，在首次实例时从类路径下加载/config.properties文件。不管/config.properties存不存在，AppContext都能正常使用。
+	AppContext内部维护一个Map<String, Object> contextMap，用来保存配置项。
+	配置值的来源有两个，一是从/config.properties在初始化时加载，二是在运行期动态存入。
+ 	
+----------------------------------------------------------------------- 	
+ 
+ 从AppContext中获得配置项
+ 	{{{
+ 	AppContext apptext = AppContext.getInstance();	
+ 	String charset = apptext.getString("app.Charset");
+ 	int pageSize = apptext.getInt("app.pageSize");
+ 	Object obj = apptext.get("app.message");
+ 	}}}
+-----------------------------------------------------------------------
+ 
+ 向AppContext里保存配置项
+	{{{
+ 	AppContext apptext = AppContext.getInstance();	
+ 	apptext.put("app.Charset", "UTF-8");
+ 	}}}
+
+-----------------------------------------------------------------------
+
+在jsp里使用AppContext
+	在jsp里导入标签库
+	{{{
+	<%@ taglib prefix="utils" uri="http://www.ccesun.com/tags/utils" %>
+	}}}
+	使用标签库把AppContent用变量保存到pageContext里
+	{{{
+	<utils:appctx var="appctx" />
+	}}}
+	使用EL表达式读取配置
+	{{{
+	charset: ${appctx['app.Charset']}
+	}}}

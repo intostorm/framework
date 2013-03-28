@@ -1,0 +1,280 @@
+#title: 查询
+#index:0,3
+
+-----------------------------------------------------------------------
+查询一个对象
+	
+	按主键查找对象
+		假定SimpleDao是IDao的实现类 
+		{{{
+		Foo foo = simpleDao.findByPk(id);
+		}}}
+
+	按主键查找对象引用
+		与findByPk方法不同于，findReferenceByPk不立即查询数据库，是延迟加载
+		假定SimpleDao是IDao的实现类
+		{{{ 
+		Foo foo = simpleDao.findReferenceByPk(id);
+		}}}
+	
+	根据查询条件，查出第一个符合条件的对象
+		假定SimpleDao是IDao的实现类 
+		{{{ 
+		QCriteria criteria = new QCriteria();
+		criteria.addEntry("name", Op.EQ, "name1"); //name 是 Foo的一个属性， name1是属性的值 
+		Foo foo = simpleDao.findOne(criteria);
+		}}}
+		
+		{{{ 
+		Sort sort = new Sort().asc("name");
+	 	QCriteria criteria = new QCriteria();
+	 	criteria.addEntry("name", Op.EQ, "name1"); //name 是 Foo的一个属性， name1是属性的值 
+	 	Foo foo = simpleDao.findOne(sort, criteria);
+		}}}
+	
+	使用jpql语句，查出第一个符合条件的对象
+		假定SimpleDao是IDao的实现类 
+		{{{ 
+		String jpql = "select o from Foo o where o.name = ?";
+	 	Foo foo = simpleDao.findOne(jpql, "name1"); //name1作为jpql参数的值
+		}}}
+
+		{{{ 
+		String jpql = "select o from Foo o where o.name = :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1");
+	 	Foo foo = simpleDao.findOne(jpql, params); //name1作为jpql参数的值
+		}}}	
+		
+		{{{ 
+		Sort sort = new Sort().asc("name");
+	 	String jpql = "select o from Foo o where o.name = ?";
+	 	Foo foo = simpleDao.findOne(sort, jpql, "name1"); //name1作为jpql参数的值
+		}}}
+
+		{{{ 
+		Sort sort = new Sort().asc("name");
+	 	String jpql = "select o from Foo o where o.name = :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1");
+	 	Foo foo = simpleDao.findOne(sort, jpql, params); //name1作为jpql参数的值
+		}}}	
+		
+	使用jpql语句，查出第一个符合条件的对象（与泛型无关）
+		假定SimpleDao是IDao的实现类 
+		{{{ 
+		String jpql = "select o from Foo o where o.name like ?";
+	 	Foo foo = (Foo) simpleDao.executeQueryOne(jpql, "name1".concat("%"));
+		}}}
+
+		{{{ 
+		String jpql = "select o from Foo o where o.name like :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1".concat("%"));
+	 	Foo foo = (Foo) simpleDao.executeQueryOne(jpql, params);
+		}}}	
+		
+		{{{ 
+		Sort sort = new Sort().asc("name");
+	 	String jpql = "select o from Foo o where o.name like ?";
+	 	Foo foo = (Foo) simpleDao.executeQueryOne(sort, jpql, "name1".concat("%"));
+		}}}
+
+		{{{ 
+		Sort sort = new Sort().asc("name");
+	 	String jpql = "select o from Foo o where o.name like :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1".concat("%"));
+	 	Foo foo = (Foo) simpleDao.executeQueryOne(sort, jpql, params);
+		}}}	
+	
+查询对象List
+	
+	查询所有对象
+		假定SimpleDao是IDao的实现类
+		{{{
+		List<Foo> fooList = simpleDao.findAll();
+		}}}	
+	
+	查出符合条件的对象集合
+		假定SimpleDao是IDao的实现类
+		{{{
+		String criteria = new QCriteria();
+	 	List<Foo> fooList = simpleDao.find(criteria);
+		}}}
+		
+		{{{
+	 	Sort sort = new Sort().asc("name");
+	 	QCriteria criteria = new QCriteria();
+	 	criteria.addEntry("name", Op.EQ, "name1"); //name 是 Foo的一个属性， name1是属性的值 
+	 	List<Foo> fooList = simpleDao.find(sort, criteria);
+	 	}}}
+	 	
+	 	{{{
+	 	Sort sort = new Sort().asc("name");
+	 	PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+	 	QCriteria criteria = new QCriteria();
+	 	criteria.addEntry("name", Op.EQ, "name1"); //name 是 Foo的一个属性， name1是属性的值 
+	 	List<Foo> fooList = simpleDao.find(pageRequest, criteria);
+	 	}}}
+		
+	使用jpql语句，查出符合条件的对象集合
+		假定SimpleDao是IDao的实现类
+		{{{
+		String jpql = "select o from Foo o where o.name like ?";
+	 	List<Foo> fooList = simpleDao.find(jpql, "name1".concat("%")); //name1作为jpql参数的值
+	 	}}}
+	 	
+	 	{{{
+	 	String jpql = "select o from Foo o where o.name like :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1".concat("%"));
+	 	List<Foo> fooList = simpleDao.find(jpql, params); //name1作为jpql参数的值
+	 	}}}
+	 	
+	 	{{{
+	 	Sort sort = new Sort().asc("name");
+	 	String jpql = "select o from Foo o where o.name like ?";
+	 	List<Foo> fooList = simpleDao.find(sort, jpql, "name1".concat("%")); //name1作为jpql参数的值
+	 	}}}
+	 	
+	 	{{{
+	 	Sort sort = new Sort().asc("name");
+	 	String jpql = "select o from Foo o where o.name like :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1".concat("%"));
+	 	List<Foo> fooList = simpleDao.find(sort, jpql, params); //name1作为jpql参数的值
+	 	}}}
+	 	
+	 	{{{
+	 	Sort sort = new Sort().asc("name");
+	 	PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+	 	String jpql = "select o from Foo o where o.name like ?";
+	 	List<Foo> fooList = simpleDao.find(pageRequest, jpql, "name1".concat("%")); //name1作为jpql参数的值
+	 	}}}
+	 	
+	 	{{{
+	 	Sort sort = new Sort().asc("name");
+	 	PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+	 	String jpql = "select o from Foo o where o.name like :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1".concat("%"));
+	 	List<Foo> fooList = simpleDao.find(pageRequest, jpql, params); //name1作为jpql参数的值
+	 	}}}
+	 	
+	 使用 jpql语句，查出符合条件的对象集合（与泛型无关）
+	 	假定SimpleDao是IDao的实现类 
+	 	{{{
+	 	String jpql = "select o from Foo o where o.name like ?";
+	 	List<Foo> fooList = simpleDao.executeQuery(jpql, "name1".concat("%"));
+	 	}}}
+	 	
+	 	{{{
+	 	String jpql = "select o from Foo o where o.name like :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1".concat("%"));
+	 	List<Foo> fooList = simpleDao.executeQuery(jpql, params);
+	 	}}}
+	 	
+	 	{{{
+	 	Sort sort = new Sort().asc(name);
+	 	String jpql = "select o from Foo o where o.name like ?";
+	 	List<Foo> fooList = simpleDao.executeQuery(sort, jpql, "name1".concat("%"));
+	 	}}}
+	 	
+	 	{{{
+	 	Sort sort = new Sort().asc(name);
+	 	String jpql = "select o from Foo o where o.name like :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1".concat("%"));
+	 	List<Foo> fooList = simpleDao.executeQuery(sort, jpql, params);
+	 	}}}
+	 	
+	 	{{{
+	 	Sort sort = new Sort().asc(name);
+	 	PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+	 	String jpql = "select o from Foo o where o.name like ?";
+	 	List<Foo> fooList = simpleDao.executeQuery(pageRequest, jpql, "name1".concat("%"));
+	 	}}}
+	 	
+	 	{{{
+	 	Sort sort = new Sort().asc(name);
+	 	PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+	 	String jpql = "select o from Foo o where o.name like :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1".concat("%"));
+	 	List<Foo> fooList = simpleDao.executeQuery(pageRequest, jpql, params);
+	 	}}}
+	 	
+分页查询
+	使用 分页条件、查询条件，查出符合条件的分页对象
+		假定SimpleDao是IDao的实现类 
+		{{{
+		Sort sort = new Sort().asc("name");
+		PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+		QCriteria criteria = new QCriteria();
+		criteria.addEntry("name", Op.EQ, "name1"); //name 是 Foo的一个属性， name1是属性的值 
+		Page<Foo> fooPage = simpleDao.findPage(pageRequest, criteria);
+		}}} 
+		
+	使用 jpql语句，查出符合条件的第一个对象 
+		假定SimpleDao是IDao的实现类 
+		{{{
+		Sort sort = new Sort().asc("name");
+		PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+		String jpql = "select o from Foo o where o.name like ?";
+		Page<Foo> fooPage = simpleDao.findPage(pageRequest, jpql, "name1".concat("%")); //name1作为jpql参数的值
+		}}}
+		 
+		{{{
+		Sort sort = new Sort().asc("name");
+		PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+		String jpql = "select o from Foo o where o.name like :name";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("name", "name1".concat("%"));
+		Page<Foo> fooPage = simpleDao.findPage(pageRequest, jpql, params); //name1作为jpql参数的值
+		}}}
+		
+	使用 jpql语句，查出符合条件的第一个对象（与泛型无关） 
+		假定SimpleDao是IDao的实现类 
+		{{{
+		Sort sort = new Sort().asc("name");
+		PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+		String jpql = "select o from Foo o where o.name like ?";
+		Page<Foo> foo = simpleDao.executeQueryPage(pageRequest, jpql, "name1".concat("%"));
+		}}}
+		 
+		{{{
+		Sort sort = new Sort().asc("name");
+		PageRequest pageRequest = new PageRequest(1, 10, sort); //PageRequest有多个构造器
+		String jpql = "select o from Foo o where o.name like :name";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("name", "name1".concat("%"));
+		Page<Foo> foo = simpleDao.executeQueryPage(pageRequest, jpql, params);
+		}}}
+
+查询数量
+	
+	使用 查询条件，查出符合条件的对象数量
+		假定SimpleDao是IDao的实现类 
+		{{{
+		QCriteria criteria = new QCriteria();
+	 	criteria.addEntry("name", Op.EQ, "name1"); //name 是 Foo的一个属性， name1是属性的值 
+	 	long count = simpleDao.count(criteria);		
+	 	}}}
+	 	
+	 使用 jpql语句，查出符合条件的对象数量
+	 	
+	 	假定SimpleDao是IDao的实现类 
+	 	{{{
+	 	String jpql = "select o from Foo o where o.name like ?";
+	 	long count = simpleDao.count(jpql, "name1".concat("%")); //name1作为jpql参数的值
+	 	}}}
+	 	
+	 	{{{
+	 	String jpql = "select o from Foo o where o.name like :name";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("name", "name1".concat("%"));
+	 	long count = simpleDao.count(jpql, params); //name1作为jpql参数的值
+	 	}}}
+-----------------------------------------------------------------------

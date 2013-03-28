@@ -1,0 +1,133 @@
+#title: 地区插件
+#index:0,3
+
+-----------------------------------------------------------------------
+
+安装字典插件
+	# 在工程的pom中加入
+	{{{
+	<dependency>
+		<groupId>com.ccesun.framework</groupId>
+		<artifactId>plugin-area</artifactId>
+		<version>${framework-version}</version>
+	</dependency>
+	}}}
+	# 运行plug-area/appendix/dbscripts中的脚本，创建地区表
+	# 向地区表中插入数据
+	
+-----------------------------------------------------------------------
+
+地区插件的工作原理
+	
+	地区的核心类AreaHelper接受Spring容器管理（单例），在实例化时自动调用init方法，把地区数据全部加载中对象内部的map里，使用AreaHelper对外提供的方法，完成关于地区的操作。
+
+地区表的结构
+	地区插件强制要求一张数据库表，在plug-area的appendix/dbscripts中能找到数据库脚本
+	|| 字段					|| 描述						||
+	|| record_id			|| 主键						||
+	|| areacode				|| 编码						||
+	|| areaname				|| 简称						||
+	|| full_areaname		|| 全称						||
+	|| is_available			|| 是否可用					||
+	
+	示例数据
+	|| record_id	|| areacode		|| areaname		|| full_areaname		|| is_available	||
+	|| 1			|| 22			|| 吉林省		|| 吉林省				|| 1			||
+	|| 2			|| 2201			|| 长春市		|| 吉林省长春市			|| 1			||
+	|| 3			|| 220101		|| 宽城区		|| 吉林省长春市宽城区		|| 1			||
+	
+-----------------------------------------------------------------------
+
+在Java中使用地区插件	
+	首先声明AreaHelper
+		{{{
+		@Autowired
+		private AreaHelper areaHelper;
+		}}}
+		或
+		{{{
+		ServletContext servletContext = ...
+		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+		areaHelper = applicationContext.getBean(AreaHelper.class);
+		}}}
+		
+	获得地区对象
+		{{{
+		Area area = areaHelper.lookupArea("22");
+		}}}
+	
+	获得地区简称
+		{{{
+		String areaName = areaHelper.lookupAreaName("22");
+		}}}	
+		
+	获得地区全称
+		{{{
+		String fullAreaName = areaHelper.lookupFullAreaName("22");
+		}}}
+		
+	获得本地区及下一级地区Map
+		{{{
+		Map<String, Area> areaMap = areaHelper.lookupAreaAndNextLevelAreas("22");
+		}}}
+		
+	获得下一级地区Map
+		{{{
+		Map<String, Area> areaMap = areaHelper.lookupNextLevelAreas("22");
+		}}}	
+		
+	获得所有下级地区Map
+		{{{
+		Map<String, Area> areaMap = areaHelper.lookupSubAreas("22");
+		}}}	
+		
+	获得指定LEVEL之上的所有下级地区Map
+		{{{
+		Map<String, Area> areaMap = areaHelper.lookupSubAreas("22", CUN_LEVEL);
+		}}}	
+-----------------------------------------------------------------------
+		
+在Jsp中使用地区
+	导入标签库
+	{{{
+	<%@ taglib prefix="area" uri="http://www.ccesun.com/tags/area" %>
+	}}}
+	
+	输出地区简称
+	{{{
+	<c:set value="22" var="areaCode" />
+	<dict:lookupAreaName areaCode="${areaCode}" />
+	}}}
+	
+	输出地区全称
+	{{{
+	<c:set value="22" var="areaCode" />
+	<dict:lookupFullAreaName areaCode="${areaCode}" />
+	}}}
+	
+使用地区选择树
+	# 在工程web.xml中添加
+	{{{
+	<servlet>
+		<servlet-name>areaTree</servlet-name>
+		<servlet-class>com.ccesun.framework.plugins.area.web.servlet.AreaTreeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>areaTree</servlet-name>
+		<url-pattern>/plugin/areaTree</url-pattern>
+	</servlet-mapping>
+	}}}
+	# 把plugin-area/src/main/resources/META-INF/web-resources/scripts/areaTree.js放到工程目录中
+	# 在jsp中引入areaTree.js
+	{{{
+	<script type="text/javascript" src="${pageContext.request.contextPath}/scripts/areaTree.js"></script>
+	}}}
+	# 在需要使用地区选择树的表单元素上注册事件
+	{{{
+	<form:input path="areacode" />
+	<script>
+		$('#areacode').click(function() {
+			$(this).areaTree(); 
+		});
+    </script>
+	}}}

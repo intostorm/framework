@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>字典插件</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">字典插件</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#安装字典插件">安装字典插件</a></div>
+</li>
+<li>
+<div><span class="num">2</span><a href="#字典的工作原理">字典的工作原理</a></div>
+</li>
+<li>
+<div><span class="num">3</span><a href="#字典表的结构">字典表的结构</a></div>
+</li>
+<li>
+<div class="zdoc_folder"><span class="num">4</span><a href="#在Java中使用字典">在Java中使用字典</a></div>
+<ul>
+<li>
+<div><span class="num">4.1</span><a href="#首先声明DictionaryHelper">首先声明DictionaryHelper</a></div>
+</li>
+<li>
+<div><span class="num">4.2</span><a href="#按类型和键查找一个字典对象">按类型和键查找一个字典对象</a></div>
+</li>
+<li>
+<div><span class="num">4.3</span><a href="#按类型和逗号分隔的键查找字典对象数组">按类型和逗号分隔的键查找字典对象数组</a></div>
+</li>
+<li>
+<div><span class="num">4.4</span><a href="#按类型和键查找字典值0">按类型和键查找字典值0</a></div>
+</li>
+<li>
+<div><span class="num">4.5</span><a href="#按类型和键查找字典值1">按类型和键查找字典值1</a></div>
+</li>
+<li>
+<div><span class="num">4.6</span><a href="#按类型和键查找字典值2">按类型和键查找字典值2</a></div>
+</li>
+<li>
+<div><span class="num">4.7</span><a href="#按类型和键查找字典值3">按类型和键查找字典值3</a></div>
+</li>
+<li>
+<div><span class="num">4.8</span><a href="#按类型查找字典Map">按类型查找字典Map</a></div>
+</li>
+<li>
+<div><span class="num">4.9</span><a href="#按类型和父级KEY查询字典Map">按类型和父级KEY查询字典Map</a></div>
+</li>
+<li>
+<div><span class="num">4.10</span><a href="#批量转换一个对象List">批量转换一个对象List</a></div>
+</li>
+</ul>
+</li>
+<li>
+<div><span class="num">5</span><a href="#在Jsp中使用字典">在Jsp中使用字典</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="安装字典插件"></a>安装字典插件</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<ol type="1">
+<li>在工程的pom中加入</li>
+</ol>
+<pre>&lt;dependency&gt;
+	&lt;groupId&gt;com.ccesun.framework&lt;/groupId&gt;
+	&lt;artifactId&gt;plugin-dictionary&lt;/artifactId&gt;
+	&lt;version&gt;${framework-version}&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<ol type="1">
+<li>运行plug-dictionary/appendix/dbscripts中的脚本，创建字典表</li>
+<li>向字典表中插入数据</li>
+</ol>
+<div class="hr"><b></b></div>
+<h1><a name="字典的工作原理"></a>字典的工作原理</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>字典的核心类DictionaryHelper接受Spring容器管理（单例），在实例化时自动调用init方法，把字典数据全部加载中对象内部的map里，使用DictionaryHelper对外提供的方法，，完成关于字典的操作。字典插件强制要求一张数据库表，在plug-dictionary的appendix/dbscripts中能找到数据库脚本</p>
+<div class="hr"><b></b></div>
+<h1><a name="字典表的结构"></a>字典表的结构</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<table border="1" cellspacing="2" cellpadding="4">
+<tr>
+<td> 字段					</td>
+<td> 描述						</td>
+</tr>
+<tr>
+<td> record_id			</td>
+<td> 主键						</td>
+</tr>
+<tr>
+<td> dict_type			</td>
+<td> 类型						</td>
+</tr>
+<tr>
+<td> dict_key				</td>
+<td> 键						</td>
+</tr>
+<tr>
+<td> dict_value0			</td>
+<td> 值0						</td>
+</tr>
+<tr>
+<td> dict_value1			</td>
+<td> 值1						</td>
+</tr>
+<tr>
+<td> dict_value2			</td>
+<td> 值2						</td>
+</tr>
+<tr>
+<td> dict_value3			</td>
+<td> 值3						</td>
+</tr>
+<tr>
+<td> parent_key			</td>
+<td> 父级KEY					</td>
+</tr>
+</table>
+<p>字典表相当于多个属性表的溶合，若把每个dictType下的数据独立成表，则dictKey是这个表的主键，parentKey是自连接的外键。示例数据：</p>
+<table border="1" cellspacing="2" cellpadding="4">
+<tr>
+<td> record_id	</td>
+<td> dict_type	</td>
+<td> dict_key		</td>
+<td> dict_value0	</td>
+<td> dict_value1	</td>
+<td> dict_value2	</td>
+<td> dict_value3	</td>
+<td> parent_key	</td>
+</tr>
+<tr>
+<td> 1			</td>
+<td> KIND			</td>
+<td> ITEM_TYPE	</td>
+<td> 商品类型		</td>
+<td> 				</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+</tr>
+<tr>
+<td> 2			</td>
+<td> ITEM_TYPE	</td>
+<td> A			</td>
+<td> A类			</td>
+<td> 塑料材质		</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+</tr>
+<tr>
+<td> 3			</td>
+<td> ITEM_TYPE	</td>
+<td> B			</td>
+<td> B类			</td>
+<td> 瓷器			</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+</tr>
+<tr>
+<td> 4			</td>
+<td> ITEM_TYPE	</td>
+<td> C			</td>
+<td> C类			</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+</tr>
+<tr>
+<td> 5			</td>
+<td> ITEM_TYPE	</td>
+<td> A1			</td>
+<td> A1类			</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+<td> A			</td>
+</tr>
+<tr>
+<td> 5			</td>
+<td> ITEM_TYPE	</td>
+<td> A2			</td>
+<td> A2类			</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+<td> A			</td>
+</tr>
+<tr>
+<td> 5			</td>
+<td> ITEM_TYPE	</td>
+<td> C1			</td>
+<td> C1类			</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+<td> C			</td>
+</tr>
+<tr>
+<td> 5			</td>
+<td> ITEM_TYPE	</td>
+<td> C2			</td>
+<td> C2类			</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+<td> C			</td>
+</tr>
+<tr>
+<td> 5			</td>
+<td> ITEM_TYPE	</td>
+<td> A21			</td>
+<td> A21类			</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+<td> A2			</td>
+</tr>
+<tr>
+<td> 5			</td>
+<td> ITEM_TYPE	</td>
+<td> A22			</td>
+<td> A22类			</td>
+<td>				</td>
+<td>				</td>
+<td>				</td>
+<td> A2			</td>
+</tr>
+</table>
+<p>第一条记录作为ITEM_TYPE的字典描述，是可选的。所有描述字典项的记录，dictType都用KIND，dictKey与要描述的字典的dictType保持一致。</p>
+<div class="hr"><b></b></div>
+<h1><a name="在Java中使用字典"></a>在Java中使用字典	</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<h2><a name="首先声明DictionaryHelper"></a>首先声明DictionaryHelper</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>@Autowired
+private DictionaryHelper dictionaryHelper;
+</pre>
+<p>或</p>
+<pre>ServletContext servletContext = ...
+WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+dictionaryHelper = applicationContext.getBean(DictionaryHelper.class);
+</pre>
+<h2><a name="按类型和键查找一个字典对象"></a>按类型和键查找一个字典对象</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>Dictionary dict = dictionaryHelper.lookupDict("ITEM_TYPE", "A");
+</pre>
+<h2><a name="按类型和逗号分隔的键查找字典对象数组"></a>按类型和逗号分隔的键查找字典对象数组</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>Dictionary[] dicts = lookupDicts("ITEM_TYPE", "A, A1, A2");
+</pre>
+<h2><a name="按类型和键查找字典值0"></a>按类型和键查找字典值0</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>String value = lookupDictValue0("ITEM_TYPE", "A");
+</pre>
+<h2><a name="按类型和键查找字典值1"></a>按类型和键查找字典值1</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>String value = lookupDictValue1("ITEM_TYPE", "A");
+</pre>
+<h2><a name="按类型和键查找字典值2"></a>按类型和键查找字典值2</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>String value = lookupDictValue2("ITEM_TYPE", "A");
+</pre>
+<h2><a name="按类型和键查找字典值3"></a>按类型和键查找字典值3</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>String value = lookupDictValue3("ITEM_TYPE", "A");
+</pre>
+<h2><a name="按类型查找字典Map"></a>按类型查找字典Map</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>Map&lt;String, Dictionary&gt; dictMap = getDictionariesByType("ITEM_TYPE") {
+</pre>
+<h2><a name="按类型和父级KEY查询字典Map"></a>按类型和父级KEY查询字典Map</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>Map&lt;String, Dictionary&gt; dictMap = getDictionariesByTypeAndParent("ITEM_TYPE", "A") {
+</pre>
+<h2><a name="批量转换一个对象List"></a>批量转换一个对象List</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>当对象中含有使用了字典的属性，为了批量将这些属性转换成字典的值，可进行如下操作</p>
+<p>在domain对象属性上加上注解</p>
+<pre>/** 商品类别 */
+@DictValue(type="ITEM_TYPE")
+@Column(name="ITEM_TYPE")
+private String itemType;
+</pre>
+<p>使用下列方法中的一个进行批量转换</p>
+<pre>List contactList = ...
+List&lt;Map&lt;String, String&gt;&gt; contactMaps = dictionaryHelper.decodeBeansToMaps(contactList);
+</pre>
+<pre>List contactList = ...
+contactList = dictionaryHelper.decodeBeans(contactList);
+</pre>
+<pre>Page contactPage = ...
+dictionaryHelper.decodePage(contactPage);
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="在Jsp中使用字典"></a>在Jsp中使用字典</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>导入标签库</p>
+<pre>&lt;%@ taglib prefix="dict" uri="http:<span class="zdoc_code_cmt">//www.ccesun.com/tags/dict" %&gt;
+</span></pre>
+<p>得到字典对象，放到var指定的变量中</p>
+<pre>&lt;c:set value="A" var="key1" /&gt;
+&lt;dict:lookupDict type="ITEM_TYPE" key="${key1}" var="itemType" /&gt;
+</pre>
+<p>输出字典的值，position取值 0-3,分别对应值dict_value0 - dict_value3, 默认是0;</p>
+<pre>&lt;c:set value="A" var="key1" /&gt;
+&lt;dict:lookupDictValue type="ITEM_TYPE" key="${key1}" position="1" /&gt;
+</pre>
+<p>得到字典List，放到var指定的变量中，parentKey与toJson是可选的，toJson默认是false</p>
+<pre>&lt;c:set value="A" var="key1" /&gt;
+&lt;dict:loadDictList type="ITEM_TYPE" parentKey="${key1}" var="itemType" toJson="false" /&gt;
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<doc title="Java web framework doc" author="Jaron">
+
+	<doc  title="概述" path="readme.txt" />
+ 	
+ 	<doc  title="核心" path="core" >
+ 		<doc title="全局配置" path="config.txt" />
+ 		<doc title="DAO API" path="dao" >
+			<doc title="保存" path="save.txt"/>
+			<doc title="删除" path="remove.txt" />
+			<doc title="查询" path="query.txt" />
+			<doc title="其他" path="other.txt" />
+		</doc>
+		<doc title="工具类" path="utils.txt" />
+		
+ 	</doc>
+ 	
+	<doc  title="插件" path="plugin" >
+ 		<doc title="字典" path="dict.txt" />
+		<doc title="地区" path="area.txt" />
+		<doc title="权限" path="security.txt"/>
+		<doc title="报表" path="report.txt"/>	
+		<doc title="全文检索" path="search.txt"/>	
+		<doc title="静态页" path="staticpage.txt"/>	
+		<doc title="缓存" path="cache.txt"/>	
+ 	</doc>
+ 	
+	<doc title="HOWTO" path="howto" >
+		<doc title="如何实现分页" path="pagination.txt" />
+		<doc title="如何返回历史页面" path="requesthistory.txt" />
+		<doc title="如何使用表单查询" path="searchform.txt" />
+	</doc> 
+</doc>

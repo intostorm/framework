@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>删除</title><link href="../../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">删除</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#删除一个对象">删除一个对象</a></div>
+</li>
+<li>
+<div><span class="num">2</span><a href="#删除多个对象">删除多个对象</a></div>
+</li>
+<li>
+<div><span class="num">3</span><a href="#按主键删除对象">按主键删除对象</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="删除一个对象"></a>删除一个对象</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>假定SimpleDao是IDao的实现类</p>
+<pre>Foo foo1 = new Foo();
+simpleDao.remove(foo1) 
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="删除多个对象"></a>删除多个对象</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>假定SimpleDao是IDao的实现类</p>
+<pre>Foo foo1 = new Foo();
+Foo foo2 = new Foo();
+simpleDao.remove(foo1, foo2);
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="按主键删除对象"></a>按主键删除对象</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>假定SimpleDao是IDao的实现类 
+int id = 1; 
+simpleDao.remove(id);
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

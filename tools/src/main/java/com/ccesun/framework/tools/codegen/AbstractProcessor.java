@@ -209,6 +209,11 @@ public abstract class AbstractProcessor implements IProcessor {
 	protected <T extends IArtifact> void doProcess(T artifact, List<MaterialDetail> materialDetails, CodeGenConfiguation config) throws IOException, TemplateException {
 		
 		for (MaterialDetail materialDetail : materialDetails) {
+			
+			if (!materialDetail.hasPk()) {
+				logger.warn(String.format("%s has no primary key, would not generate any code this time.", materialDetail.getMaterial().getTableName()));
+				continue;
+			}
 			processMaterialDetail(artifact, materialDetail, config);
 		}
 		

@@ -1,0 +1,79 @@
+#title: 如何使用表单查询
+#index:0,3
+
+-----------------------------------------------------------------------
+使用方法
+	在jsp里使用表单
+		{{{
+		<form:form modelAttribute="searchForm" action="${REQUEST_URI }" class="form-inline" >
+	    	<form:input path="form['name_eq']" id="search_name" placeholder="姓名"/>
+	    	<form:input path="form['phone_blk']" id="search_phone" placeholder="电话"/>
+	    	<form:input path="form['gender_eq_int']" id="search_phone" placeholder="性别"/>
+	    	<button type="submit" class="btn"><i class="icon-search"></i> 搜索</button>
+	    </form:form>
+		}}}
+		每个作为查询条件的表单元素，形式为：字段名 + 查询操作符 + 数据类型。 数据类型可不写，默认使用字符串。
+		例如：gender_eq_int, 在后台会生成 "gender = 输入值" 这样的查询条件。
+	
+	使用ISearchFormSupportService的findPage(SearchForm searchForm)方法
+		{{{
+		@RequestMapping(method = {GET, POST})
+		public String list(@ModelAttribute SearchForm searchForm, Model model) {
+			Page<Contact> contactPage = contactService.findPage(searchForm);
+			model.addAttribute("contactPage", contactPage);
+			return "contact/list";
+		}
+		}}}
+	
+	可用的查询操作符
+	||操作符					||SearchForm里的常量						||生成的条件					||
+	||_lk					||OP_LIKE_SUFFIX						||like param + "%"			||
+	||_blk					||OP_BOTH_LIKE_SUFFIX					||like "%" + param + "%"	||
+	||_eq					||OP_EQ_SUFFIX							|| = param					||
+	||_neq					||OP_NOT_EQ_SUFFIX						|| <> param					||
+	||_gt					||OP_GT_SUFFIX							|| > param					||
+	||_lt					||OP_LT_SUFFIX							|| < param					||
+	||_egt					||OP_EQ_AND_GT_SUFFIX					|| >= param					||
+	||_elt					||OP_EQ_AND_LT_SUFFIX					|| <= param					||
+	||_in					||OP_IN_SUFFIX							|| in param					||
+	
+	可用的数据类型
+	||数据类型				||含义
+	||_string				||字符串
+	||_int					||整形
+	||_date					||日期型
+	||_split				||逗号分隔的字符串，每个值是字符串型
+	||_splitint				||逗号分隔的字符串，每个值 是整形
+	
+扩展查询条件
+
+	如果需要加入自定义条件, 可以在findPage(SearchForm searchForm)方法执行前加入新的条件
+	{{{
+	@RequestMapping(method = {GET, POST})
+	public String list(@ModelAttribute SearchForm searchForm, Model model) {
+		searchForm.addFormEntry("inputUser_eq", "admin");
+		Page<Contact> contactPage = contactService.findPage(searchForm);
+		model.addAttribute("contactPage", contactPage);
+		return "contact/list";
+	}
+	}}}
+	
+	或自定义一个Service方法
+	{{{
+	@RequestMapping(method = {GET, POST})
+	public String list(@ModelAttribute SearchForm searchForm, Model model) {
+		Page<Contact> contactPage = contactService.findPageByAdmin(searchForm);
+		model.addAttribute("contactPage", contactPage);
+		return "contact/list";
+	}
+	}}}
+	{{{
+	public Page<Contact> findPageByAdmin(SearchForm searchForm) {
+		PageRequest pageRequest = searchForm.getPageRequest();
+		QCriteria criteria = parseForm(searchForm);
+		criteria.addEntry("inputUser", Op.EQ, "admin");
+		return getDao().findPage(pageRequest, criteria);
+	}
+	}}}
+	
+	

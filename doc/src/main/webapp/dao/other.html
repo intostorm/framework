@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>其他方法</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">其他方法</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#检查对象是否在数据库中存在">检查对象是否在数据库中存在</a></div>
+</li>
+<li>
+<div><span class="num">2</span><a href="#批量执行更新或删除操作">批量执行更新或删除操作</a></div>
+</li>
+<li>
+<div><span class="num">3</span><a href="#同步持久层上下文与数据库的状态">同步持久层上下文与数据库的状态</a></div>
+</li>
+<li>
+<div><span class="num">4</span><a href="#得到JPA中的EntityManager">得到JPA中的EntityManager</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="检查对象是否在数据库中存在"></a>检查对象是否在数据库中存在</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>假定SimpleDao是IDao的实现类</p>
+<pre>int id = 1; &lt;br&gt;
+simpleDao.exists(id);
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="批量执行更新或删除操作"></a>批量执行更新或删除操作</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>假定SimpleDao是IDao的实现类 </p>
+<pre>String jpql = "select o from Foo o where o.name like ?";&lt;br&gt;
+simpleDao.execute(jpql, "name1".concat("%"));
+</pre>
+<pre>String jpql = "select o from Foo o where o.name like :name";&lt;br&gt;
+Map&lt;String, Object&gt; params = new HashMap&lt;String, Object&gt;();
+params.put("name", "name1".concat("%"));
+simpleDao.execute(jpql, params);
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="同步持久层上下文与数据库的状态"></a>同步持久层上下文与数据库的状态</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>假定SimpleDao是IDao的实现类 <img src="br"/></p>
+<pre>simpleDao.flush();	
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="得到JPA中的EntityManager"></a>得到JPA中的EntityManager</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>假定SimpleDao是IDao的实现类 <img src="br"/></p>
+<pre>EntityManager entityManager = simpleDao.getEntityManager();	
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

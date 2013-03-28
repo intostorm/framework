@@ -1,0 +1,161 @@
+#title: 字典插件
+#index:0,3
+
+-----------------------------------------------------------------------
+
+安装字典插件
+	# 在工程的pom中加入
+	{{{
+	<dependency>
+		<groupId>com.ccesun.framework</groupId>
+		<artifactId>plugin-dictionary</artifactId>
+		<version>${framework-version}</version>
+	</dependency>
+	}}}
+	# 运行plug-dictionary/appendix/dbscripts中的脚本，创建字典表
+	# 向字典表中插入数据
+
+-----------------------------------------------------------------------
+
+字典的工作原理
+	
+	字典的核心类DictionaryHelper接受Spring容器管理（单例），在实例化时自动调用init方法，把字典数据全部加载中对象内部的map里，使用DictionaryHelper对外提供的方法，，完成关于字典的操作。
+	字典插件强制要求一张数据库表，在plug-dictionary的appendix/dbscripts中能找到数据库脚本
+
+-----------------------------------------------------------------------
+	
+字典表的结构
+	|| 字段					|| 描述						||
+	|| record_id			|| 主键						||
+	|| dict_type			|| 类型						||
+	|| dict_key				|| 键						||
+	|| dict_value0			|| 值0						||
+	|| dict_value1			|| 值1						||
+	|| dict_value2			|| 值2						||
+	|| dict_value3			|| 值3						||
+	|| parent_key			|| 父级KEY					||
+	
+	字典表相当于多个属性表的溶合，若把每个dictType下的数据独立成表，则dictKey是这个表的主键，parentKey是自连接的外键。示例数据：
+	|| record_id	|| dict_type	|| dict_key		|| dict_value0	|| dict_value1	|| dict_value2	|| dict_value3	|| parent_key	||
+	|| 1			|| KIND			|| ITEM_TYPE	|| 商品类型		|| 				||				||				||				||
+	|| 2			|| ITEM_TYPE	|| A			|| A类			|| 塑料材质		||				||				||				||
+	|| 3			|| ITEM_TYPE	|| B			|| B类			|| 瓷器			||				||				||				||
+	|| 4			|| ITEM_TYPE	|| C			|| C类			||				||				||				||				||
+	|| 5			|| ITEM_TYPE	|| A1			|| A1类			||				||				||				|| A			||
+	|| 5			|| ITEM_TYPE	|| A2			|| A2类			||				||				||				|| A			||
+	|| 5			|| ITEM_TYPE	|| C1			|| C1类			||				||				||				|| C			||
+	|| 5			|| ITEM_TYPE	|| C2			|| C2类			||				||				||				|| C			||
+	|| 5			|| ITEM_TYPE	|| A21			|| A21类			||				||				||				|| A2			||
+	|| 5			|| ITEM_TYPE	|| A22			|| A22类			||				||				||				|| A2			||
+	第一条记录作为ITEM_TYPE的字典描述，是可选的。所有描述字典项的记录，dictType都用KIND，dictKey与要描述的字典的dictType保持一致。
+	
+-----------------------------------------------------------------------
+
+在Java中使用字典	
+
+	首先声明DictionaryHelper
+		{{{
+		@Autowired
+		private DictionaryHelper dictionaryHelper;
+		}}}
+		或
+		{{{
+		ServletContext servletContext = ...
+		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+		dictionaryHelper = applicationContext.getBean(DictionaryHelper.class);
+		}}}
+		
+	按类型和键查找一个字典对象
+		{{{
+		Dictionary dict = dictionaryHelper.lookupDict("ITEM_TYPE", "A");
+		}}}
+	
+	按类型和逗号分隔的键查找字典对象数组
+		{{{
+		Dictionary[] dicts = lookupDicts("ITEM_TYPE", "A, A1, A2");
+		}}}
+		
+	按类型和键查找字典值0
+		{{{
+		String value = lookupDictValue0("ITEM_TYPE", "A");
+		}}}
+	
+	按类型和键查找字典值1
+		{{{
+		String value = lookupDictValue1("ITEM_TYPE", "A");
+		}}}
+		
+	按类型和键查找字典值2
+		{{{
+		String value = lookupDictValue2("ITEM_TYPE", "A");
+		}}}
+		
+	按类型和键查找字典值3
+		{{{
+		String value = lookupDictValue3("ITEM_TYPE", "A");
+		}}}
+		
+	按类型查找字典Map
+		{{{
+		Map<String, Dictionary> dictMap = getDictionariesByType("ITEM_TYPE") {
+		}}}
+		
+	按类型和父级KEY查询字典Map
+		{{{
+		Map<String, Dictionary> dictMap = getDictionariesByTypeAndParent("ITEM_TYPE", "A") {
+		}}}
+		
+	批量转换一个对象List
+		当对象中含有使用了字典的属性，为了批量将这些属性转换成字典的值，可进行如下操作
+		
+		在domain对象属性上加上注解
+		{{{
+		/** 商品类别 */
+		@DictValue(type="ITEM_TYPE")
+		@Column(name="ITEM_TYPE")
+		private String itemType;
+		}}}	
+		
+		使用下列方法中的一个进行批量转换
+		{{{
+		List contactList = ...
+		List<Map<String, String>> contactMaps = dictionaryHelper.decodeBeansToMaps(contactList);
+		}}}
+		
+		{{{
+		List contactList = ...
+		contactList = dictionaryHelper.decodeBeans(contactList);
+		}}}
+		
+		{{{
+		Page contactPage = ...
+		dictionaryHelper.decodePage(contactPage);
+		}}}
+		
+-----------------------------------------------------------------------
+		
+在Jsp中使用字典
+	导入标签库
+	{{{
+	<%@ taglib prefix="dict" uri="http://www.ccesun.com/tags/dict" %>
+	}}}
+	
+	得到字典对象，放到var指定的变量中
+	{{{
+	<c:set value="A" var="key1" />
+	<dict:lookupDict type="ITEM_TYPE" key="${key1}" var="itemType" />
+	}}}
+	
+	输出字典的值，position取值 0-3,分别对应值dict_value0 - dict_value3, 默认是0;
+	{{{
+	<c:set value="A" var="key1" />
+	<dict:lookupDictValue type="ITEM_TYPE" key="${key1}" position="1" />
+	}}}
+	
+	得到字典List，放到var指定的变量中，parentKey与toJson是可选的，toJson默认是false
+	{{{
+	<c:set value="A" var="key1" />
+	<dict:loadDictList type="ITEM_TYPE" parentKey="${key1}" var="itemType" toJson="false" />
+	}}}
+	
+	

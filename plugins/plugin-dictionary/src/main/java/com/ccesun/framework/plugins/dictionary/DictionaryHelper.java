@@ -92,7 +92,7 @@ public class DictionaryHelper {
 	 * @param key 逗号分隔的key串
 	 * @return
 	 */
-	public Dictionary[] lookupDictList(String type, String csvKey) {
+	public Dictionary[] lookupDicts(String type, String csvKey) {
 		if (StringUtils.isBlank(type) || StringUtils.isBlank(csvKey))
 			return null;
 		
@@ -111,7 +111,7 @@ public class DictionaryHelper {
 	
 	
 	public String lookupDictValue0(String type, String key) {
-		Dictionary[] dicts = lookupDictList(type, key);
+		Dictionary[] dicts = lookupDicts(type, key);
 		if (dicts == null)
 			return StringUtils.EMPTY;
 		String[] result = new String[dicts.length];
@@ -122,7 +122,7 @@ public class DictionaryHelper {
 	}
 	
 	public String lookupDictValue1(String type, String key) {
-		Dictionary[] dicts = lookupDictList(type, key);
+		Dictionary[] dicts = lookupDicts(type, key);
 		if (dicts == null)
 			return StringUtils.EMPTY;
 		String[] result = new String[dicts.length];
@@ -133,7 +133,7 @@ public class DictionaryHelper {
 	}
 	
 	public String lookupDictValue2(String type, String key) {
-		Dictionary[] dicts = lookupDictList(type, key);
+		Dictionary[] dicts = lookupDicts(type, key);
 		if (dicts == null)
 			return StringUtils.EMPTY;
 		String[] result = new String[dicts.length];
@@ -144,7 +144,7 @@ public class DictionaryHelper {
 	}
 	
 	public String lookupDictValue3(String type, String key) {
-		Dictionary[] dicts = lookupDictList(type, key);
+		Dictionary[] dicts = lookupDicts(type, key);
 		if (dicts == null)
 			return StringUtils.EMPTY;
 		String[] result = new String[dicts.length];

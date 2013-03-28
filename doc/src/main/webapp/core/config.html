@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>全局配置</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">全局配置</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#说明">说明</a></div>
+</li>
+<li>
+<div><span class="num">2</span><a href="#从AppContext中获得配置项">从AppContext中获得配置项</a></div>
+</li>
+<li>
+<div><span class="num">3</span><a href="#向AppContext里保存配置项">向AppContext里保存配置项</a></div>
+</li>
+<li>
+<div><span class="num">4</span><a href="#在jsp里使用AppContext">在jsp里使用AppContext</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="说明"></a>说明</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>全局配置com.ccesun.framework.core.AppContext是个单例，在首次实例时从类路径下加载/config.properties文件。不管/config.properties存不存在，AppContext都能正常使用。AppContext内部维护一个Map<img src="String, Object"/> contextMap，用来保存配置项。配置值的来源有两个，一是从/config.properties在初始化时加载，二是在运行期动态存入。</p>
+<div class="hr"><b></b></div>
+<h1><a name="从AppContext中获得配置项"></a>从AppContext中获得配置项</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>AppContext apptext = AppContext.getInstance();	
+String charset = apptext.getString("app.Charset");
+int pageSize = apptext.getInt("app.pageSize");
+Object obj = apptext.get("app.message");
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="向AppContext里保存配置项"></a>向AppContext里保存配置项</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>AppContext apptext = AppContext.getInstance();	
+apptext.put("app.Charset", "UTF-8");
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="在jsp里使用AppContext"></a>在jsp里使用AppContext</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>在jsp里导入标签库</p>
+<pre>&lt;%@ taglib prefix="utils" uri="http:<span class="zdoc_code_cmt">//www.ccesun.com/tags/utils" %&gt;
+</span></pre>
+<p>使用标签库把AppContent用变量保存到pageContext里</p>
+<pre>&lt;utils:appctx var="appctx" /&gt;
+</pre>
+<p>使用EL表达式读取配置</p>
+<pre>charset: ${appctx['app.Charset']}
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

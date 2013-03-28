@@ -1,0 +1,193 @@
+#title: 安全插件
+#index:0,3
+
+-----------------------------------------------------------------------
+
+安装安全插件
+	# 在工程的pom中加入
+	{{{
+	<dependency>
+		<groupId>com.ccesun.framework</groupId>
+		<artifactId>plugin-security</artifactId>
+		<version>${framework-version}</version>
+	</dependency>
+	}}}
+	
+	# 用户domain类实现 ISecurityUser 接口 （参考sample）
+	# 功能domain类实现 IPermission 接口（参考sample）
+	# 用户dao类实现ISecurityDao接口（参考sample）
+	# 功能dao类实现IPermissionDao接口（参考sample）
+	# 在src/main/webapp/WEB-INF/spring/app-webwvc.xml里添加拦截器
+	{{{
+	<interceptors>
+		<beans:bean class="com.ccesun.framework.plugins.security.web.interceptor.SecurityInterceptor">
+			<beans:property name="loginUrl" value="/login" /> <!-- 登录URI -->
+			<beans:property name="noPermUrl" value="/login" /> <!-- 遇到权限不足时转向的URI -->
+			<beans:property name="excludesPath"> <!-- 不纳入权限管理的URI -->
+				<beans:list>
+					<beans:value type="java.lang.String">/main</beans:value>
+					<beans:value type="java.lang.String">/login</beans:value>
+					<beans:value type="java.lang.String">/logout</beans:value>
+					<beans:value type="java.lang.String">/plugin</beans:value>
+				</beans:list>
+			</beans:property>
+		</beans:bean>
+	</interceptors>
+	}}}
+	
+-----------------------------------------------------------------------
+用户登录
+	
+	# 在jsp中加入表单，参考代码
+	{{{
+	<form class="form-signin" action="${pageContext.request.contextPath }/login" method="post">
+		<h2 class="form-signin-heading">登录</h2>
+		<c:if test="${not empty errMsg}">
+			<div class="alert alert-error">
+		    	${errMsg }
+		    </div>
+	    </c:if>
+		<input name="username" type="text" placeholder="用户名" class="input-block-level"> 
+		<input name="password" type="password" placeholder="密码" class="input-block-level"> 
+		<label class="checkbox"> 
+			<input type="checkbox" name="rememberme" value="true">
+			记住我
+		</label>
+		<button type="submit" class="btn btn-large btn-primary">登录</button>
+	</form>
+	}}}
+
+	# 在Controller中调用ISecurityService提供的login方法， 参考代码
+	{{{
+	@Autowired
+	private ISecurityService securityService;
+	
+	@RequestMapping(value="/login", method = {POST})
+	public String login(
+			HttpServletResponse response,
+			@RequestParam("username") String userName, 
+			@RequestParam("password") String password,
+			@RequestParam(required=false, value="rememberme") Boolean rememberme,
+			Model model) {
+
+		try {
+			securityService.login(response, new String[] {userName}, password, BooleanUtils.isTrue(rememberme));
+		} catch (UserNotFoundException e) {
+			String errMsg = getMessage("security.errMsg.userNotFound");
+			model.addAttribute("errMsg", errMsg);
+			return "main/login";
+		} catch (UserNotAvailableException e) {
+			String errMsg = getMessage("security.errMsg.userNotAvailable");
+			model.addAttribute("errMsg", errMsg);
+			return "main/login";
+		} catch (WrongPasswordException e) {
+			String errMsg = getMessage("security.errMsg.wrongPassword");
+			model.addAttribute("errMsg", errMsg);
+			return "main/login";
+		}
+		return "redirect:/main";
+	}
+	}}}
+	
+用户退出	
+	在Controller中调用ISecurityService提供的logout方法， 参考代码
+	{{{
+	@RequestMapping(value="/logout", method = {GET})
+	public String logout(HttpServletResponse response) {
+		securityService.logout(response);
+		return "redirect:/login";
+	}
+	}}}
+
+在登录时使用验证码
+	# 在工程web.xml里添加
+	{{{
+	<servlet>
+		<servlet-name>validateCodeServlet</servlet-name>
+		<servlet-class>com.ccesun.framework.plugins.security.validatecode.ValidateCodeServlet</servlet-class>
+		<init-param>
+			<param-name>width</param-name> <!-- 图片宽度 -->
+			<param-value>80</param-value>
+		</init-param>
+		<init-param>
+			<param-name>height</param-name> <!-- 图片高度 -->
+			<param-value>30</param-value>
+		</init-param>
+		<init-param>
+			<param-name>codeCount</param-name>	<!-- 字符数量 -->
+			<param-value>4</param-value>
+		</init-param>
+		<init-param>
+			<param-name>lineCount</param-name>	<!-- 干扰线数量 -->
+			<param-value>40</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>validateCodeServlet</servlet-name>
+		<url-pattern>*.images</url-pattern>
+	</servlet-mapping>
+	}}}
+	
+	# jsp里再添加一个字段 validateCode
+	{{{
+	<form:input path="validateCode" />
+	<img src="${pageContext.request.contextPath }/validate.images" id="validateCodeImg" width="80" height="30"/></span>
+	<a href="javascript: void(0)" id="changeValidateCode" >看不清，换一张</a>
+	<script>
+		$('#changeValidateCode').click(function() {
+			var orginSrc = $('#validateCodeImg').attr('src');
+			$('#validateCodeImg').attr('src', orginSrc + '?');
+		});
+	</script>
+	}}}
+	
+	# Controller里调用ISecurityService的另一个重载方法，方法定义如下
+	{{{
+	SecurityToken login(HttpServletRequest request, HttpServletResponse response, String[] usernames,
+			String passwd, boolean rememberme, String validateCode)
+			throws UserNotFoundException, UserNotAvailableException,
+			WrongPasswordException, WrongValidateCodeException;
+	}}}
+-----------------------------------------------------------------------
+
+在JSP中使用安全插件
+	导入标签库
+	{{{
+	<%@ taglib prefix="security" uri="http://www.ccesun.com/tags/security" %>
+	}}}
+	
+	获得当前登录的用户，把用户对象放到var指定的变量里
+	{{{
+	<security:securityUser var="user" />
+	}}}
+	
+	获得指定code的功能，把功能对象放到var指定的变量里
+	{{{
+	<security:permission code="1" var="perm1" />
+	}}}
+	
+	获得功能List，把功能List放到var指定的变量里， groupCode、parentCode是可选的过滤条件
+	{{{
+	<security:permissionList groupCode="menu2" parentCode="23" var="perm1" />
+	}}}
+	
+	获得当前用户的功能List，把功能List放到var指定的变量里， groupCode、parentCode是可选的过滤条件
+	{{{
+	<security:permissionFilter groupCode="menu2" parentCode="23" var="perm1" />
+	}}}
+	
+	当前用户如具有指定code的访问权限，则显示标签内的内容
+	{{{
+	<security:hasPermission permCode="22">
+		<a href="show" >查看</a>
+	</security:hasPermission>
+	}}}
+	
+	当前用户如不具有指定code的访问权限，则显示标签内的内容
+	{{{
+	<security:noPermission permCode="22">
+		<span class="msg">对不起，您无权访问以下内容</span>
+	</security:noPermission>
+	}}}
+	

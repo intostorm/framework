@@ -1,0 +1,24 @@
+#title: 如何实现分页
+#index:0,3
+
+-----------------------------------------------------------------------
+
+在Controller里使用Service的findPage方法得到Page对象，并放置到model里
+{{{
+Page<Contact> contactPage = contactService.findPage(searchForm);
+model.addAttribute("contactPage", contactPage);
+}}}
+ 	
+在jsp里导入pager标签库
+{{{
+<%@ taglib prefix="pg" uri="http://www.ccesun.com/tags/pager" %>
+}}}
+
+需要显示分页时使用
+{{{
+<pg:pager url="/contact" page="${contactPage}" indexSize="7" />
+<%@ include file="/include/pager-default.jsp" %>
+}}}
+url是当前页面的访问URI，page是Page对象，indexSize是分页链接的最大索引数（可选）。
+分页模板通过include的方式引入到jsp中，模板应按需要修改。
+ 

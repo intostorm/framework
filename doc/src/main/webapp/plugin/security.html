@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>安全插件</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">安全插件</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#安装安全插件">安装安全插件</a></div>
+</li>
+<li>
+<div><span class="num">2</span><a href="#用户登录">用户登录</a></div>
+</li>
+<li>
+<div><span class="num">3</span><a href="#用户退出">用户退出</a></div>
+</li>
+<li>
+<div><span class="num">4</span><a href="#在登录时使用验证码">在登录时使用验证码</a></div>
+</li>
+<li>
+<div><span class="num">5</span><a href="#在JSP中使用安全插件">在JSP中使用安全插件</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="安装安全插件"></a>安装安全插件</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<ol type="1">
+<li>在工程的pom中加入</li>
+</ol>
+<pre>&lt;dependency&gt;
+	&lt;groupId&gt;com.ccesun.framework&lt;/groupId&gt;
+	&lt;artifactId&gt;plugin-security&lt;/artifactId&gt;
+	&lt;version&gt;${framework-version}&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<ol type="1">
+<li>用户domain类实现 ISecurityUser 接口 （参考sample）</li>
+<li>功能domain类实现 IPermission 接口（参考sample）</li>
+<li>用户dao类实现ISecurityDao接口（参考sample）</li>
+<li>功能dao类实现IPermissionDao接口（参考sample）</li>
+<li>在src/main/webapp/WEB-INF/spring/app-webwvc.xml里添加拦截器</li>
+</ol>
+<pre>&lt;interceptors&gt;
+	&lt;beans:bean class="com.ccesun.framework.plugins.security.web.interceptor.SecurityInterceptor"&gt;
+		&lt;beans:property name="loginUrl" value="/login" /&gt; &lt;!-- 登录URI --&gt;
+		&lt;beans:property name="noPermUrl" value="/login" /&gt; &lt;!-- 遇到权限不足时转向的URI --&gt;
+		&lt;beans:property name="excludesPath"&gt; &lt;!-- 不纳入权限管理的URI --&gt;
+			&lt;beans:list&gt;
+				&lt;beans:value type="java.lang.String"&gt;/main&lt;/beans:value&gt;
+				&lt;beans:value type="java.lang.String"&gt;/login&lt;/beans:value&gt;
+				&lt;beans:value type="java.lang.String"&gt;/logout&lt;/beans:value&gt;
+				&lt;beans:value type="java.lang.String"&gt;/plugin&lt;/beans:value&gt;
+			&lt;/beans:list&gt;
+		&lt;/beans:property&gt;
+	&lt;/beans:bean&gt;
+&lt;/interceptors&gt;
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="用户登录"></a>用户登录</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<ol type="1">
+<li>在jsp中加入表单，参考代码</li>
+</ol>
+<pre>&lt;form class="form-signin" action="${pageContext.request.contextPath }/login" method="post"&gt;
+	&lt;h2 class="form-signin-heading"&gt;登录&lt;/h2&gt;
+	&lt;c:if test="${not empty errMsg}"&gt;
+		&lt;div class="alert alert-error"&gt;
+	    	${errMsg }
+	    &lt;/div&gt;
+    &lt;/c:if&gt;
+	&lt;input name="username" type="text" placeholder="用户名" class="input-block-level"&gt; 
+	&lt;input name="password" type="password" placeholder="密码" class="input-block-level"&gt; 
+	&lt;label class="checkbox"&gt; 
+		&lt;input type="checkbox" name="rememberme" value="true"&gt;
+		记住我
+	&lt;/label&gt;
+	&lt;button type="submit" class="btn btn-large btn-primary"&gt;登录&lt;/button&gt;
+&lt;/form&gt;
+</pre>
+<ol type="1">
+<li>在Controller中调用ISecurityService提供的login方法， 参考代码</li>
+</ol>
+<pre>@Autowired
+private ISecurityService securityService;
+
+@RequestMapping(value="/login", method = {POST})
+public String login(
+		HttpServletResponse response,
+		@RequestParam("username") String userName, 
+		@RequestParam("password") String password,
+		@RequestParam(required=false, value="rememberme") Boolean rememberme,
+		Model model) {
+
+	try {
+		securityService.login(response, new String[] {userName}, password, BooleanUtils.isTrue(rememberme));
+	} catch (UserNotFoundException e) {
+		String errMsg = getMessage("security.errMsg.userNotFound");
+		model.addAttribute("errMsg", errMsg);
+		return "main/login";
+	} catch (UserNotAvailableException e) {
+		String errMsg = getMessage("security.errMsg.userNotAvailable");
+		model.addAttribute("errMsg", errMsg);
+		return "main/login";
+	} catch (WrongPasswordException e) {
+		String errMsg = getMessage("security.errMsg.wrongPassword");
+		model.addAttribute("errMsg", errMsg);
+		return "main/login";
+	}
+	return "redirect:/main";
+}
+</pre>
+<h1><a name="用户退出"></a>用户退出	</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>在Controller中调用ISecurityService提供的logout方法， 参考代码</p>
+<pre>@RequestMapping(value="/logout", method = {GET})
+public String logout(HttpServletResponse response) {
+	securityService.logout(response);
+	return "redirect:/login";
+}
+</pre>
+<h1><a name="在登录时使用验证码"></a>在登录时使用验证码</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<ol type="1">
+<li>在工程web.xml里添加</li>
+</ol>
+<pre>&lt;servlet&gt;
+	&lt;servlet-name&gt;validateCodeServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;com.ccesun.framework.plugins.security.validatecode.ValidateCodeServlet&lt;/servlet-class&gt;
+	&lt;init-param&gt;
+		&lt;param-name&gt;width&lt;/param-name&gt; &lt;!-- 图片宽度 --&gt;
+		&lt;param-value&gt;80&lt;/param-value&gt;
+	&lt;/init-param&gt;
+	&lt;init-param&gt;
+		&lt;param-name&gt;height&lt;/param-name&gt; &lt;!-- 图片高度 --&gt;
+		&lt;param-value&gt;30&lt;/param-value&gt;
+	&lt;/init-param&gt;
+	&lt;init-param&gt;
+		&lt;param-name&gt;codeCount&lt;/param-name&gt;	&lt;!-- 字符数量 --&gt;
+		&lt;param-value&gt;4&lt;/param-value&gt;
+	&lt;/init-param&gt;
+	&lt;init-param&gt;
+		&lt;param-name&gt;lineCount&lt;/param-name&gt;	&lt;!-- 干扰线数量 --&gt;
+		&lt;param-value&gt;40&lt;/param-value&gt;
+	&lt;/init-param&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;validateCodeServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;*.images&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</pre>
+<ol type="1">
+<li>jsp里再添加一个字段 validateCode</li>
+</ol>
+<pre>&lt;form:input path="validateCode" /&gt;
+&lt;img src="${pageContext.request.contextPath }/validate.images" id="validateCodeImg" width="80" height="30"/&gt;&lt;/span&gt;
+&lt;a href="javascript: void(0)" id="changeValidateCode" &gt;看不清，换一张&lt;/a&gt;
+&lt;script&gt;
+	$('<span class="zdoc_code_cmt">#changeValidateCode').click(function() {
+</span>		var orginSrc = $('<span class="zdoc_code_cmt">#validateCodeImg').attr('src');
+</span>		$('<span class="zdoc_code_cmt">#validateCodeImg').attr('src', orginSrc + '?');
+</span>	});
+&lt;/script&gt;
+</pre>
+<ol type="1">
+<li>Controller里调用ISecurityService的另一个重载方法，方法定义如下</li>
+</ol>
+<pre>SecurityToken login(HttpServletRequest request, HttpServletResponse response, String[] usernames,
+		String passwd, boolean rememberme, String validateCode)
+		throws UserNotFoundException, UserNotAvailableException,
+		WrongPasswordException, WrongValidateCodeException;
+</pre>
+<div class="hr"><b></b></div>
+<h1><a name="在JSP中使用安全插件"></a>在JSP中使用安全插件</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>导入标签库</p>
+<pre>&lt;%@ taglib prefix="security" uri="http:<span class="zdoc_code_cmt">//www.ccesun.com/tags/security" %&gt;
+</span></pre>
+<p>获得当前登录的用户，把用户对象放到var指定的变量里</p>
+<pre>&lt;security:securityUser var="user" /&gt;
+</pre>
+<p>获得指定code的功能，把功能对象放到var指定的变量里</p>
+<pre>&lt;security:permission code="1" var="perm1" /&gt;
+</pre>
+<p>获得功能List，把功能List放到var指定的变量里， groupCode、parentCode是可选的过滤条件</p>
+<pre>&lt;security:permissionList groupCode="menu2" parentCode="23" var="perm1" /&gt;
+</pre>
+<p>获得当前用户的功能List，把功能List放到var指定的变量里， groupCode、parentCode是可选的过滤条件</p>
+<pre>&lt;security:permissionFilter groupCode="menu2" parentCode="23" var="perm1" /&gt;
+</pre>
+<p>当前用户如具有指定code的访问权限，则显示标签内的内容</p>
+<pre>&lt;security:hasPermission permCode="22"&gt;
+	&lt;a href="show" &gt;查看&lt;/a&gt;
+&lt;/security:hasPermission&gt;
+</pre>
+<p>当前用户如不具有指定code的访问权限，则显示标签内的内容</p>
+<pre>&lt;security:noPermission permCode="22"&gt;
+	&lt;span class="msg"&gt;对不起，您无权访问以下内容&lt;/span&gt;
+&lt;/security:noPermission&gt;
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

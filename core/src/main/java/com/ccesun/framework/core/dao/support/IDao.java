@@ -681,6 +681,9 @@ public interface IDao<T extends IEntity<I>, I extends Serializable> {
 	
 	/**
 	 * 同步持久层上下文与数据库的状态
+	 * <p>示例：<br>
+	 * 假定SimpleDao是IDao的实现类 <br>
+	 * simpleDao.flush();
 	 */
 	public void flush();
 

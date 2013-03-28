@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>如何使用表单查询</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">如何使用表单查询</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div class="zdoc_folder"><span class="num">1</span><a href="#使用方法">使用方法</a></div>
+<ul>
+<li>
+<div><span class="num">1.1</span><a href="#在jsp里使用表单">在jsp里使用表单</a></div>
+</li>
+<li>
+<div><span class="num">1.2</span><a href="#使用ISearchFormSupportService的findPage(SearchForm_searchForm)方法">使用ISearchFormSupportService的findPage(SearchForm searchForm)方法</a></div>
+</li>
+</ul>
+</li>
+<li>
+<div><span class="num">2</span><a href="#扩展查询条件">扩展查询条件</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="使用方法"></a>使用方法</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<h2><a name="在jsp里使用表单"></a>在jsp里使用表单</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>&lt;form:form modelAttribute="searchForm" action="${REQUEST_URI }" class="form-inline" &gt;
+	&lt;form:input path="form['name_eq']" id="search_name" placeholder="姓名"/&gt;
+	&lt;form:input path="form['phone_blk']" id="search_phone" placeholder="电话"/&gt;
+	&lt;form:input path="form['gender_eq_int']" id="search_phone" placeholder="性别"/&gt;
+	&lt;button type="submit" class="btn"&gt;&lt;i class="icon-search"&gt;&lt;/i&gt; 搜索&lt;/button&gt;
+&lt;/form:form&gt;
+</pre>
+<p>每个作为查询条件的表单元素，形式为：字段名 + 查询操作符 + 数据类型。 数据类型可不写，默认使用字符串。例如：gender_eq_int, 在后台会生成 "gender = 输入值" 这样的查询条件。</p>
+<h2><a name="使用ISearchFormSupportService的findPage(SearchForm_searchForm)方法"></a>使用ISearchFormSupportService的findPage(SearchForm searchForm)方法</h2>
+<div style="float:right;"><a href="#top">Top</a></div>
+<pre>@RequestMapping(method = {GET, POST})
+public String list(@ModelAttribute SearchForm searchForm, Model model) {
+	Page&lt;Contact&gt; contactPage = contactService.findPage(searchForm);
+	model.addAttribute("contactPage", contactPage);
+	return "contact/list";
+}
+</pre>
+<p>可用的查询操作符</p>
+<table border="1" cellspacing="2" cellpadding="4">
+<tr>
+<td>操作符					</td>
+<td>SearchForm里的常量						</td>
+<td>生成的条件					</td>
+</tr>
+<tr>
+<td>_lk					</td>
+<td>OP_LIKE_SUFFIX						</td>
+<td>like param + "%"			</td>
+</tr>
+<tr>
+<td>_blk					</td>
+<td>OP_BOTH_LIKE_SUFFIX					</td>
+<td>like "%" + param + "%"	</td>
+</tr>
+<tr>
+<td>_eq					</td>
+<td>OP_EQ_SUFFIX							</td>
+<td> = param					</td>
+</tr>
+<tr>
+<td>_neq					</td>
+<td>OP_NOT_EQ_SUFFIX						</td>
+<td> <img src=""/> param					</td>
+</tr>
+<tr>
+<td>_gt					</td>
+<td>OP_GT_SUFFIX							</td>
+<td> &gt; param					</td>
+</tr>
+<tr>
+<td>_lt					</td>
+<td>OP_LT_SUFFIX							</td>
+<td> <img src=" param					"/></td>
+</tr>
+<tr>
+<td>_egt					</td>
+<td>OP_EQ_AND_GT_SUFFIX					</td>
+<td> &gt;= param					</td>
+</tr>
+<tr>
+<td>_elt					</td>
+<td>OP_EQ_AND_LT_SUFFIX					</td>
+<td> <img src="= param					"/></td>
+</tr>
+<tr>
+<td>_in					</td>
+<td>OP_IN_SUFFIX							</td>
+<td> in param					</td>
+</tr>
+</table>
+<p>可用的数据类型||数据类型				||含义||_string				||字符串||_int					||整形||_date					||日期型||_split				||逗号分隔的字符串，每个值是字符串型||_splitint				||逗号分隔的字符串，每个值 是整形</p>
+<h1><a name="扩展查询条件"></a>扩展查询条件</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>如果需要加入自定义条件, 可以在findPage(SearchForm searchForm)方法执行前加入新的条件</p>
+<pre>@RequestMapping(method = {GET, POST})
+public String list(@ModelAttribute SearchForm searchForm, Model model) {
+	searchForm.addFormEntry("inputUser_eq", "admin");
+	Page&lt;Contact&gt; contactPage = contactService.findPage(searchForm);
+	model.addAttribute("contactPage", contactPage);
+	return "contact/list";
+}
+</pre>
+<p>或自定义一个Service方法</p>
+<pre>@RequestMapping(method = {GET, POST})
+public String list(@ModelAttribute SearchForm searchForm, Model model) {
+	Page&lt;Contact&gt; contactPage = contactService.findPageByAdmin(searchForm);
+	model.addAttribute("contactPage", contactPage);
+	return "contact/list";
+}
+</pre>
+<pre>public Page&lt;Contact&gt; findPageByAdmin(SearchForm searchForm) {
+	PageRequest pageRequest = searchForm.getPageRequest();
+	QCriteria criteria = parseForm(searchForm);
+	criteria.addEntry("inputUser", Op.EQ, "admin");
+	return getDao().findPage(pageRequest, criteria);
+}
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>

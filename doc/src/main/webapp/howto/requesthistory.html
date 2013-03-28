@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"/>
+<title>如何返回历史页面</title><link href="../zdoc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><a name="top"></a>
+<div class="zdoc_header">如何返回历史页面</div>
+<div class="zdoc_author"><em>By:</em><b>Jaron</b></div>
+<div class="zdoc_body">
+<ul class="zdoc_index_table">
+<li>
+<div><span class="num">1</span><a href="#保存历史">保存历史</a></div>
+</li>
+<li>
+<div><span class="num">2</span><a href="#返回历史">返回历史</a></div>
+</li>
+</ul>
+<div class="hr"><b></b></div>
+<h1><a name="保存历史"></a>保存历史</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>在Controller的方法上使用注解@RequestHistory</p>
+<pre>@RequestMapping(value="/contact/list", method = {GET, POST})
+@RequestHistory
+public String list(@ModelAttribute SearchForm searchForm, Model model) {
+	
+	Page&lt;Contact&gt; contactPage = contactService.findPage(searchForm);
+	model.addAttribute("contactPage", contactPage);
+	
+	return "contact/list";
+}
+</pre>
+<p>上面的代码，保存的历史绑定在/contact/list路径下，这个路径就是list方法能够响应的路径</p>
+<h1><a name="返回历史"></a>返回历史</h1>
+<div style="float:right;"><a href="#top">Top</a></div>
+<p>在Controller的方法内return一个已保存的历史</p>
+<pre>@RequestMapping(value = "/create", method = POST)
+public String create(@Valid Contact contact, BindingResult bindingResult, Model model) {
+    if (bindingResult.hasErrors()) {
+        model.addAttribute("contact", contact);
+        return "contact/create";
+    }
+
+    contactService.save(contact);
+    return "history:/contact/list";
+}	
+</pre>
+</div>
+<div class="zdoc_footer"><em>By:</em><b>Jaron</b></div>
+</body>
+</html>
