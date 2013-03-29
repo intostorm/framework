@@ -27,5 +27,9 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils{
 		SimpleDateFormat dateFormat = new SimpleDateFormat(PATTERN_DATETIME);
 		return dateFormat.format(date);
 	}
+	public static final String format(Date date, String pattern){
+		SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+		return dateFormat.format(date);
+	}
 
 }
