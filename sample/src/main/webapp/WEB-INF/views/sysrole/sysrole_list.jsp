@@ -9,9 +9,7 @@
     <div class="span10"> 
     	<h3>列表</h3>
 	    <form:form modelAttribute="searchForm" action="${REQUEST_URI}" class="form-inline" >
-	    	<form:input path="form['roleId_eq_int']" id="search_roleId" placeholder="主键"/>
-	    	<form:input path="form['roleName_eq']" id="search_roleName" placeholder="角色名"/>
-	    	<form:input path="form['roleRemarks_eq']" id="search_roleRemarks" placeholder="描述"/>
+	    	<form:input path="form['roleName_blk']" id="search_roleName" placeholder="角色名"/>
 	    	<button type="submit" class="btn"><i class="icon-search"></i> 搜索</button>
 	    </form:form>
     
@@ -30,6 +28,7 @@
 		    	<td>
 		    		<a href="${baseUrl}/${entry.roleId}/show" class="btn btn-small"><i class="icon-eye-open"></i></a> 
 		    		<a href="${baseUrl}/${entry.roleId}/update" class="btn btn-small"><i class="icon-edit"></i></a> 
+		    		<a href="${baseUrl}/${entry.roleId}/assignFunc" class="btn btn-small"><i class="icon-list"></i></a> 
 		    		<a href="${baseUrl}/${entry.roleId}/remove" class="btn btn-small" onclick="return confirm('确定要删除吗？')"><i class="icon-remove-sign"></i></a> 
 		    	</td>
 	    	</tr>	

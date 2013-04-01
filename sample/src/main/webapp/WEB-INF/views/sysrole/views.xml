@@ -13,4 +13,7 @@
     <definition extends="default" name="sysRole/create">
         <put-attribute name="body" value="/WEB-INF/views/sysrole/sysrole_edit.jsp" />
     </definition>
+    <definition extends="default" name="sysRole/assignFunc">
+        <put-attribute name="body" value="/WEB-INF/views/sysrole/assignfunc.jsp" />
+    </definition>
 </tiles-definitions>

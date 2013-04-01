@@ -9,19 +9,18 @@
     <div class="span10"> 
     	<h3>列表</h3>
 	    <form:form modelAttribute="searchForm" action="${REQUEST_URI}" class="form-inline" >
-	    	<form:input path="form['funcId_eq_int']" id="search_funcId" placeholder="主键"/>
-	    	<form:input path="form['funcName_eq']" id="search_funcName" placeholder="功能名"/>
-	    	<form:input path="form['funcUrl_eq']" id="search_funcUrl" placeholder="功能地址"/>
-	    	<form:input path="form['funcRemarks_eq']" id="search_funcRemarks" placeholder="描述"/>
+	    	<form:input path="form['funcGroupCode_blk']" id="search_funcGroupCode" placeholder="功能组"/>
+	    	<form:input path="form['parent.funcId_eq_int']" id="search_parentFuncId" placeholder="父级编码"/>
+	    	<form:input path="form['funcName_blk']" id="search_funcName" placeholder="功能名"/>
 	    	<button type="submit" class="btn"><i class="icon-search"></i> 搜索</button>
 	    </form:form>
     
 	    <table class="table table-bordered table-hover"> 
 	    	<tr>
 		    	<td>主键</td>
-		    	<td>功能组编码</td>
-		    	<td>功能名</td>
+		    	<td>功能组</td>
 		    	<td>父级编码</td>
+		    	<td>功能名</td>
 		    	<td>功能地址</td>
 		    	<td>序号</td>
 		    	<td>描述</td>
@@ -31,8 +30,8 @@
 	    	<tr>
 		    	<td>${entry.funcId}</td>
 		    	<td>${entry.funcGroupCode}</td>
-		    	<td>${entry.funcName}</td>
 		    	<td>${entry.parent.funcId}</td>
+		    	<td>${entry.funcName}</td>
 		    	<td>${entry.funcUrl}</td>
 		    	<td>${entry.funcOrder}</td>
 		    	<td>${entry.funcRemarks}</td>

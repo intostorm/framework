@@ -9,11 +9,8 @@
     <div class="span10"> 
     	<h3>列表</h3>
 	    <form:form modelAttribute="searchForm" action="${REQUEST_URI}" class="form-inline" >
-	    	<form:input path="form['userId_eq_int']" id="search_userId" placeholder="主键"/>
-	    	<form:input path="form['userName_eq']" id="search_userName" placeholder="用户名"/>
-	    	<form:input path="form['realName_eq']" id="search_realName" placeholder="姓名"/>
-	    	<form:input path="form['passwd_eq']" id="search_passwd" placeholder="密码"/>
-	    	<form:input path="form['isAvaliable_eq_int']" id="search_isAvaliable" placeholder="是否可用"/>
+	    	<form:input path="form['userName_blk']" id="search_userName" placeholder="用户名"/>
+	    	<form:input path="form['realName_blk']" id="search_realName" placeholder="姓名"/>
 	    	<button type="submit" class="btn"><i class="icon-search"></i> 搜索</button>
 	    </form:form>
     
