@@ -23,8 +23,8 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
-import org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils.MethodFilter;
@@ -146,7 +146,8 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter i
 		this.messageConverters.add(new ByteArrayHttpMessageConverter());
 		this.messageConverters.add(stringHttpMessageConverter);
 		this.messageConverters.add(new SourceHttpMessageConverter<Source>());
-		this.messageConverters.add(new XmlAwareFormHttpMessageConverter());
+		this.messageConverters.add(new AllEncompassingFormHttpMessageConverter());
+		//this.messageConverters.add(new XmlAwareFormHttpMessageConverter());
 		this.messageConverters.add(new MappingJacksonHttpMessageConverter());
 	}
 
