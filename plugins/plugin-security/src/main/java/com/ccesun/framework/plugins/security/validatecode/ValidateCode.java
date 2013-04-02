@@ -63,7 +63,7 @@ public class ValidateCode {
 	}
 	
 	public void createCode() {
-		int x = 0,fontHeight=0,codeY=0;
+		int x = 0,fontHeight = 0,codeY = 0;
 		int red = 0, green = 0, blue = 0;
 		
 		x = width / (codeCount +2);//每个字符的宽度
@@ -101,9 +101,9 @@ public class ValidateCode {
 		for (int i = 0; i < codeCount; i++) {
 			String strRand = String.valueOf(codeSequence[random.nextInt(codeSequence.length)]);
 			// 产生随机的颜色值，让输出的每个字符的颜色值都将不同。
-			red = random.nextInt(255);
-			green = random.nextInt(255);
-			blue = random.nextInt(255);
+			red = random.nextInt(90);
+			green = random.nextInt(90);
+			blue = random.nextInt(90);
 			g.setColor(new Color(red, green, blue));
 			g.drawString(strRand, (i + 1) * x, codeY);
 			// 将产生的四个随机数组合在一起。

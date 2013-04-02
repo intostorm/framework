@@ -64,6 +64,27 @@
 	</servlet>
 	
 	<servlet>
+		<servlet-name>validateCodeServlet</servlet-name>
+		<servlet-class>com.ccesun.framework.plugins.security.validatecode.ValidateCodeServlet</servlet-class>
+		<init-param>
+			<param-name>width</param-name>
+			<param-value>80</param-value>
+		</init-param>
+		<init-param>
+			<param-name>height</param-name>
+			<param-value>30</param-value>
+		</init-param>
+		<init-param>
+			<param-name>codeCount</param-name>
+			<param-value>4</param-value>
+		</init-param>
+		<init-param>
+			<param-name>lineCount</param-name>
+			<param-value>20</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet>
 		<servlet-name>areaTree</servlet-name>
 		<servlet-class>com.ccesun.framework.plugins.area.web.servlet.AreaTreeServlet</servlet-class>
 	</servlet>
@@ -76,5 +97,10 @@
 	<servlet-mapping>
 		<servlet-name>areaTree</servlet-name>
 		<url-pattern>/plugin/areaTree</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>validateCodeServlet</servlet-name>
+		<url-pattern>*.images</url-pattern>
 	</servlet-mapping>
 </web-app>

@@ -36,20 +36,6 @@ public class ImgFontByte {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * ttf字体文件的十六进制字符串
 	 * @return
