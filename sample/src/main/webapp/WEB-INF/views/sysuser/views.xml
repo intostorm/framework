@@ -13,4 +13,7 @@
     <definition extends="default" name="sysUser/create">
         <put-attribute name="body" value="/WEB-INF/views/sysuser/sysuser_edit.jsp" />
     </definition>
+    <definition extends="default" name="sysUser/assignRole">
+        <put-attribute name="body" value="/WEB-INF/views/sysuser/assignrole.jsp" />
+    </definition>
 </tiles-definitions>

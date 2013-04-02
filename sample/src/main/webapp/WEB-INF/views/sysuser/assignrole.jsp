@@ -5,12 +5,12 @@
 <%@ taglib prefix="pg" uri="http://www.ccesun.com/tags/pager" %>
 <div class="row">
 
-	<spring:url value="/sysRole" var="baseUrl"/>  
+	<spring:url value="/sysUser" var="baseUrl"/>  
     
     <div class="span10"> 
-    	<h3>分配 ${sysRole.roleName } 的功能</h3>
-    	<form:form modelAttribute="assignFuncForm">
-    	<form:hidden path="roleId" />
+    	<h3>分配 ${sysUser.userName } 的角色</h3>
+    	<form:form modelAttribute="assignRoleForm">
+    	<form:hidden path="userId" />
 	    <table class="table table-bordered table-hover"> 
 	    	<tr>
 		    	<td><input type="checkbox" id="checkHandler"/></td>
@@ -22,21 +22,15 @@
 					});
 		    	</script>
 		    	<td>主键</td>
-		    	<td>功能组</td>
-		    	<td>父级编码</td>
-		    	<td>功能名</td>
-		    	<td>功能地址</td>
-		    	<td>序号</td>
+		    	<td>角色名</td>
+		    	<td>描述</td>
 	    	</tr>
-	    	<c:forEach items="${functions}" var="entry">
+	    	<c:forEach items="${roles}" var="entry">
 	    	<tr>
-		    	<td><form:checkbox path="funcIds" cssClass="checkboxes" value="${entry.funcId}"/> </td>
-		    	<td>${entry.funcId}</td>
-		    	<td>${entry.funcGroupCode}</td>
-		    	<td>${entry.parent.funcId}</td>
-		    	<td>${entry.funcName}</td>
-		    	<td>${entry.funcUrl}</td>
-		    	<td>${entry.funcOrder}</td>
+		    	<td><form:checkbox path="roleIds" cssClass="checkboxes" value="${entry.roleId}"/> </td>
+		    	<td>${entry.roleId}</td>
+		    	<td>${entry.roleName}</td>
+		    	<td>${entry.roleRemarks}</td>
 	    	</tr>	
 	    	</c:forEach>
 	    </table> 

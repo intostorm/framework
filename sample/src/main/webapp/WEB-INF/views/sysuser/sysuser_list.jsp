@@ -33,6 +33,7 @@
 		    	<td>
 		    		<a href="${baseUrl}/${entry.userId}/show" class="btn btn-small"><i class="icon-eye-open"></i></a> 
 		    		<a href="${baseUrl}/${entry.userId}/update" class="btn btn-small"><i class="icon-edit"></i></a> 
+		    		<a href="${baseUrl}/${entry.userId}/assignRole" class="btn btn-small"><i class="icon-list"></i></a> 
 		    		<a href="${baseUrl}/${entry.userId}/remove" class="btn btn-small" onclick="return confirm('确定要删除吗？')"><i class="icon-remove-sign"></i></a> 
 		    	</td>
 	    	</tr>	

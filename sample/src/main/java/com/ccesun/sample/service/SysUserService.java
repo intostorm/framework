@@ -5,4 +5,6 @@ import com.ccesun.framework.core.service.ISearchFormSupportService;
 
 public interface SysUserService extends ISearchFormSupportService<SysUser, Integer> {
 
+	void assignRole(Integer userId, Integer[] roleIds);
+
 }
