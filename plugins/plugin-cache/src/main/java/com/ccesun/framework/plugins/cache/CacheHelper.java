@@ -39,31 +39,32 @@ public class CacheHelper {
 		put(cache, key, value);
 	}
 	
-	private Object get(Cache cache, Serializable key) {
+	@SuppressWarnings("unchecked")
+	private <T> T get(Cache cache, Serializable key) {
 		Element element = cache.get("key");
-		return element.getObjectValue();
+		return (T) element.getObjectValue();
 	}
 	
-	public Object get(Serializable key) {
+	public <T> T get(Serializable key) {
 		Cache cache = manager.getCache("defaultCache");
 		return get(cache, key);
 	}
 	
-	public Object get(String cacheName, Serializable key) {
+	public <T> T get(String cacheName, Serializable key) {
 		Cache cache = manager.getCache(cacheName);
 		return get(cache, key);
 	}
 	
-	private Object remove(Cache cache, Serializable key) {
+	private boolean remove(Cache cache, Serializable key) {
 		return cache.remove(key);
 	}
 	
-	public Object remove(Serializable key) {
+	public boolean remove(Serializable key) {
 		Cache cache = manager.getCache("defaultCache");
 		return remove(cache, key);
 	}
 	
-	public Object remove(String cacheName, Serializable key) {
+	public boolean remove(String cacheName, Serializable key) {
 		Cache cache = manager.getCache(cacheName);
 		return remove(cache, key);
 	}
