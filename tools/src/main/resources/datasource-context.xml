@@ -18,4 +18,12 @@
 		<property name="password" value="javaforme" />
 	</bean>
 	
+	<bean id="dataSourceSample" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="connectionProperties" value="remarksReporting=true"></property>
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@192.168.0.7:1521:orcl" />
+		<property name="username" value="sample" />
+		<property name="password" value="sample" />
+	</bean>
+	
 </beans>
