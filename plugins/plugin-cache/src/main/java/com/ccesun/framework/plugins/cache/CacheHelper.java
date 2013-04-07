@@ -22,10 +22,12 @@ public class CacheHelper {
 	public void init() {
 		URL url = getClass().getResource("/ehcache.xml");
 		manager = CacheManager.newInstance(url);
+		manager.addCache("defaultCache");
 	}
 	
 	private void put(Cache cache, Serializable key, Serializable value) {
 		Element element = new Element(key, value);
+		element.setEternal(false);
 		cache.put(element);
 	}
 	
@@ -41,8 +43,8 @@ public class CacheHelper {
 	
 	@SuppressWarnings("unchecked")
 	private <T> T get(Cache cache, Serializable key) {
-		Element element = cache.get("key");
-		return (T) element.getObjectValue();
+		Element element = cache.get(key);
+		return (element == null) ? null : (T) element.getObjectValue();
 	}
 	
 	public <T> T get(Serializable key) {

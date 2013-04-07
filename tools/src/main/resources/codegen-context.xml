@@ -30,9 +30,92 @@
 	        </list>
         </property>
 	</bean>
+	
+	<bean id="society_v2_share" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation">
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="dataSource" ref="dataSourceSocietyV2" />
+		<property name="allArticfacts" value="false" />
+		<property name="baseOutput" value="codegen/society_v2" />
+		<property name="basePackage" value="com.ccesun.society.share" />
+        <property name="materials">
+	        <list>
+	            <bean p:domainName="ShareCategory" p:tableName="share_category" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ShareProp" p:tableName="share_prop" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ShareTable" p:tableName="share_table" class="com.ccesun.framework.tools.codegen.Material" />
+	        </list>
+        </property>
+	</bean>
+	
+	<bean id="society_v2_stat" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation">
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="dataSource" ref="dataSourceSocietyV2" />
+		<property name="allArticfacts" value="false" />
+		<property name="baseOutput" value="codegen/society_v2" />
+		<property name="basePackage" value="com.ccesun.society.stat" />
+        <property name="materials">
+	        <list>
+	            <bean p:domainName="StatRsCategory" p:tableName="stat_rs_category" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="StatRsProp" p:tableName="stat_rs_prop" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="StatRsTable" p:tableName="stat_rs_table" class="com.ccesun.framework.tools.codegen.Material" />
+	        </list>
+        </property>
+	</bean>
+	
+	<bean id="society_v2_spec" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation">
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="dataSource" ref="dataSourceSocietyV2" />
+		<property name="allArticfacts" value="false" />
+		<property name="baseOutput" value="codegen/society_v2" />
+		<property name="basePackage" value="com.ccesun.society.spec" />
+        <property name="materials">
+	        <list>
+	            <bean p:domainName="SpecCfg" p:tableName="spec_cfg" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SpecComm" p:tableName="spec_comm" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SpecJournal" p:tableName="spec_journal" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SpecMain" p:tableName="spec_main" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SpecRes" p:tableName="spec_res" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="SpecTask" p:tableName="spec_task" class="com.ccesun.framework.tools.codegen.Material" />
+	        </list>
+        </property>
+	</bean>
+	
+	<bean id="society_v2_kh" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation">
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="dataSource" ref="dataSourceSocietyV2" />
+		<property name="allArticfacts" value="false" />
+		<property name="baseOutput" value="codegen/society_v2" />
+		<property name="basePackage" value="com.ccesun.society.kh" />
+        <property name="materials">
+	        <list>
+	            <bean p:domainName="KhDanwei" p:tableName="kh_danwei" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="KhPinggu" p:tableName="kh_pinggu" class="com.ccesun.framework.tools.codegen.Material" />
+	        </list>
+        </property>
+	</bean>
+	
+	
+	<bean id="society_v2_zdrq" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation">
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="dataSource" ref="dataSourceSocietyV2" />
+		<property name="allArticfacts" value="false" />
+		<property name="baseOutput" value="codegen/society_v2" />
+		<property name="basePackage" value="com.ccesun.society.zdrq" />
+        <property name="materials">
+	        <list>
+	            <bean p:domainName="ZdrqJsmzdx" p:tableName="zdrq_jsmzdx" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ZdrqWwdx" p:tableName="zdrq_wwdx" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ZdrqWwdxJcsqjztzs" p:tableName="zdrq_wwdx_jcsqjztzs" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ZdrqWwdxJzxx" p:tableName="zdrq_wwdx_jzxx" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ZdrqWwdxSwtzs" p:tableName="zdrq_wwdx_swtzs" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ZdrqWwdxWcspb" p:tableName="zdrq_wwdx_wcspb" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ZdrqWwdxZaglcfshb" p:tableName="zdrq_wwdx_zaglcfshb" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ZdrqXsjj" p:tableName="zdrq_xsjj" class="com.ccesun.framework.tools.codegen.Material" />
+	        </list>
+        </property>
+	</bean>
 	 
 	<bean id="codeGen" class="com.ccesun.framework.tools.codegen.CodeGen">
-		<property name="config" ref="sample" />
+		<property name="config" ref="society_v2_zdrq" />
 	</bean>
 	
 </beans>
