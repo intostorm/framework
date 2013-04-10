@@ -80,7 +80,13 @@ public class AppContext {
     }
 
     public int getInt(String key) {
-        return Integer.parseInt(getString(key));
+    	int result = 0;
+        try {
+        	result = Integer.parseInt(getString(key));
+		}
+		catch (NumberFormatException ex) {
+		}
+        return result;
     }
     
     public Map<String, Object> getContextMap() {

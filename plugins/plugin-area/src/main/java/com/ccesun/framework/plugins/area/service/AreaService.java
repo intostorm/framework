@@ -10,13 +10,9 @@ public interface AreaService extends ISearchFormSupportService<Area, String> {
 	/**
 	 * 读取指定地区的子地区
 	 * @param areaCode
+	 * @param endAreaLevel
 	 * @return
 	 */
-	public List<Area> findSubAreas(String areaCode);
-	/**
-	 * 读取指定地区以及其全部子地区,指定地区在List的第一位
-	 * @param areaCode
-	 * @return
-	 */
-	public List<Area> readAreaAndSubAreas(String areaCode);
+	public List<Area> findChildrenByPrarentCodeAndEndLevel(String parentCode, int endAreaLevel);
+	
 }

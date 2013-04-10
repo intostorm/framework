@@ -2,6 +2,7 @@ package com.ccesun.framework.plugins.area.service;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,21 +26,19 @@ public class AreaServiceImpl extends SearchFormSupportService<Area, String> impl
 	}
 
 	@Override
-	public List<Area> findSubAreas(String areaCode) {
-		QCriteria query = new QCriteria();
-		int len = AreaHelper.getSubAreaLength(areaCode);
-		query.where("LENGTH(o.areacode)=?", len);
-		query.addEntry("areacode", Op.LIKE, areaCode+'%');
-		return find(query);
-	}
-
-	@Override
-	public List<Area> readAreaAndSubAreas(String areaCode) {
-		Area area = findByPk(areaCode);
-		List<Area> subAreas = findSubAreas(areaCode);
-		subAreas.add(0, area);
+	public List<Area> findChildrenByPrarentCodeAndEndLevel(String parentCode, int endAreaLevel) {
 		
-		return subAreas;
+		QCriteria query = new QCriteria();
+		if (StringUtils.isNotBlank(parentCode)) {
+			query.addEntry("areacode", Op.LIKE, parentCode + "%");
+		}
+		
+		if (endAreaLevel > 0) {
+			int len = AreaHelper.getLength(endAreaLevel);
+			query.where("LENGTH(o.areacode) < ?", len);
+		}
+		
+		return find(query);
 	}
 
 }

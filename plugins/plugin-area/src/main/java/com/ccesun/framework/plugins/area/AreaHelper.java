@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import com.ccesun.framework.core.AppContext;
 import com.ccesun.framework.core.dao.support.QCriteria;
+import com.ccesun.framework.core.dao.support.QCriteria.Op;
 import com.ccesun.framework.plugins.area.domain.Area;
 import com.ccesun.framework.plugins.area.service.AreaService;
 
@@ -62,6 +64,8 @@ public class AreaHelper {
 	public static final int PERSON_CODE_LENGTH = 2;
 
 	private static final String NAV_SEP = "-";
+	
+	private static final int cacheAreaLevel = AppContext.getInstance().getInt("plugin.area.cacheAreaLevel");
 
 	//private static final String AREA_CACHE_PATH = AreaHelper.class.getResource("/").getPath() + "../conf/"; 
 	//private static final String AREA_CACHE_FILE = "area-cache.xml"; 
@@ -114,7 +118,8 @@ public class AreaHelper {
 	
 	@PostConstruct
 	public void init() {
-		List<Area> areaList = areaService.find(new QCriteria());
+		
+		List<Area> areaList = areaService.findChildrenByPrarentCodeAndEndLevel(null, cacheAreaLevel);
     	HashMap<String, Area> areasFromCache = new HashMap<String, Area>(areaList.size());
     	for(Area area : areaList){
     		areasFromCache.put(area.getAreacode(), area);
@@ -136,7 +141,14 @@ public class AreaHelper {
 	}
 
 	public Area lookupArea(String areaCode) {
-		return getAreas().get(areaCode);
+		int level = AreaHelper.getLevel(areaCode);
+		Area area = null;
+		if(level > cacheAreaLevel){
+			area = areaService.findOne(new QCriteria().addEntry("areacode", Op.EQ, areaCode));
+		}else{
+			area = areas.get(areaCode);
+		}
+		return area;
 	}
 	
 	public String lookupAreaName(String areaCode) {
@@ -223,14 +235,29 @@ public class AreaHelper {
 		if (!isValid(areaCode))
 			return results;
 		
-		Iterator<Map.Entry<String, Area>> iter = areas.entrySet().iterator();
-		while (iter.hasNext()) {
-			Map.Entry<String, Area> entry = iter.next();
-			if (entry.getKey().startsWith(areaCode)
-					&& !entry.getKey().equals(areaCode)
-					&& getLevel(entry.getKey()) <= endLevel) {
-
-				results.put(entry.getKey(), entry.getValue());
+		if(endLevel > cacheAreaLevel){
+			List<Area> tmpResult = areaService.findChildrenByPrarentCodeAndEndLevel(areaCode, endLevel);
+			for (Area area : tmpResult) {
+				
+				if (area.getAreacode().startsWith(areaCode)
+						&& !area.getAreacode().equals(areaCode)
+						&& getLevel(area.getAreacode()) <= endLevel) {
+	
+					results.put(area.getAreacode(), area);
+				}
+			}
+		}	
+		
+		else {	
+			Iterator<Map.Entry<String, Area>> iter = areas.entrySet().iterator();
+			while (iter.hasNext()) {
+				Map.Entry<String, Area> entry = iter.next();
+				if (entry.getKey().startsWith(areaCode)
+						&& !entry.getKey().equals(areaCode)
+						&& getLevel(entry.getKey()) <= endLevel) {
+	
+					results.put(entry.getKey(), entry.getValue());
+				}
 			}
 		}
 		return results;

@@ -110,12 +110,26 @@
 	            <bean p:domainName="ZdrqWwdxWcspb" p:tableName="zdrq_wwdx_wcspb" class="com.ccesun.framework.tools.codegen.Material" />
 	            <bean p:domainName="ZdrqWwdxZaglcfshb" p:tableName="zdrq_wwdx_zaglcfshb" class="com.ccesun.framework.tools.codegen.Material" />
 	            <bean p:domainName="ZdrqXsjj" p:tableName="zdrq_xsjj" class="com.ccesun.framework.tools.codegen.Material" />
+	            <bean p:domainName="ZdrqAnbrr" p:tableName="zdrq_anbrr" class="com.ccesun.framework.tools.codegen.Material" />
+	        </list>
+        </property>
+	</bean>
+	
+	<bean id="society_v2_resource" class="com.ccesun.framework.tools.codegen.SimpleCodeGenConfiguation">
+		<property name="freemarkerConfig" ref="freemarkerConfig" />
+		<property name="dataSource" ref="dataSourceSocietyV2" />
+		<property name="allArticfacts" value="false" />
+		<property name="baseOutput" value="codegen/society_v2" />
+		<property name="basePackage" value="com.ccesun.society.resource" />
+        <property name="materials">
+	        <list>
+	            <bean p:domainName="RsCloud" p:tableName="rs_cloud" class="com.ccesun.framework.tools.codegen.Material" />
 	        </list>
         </property>
 	</bean>
 	 
 	<bean id="codeGen" class="com.ccesun.framework.tools.codegen.CodeGen">
-		<property name="config" ref="society_v2_zdrq" />
+		<property name="config" ref="society_v2_resource" />
 	</bean>
 	
 </beans>
