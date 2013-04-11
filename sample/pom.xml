@@ -10,8 +10,7 @@
 	</parent>
 	<artifactId>sample</artifactId>
 	<packaging>war</packaging>
-	<name>sample</name>
-	<url>http://sample.ccesun.com</url>
+	<name>framework-sample</name>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

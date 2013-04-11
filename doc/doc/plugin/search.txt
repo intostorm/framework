@@ -2,3 +2,87 @@
 #index:0,3
 
 -----------------------------------------------------------------------
+
+安装全文插件
+	# 在工程的pom中加入
+	{{{
+	<dependency>
+		<groupId>com.ccesun.framework</groupId>
+		<artifactId>plugin-search</artifactId>
+		<version>${framework-version}</version>
+	</dependency>
+	}}}
+
+配置索引目录（可选）
+	
+	在工程的config.properties里添加
+	{{{
+	plugin.search.searchIndexDir=/path/to/index
+	}}}
+	如果没有设置plugin.search.searchIndexDir，索引目录默认为java.io.tmpdir代表的目录
+	
+添加数据到Lucence
+	
+	# 在domain类上加上@SearchableBean
+		{{{
+		
+		@Entity
+		@Table(name="contact")
+		@SearchableBean
+		public class Contact implements IEntity<Integer> {
+		
+			...
+			
+		}
+		}}}
+	
+	# 在domain类字段上加上@SearchableField
+		{{{
+		
+		...
+		
+		/** 姓名 */
+		@Column(name="NAME")
+		@NotBlank(message="{field.contact.name}")
+		@SearchableField(index=Index.ANALYZED)
+		private String name;
+		
+		...
+		
+		/** 电话 */
+		@Column(name="PHONE")
+		@SearchableField(index=Index.ANALYZED)
+		private String phone;
+		
+		...
+		
+		}}}
+		
+		@SearchableField的属性
+		
+		|| 属性					|| 说明																	||
+		|| value				|| 存储到Lucence时该字段使用的名称，如不设置，则使用原字段名				||
+		|| index				|| 代表是否可被检索，及添加到索引时是否使用分词索引，默认为分词索引			||
+		|| store				|| 代表是否可被存储，默认是可存储											||
+		
+	# 使用Service的save方法保存domain
+		{{{
+		Contact contact = new Contact();
+		contact.setName("测试一");
+		contact.setPhone("15500000001");
+		
+		contactService.save(contact);
+		}}}
+		插件里使用Spring AOP机制对所有IService的子类的save方法拦截，自动将domain保存到Lucence
+		
+分页检索对象
+
+	{{{
+	PageRequest pageRequest = new PageRequest(1, 10);
+	
+	// 查询条件，需在bean上设置过@SearchableField，且index不能是Index.NO
+	Map<String, String> paramMap = new HashMap<String, String>();
+	paramMap.put("name", "测");
+	
+	Page<Contact> contactPage = SearchUtils.findPage(pageRequest, Contact.class, paramMap);
+	}}}

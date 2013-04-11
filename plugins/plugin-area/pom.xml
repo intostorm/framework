@@ -9,7 +9,7 @@
 		<version>2.0.1</version>
 	</parent>
 	<artifactId>plugin-area</artifactId>
-	<name>plugin-area</name>
+	<name>framework-plugin-area</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<framework-version>2.0.1</framework-version>

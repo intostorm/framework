@@ -1,106 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-	<display-name>sample</display-name>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/app-context.xml</param-value>
-	</context-param>
-	<!-- <filter>
-		<filter-name>StaticPageFilter</filter-name>
-		<filter-class>com.ccesun.framework.plugins.staticpage.StaticPageFilter</filter-class>
-		<init-param>
-			<param-name>excludes</param-name>
-			<param-value>.css,.js,.png,.jpg,.gif,.swf,.els,.doc,.rar,.zip,.pdf</param-value>
-		</init-param>
-	</filter> -->
-	<!-- Spring MVC filters -->
-	<filter>
-		<filter-name>CharacterEncodingFilter</filter-name>
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>UTF-8</param-value>
-		</init-param>
-		<init-param>
-			<param-name>forceEncoding</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</filter>
-	<filter>
-		<filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
-		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>CharacterEncodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<!-- <filter-mapping>
-		<filter-name>StaticPageFilter</filter-name>
-		<url-pattern>*.do</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>StaticPageFilter</filter-name>
-		<url-pattern>*.html</url-pattern>
-	</filter-mapping> -->
-	<filter-mapping>
-		<filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<!-- Creates the Spring Container shared by all Servlets and Filters -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<!-- Processes application requests -->
-	<servlet>
-		<servlet-name>webmvc</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/app-webmvc.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>validateCodeServlet</servlet-name>
-		<servlet-class>com.ccesun.framework.plugins.security.validatecode.ValidateCodeServlet</servlet-class>
-		<init-param>
-			<param-name>width</param-name>
-			<param-value>80</param-value>
-		</init-param>
-		<init-param>
-			<param-name>height</param-name>
-			<param-value>30</param-value>
-		</init-param>
-		<init-param>
-			<param-name>codeCount</param-name>
-			<param-value>4</param-value>
-		</init-param>
-		<init-param>
-			<param-name>lineCount</param-name>
-			<param-value>20</param-value>
-		</init-param>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>areaTree</servlet-name>
-		<servlet-class>com.ccesun.framework.plugins.area.web.servlet.AreaTreeServlet</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>webmvc</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>areaTree</servlet-name>
-		<url-pattern>/plugin/areaTree</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>validateCodeServlet</servlet-name>
-		<url-pattern>*.images</url-pattern>
-	</servlet-mapping>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>framework-sample</display-name>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/spring/app-context.xml</param-value>
+  </context-param>
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
+    <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>webmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/spring/app-webmvc.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>validateCodeServlet</servlet-name>
+    <servlet-class>com.ccesun.framework.plugins.security.validatecode.ValidateCodeServlet</servlet-class>
+    <init-param>
+      <param-name>width</param-name>
+      <param-value>80</param-value>
+    </init-param>
+    <init-param>
+      <param-name>height</param-name>
+      <param-value>30</param-value>
+    </init-param>
+    <init-param>
+      <param-name>codeCount</param-name>
+      <param-value>4</param-value>
+    </init-param>
+    <init-param>
+      <param-name>lineCount</param-name>
+      <param-value>20</param-value>
+    </init-param>
+  </servlet>
+  <servlet>
+    <servlet-name>areaTree</servlet-name>
+    <servlet-class>com.ccesun.framework.plugins.area.web.servlet.AreaTreeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>webmvc</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>areaTree</servlet-name>
+    <url-pattern>/plugin/areaTree</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>validateCodeServlet</servlet-name>
+    <url-pattern>*.images</url-pattern>
+  </servlet-mapping>
 </web-app>

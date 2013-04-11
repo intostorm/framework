@@ -10,8 +10,7 @@
 	</parent>
 	<artifactId>doc</artifactId>
 	<packaging>war</packaging>
-	<name>doc</name>
-	<url>http://maven.apache.org</url>
+	<name>framework-doc</name>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

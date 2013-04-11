@@ -9,7 +9,7 @@
 		<version>2.0.1</version>
 	</parent>
 	<artifactId>plugin-search</artifactId>
-	<name>plugin-search</name>
+	<name>framework-plugin-search</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<framework-version>2.0.1</framework-version>

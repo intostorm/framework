@@ -9,7 +9,7 @@
 		<version>2.0.1</version>
 	</parent>
 	<artifactId>core</artifactId>
-	<name>core</name>
+	<name>framework-core</name>
 	<properties>
 		<org.springframework-version>3.2.0.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.9</org.aspectj-version>

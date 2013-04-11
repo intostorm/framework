@@ -9,8 +9,7 @@
 		<version>2.0.1</version>
 	</parent>
 	<artifactId>tools</artifactId>
-	<name>tools</name>
-	<url>http://maven.apache.org</url>
+	<name>framework-tools</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

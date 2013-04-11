@@ -9,7 +9,7 @@
 		<version>2.0.1</version>
 	</parent>
 	<artifactId>plugin-security</artifactId>
-	<name>plugin-security</name>
+	<name>framework-plugin-security</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<framework-version>2.0.1</framework-version>
