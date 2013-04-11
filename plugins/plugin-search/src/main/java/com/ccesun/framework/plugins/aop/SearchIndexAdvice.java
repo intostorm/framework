@@ -29,6 +29,8 @@ import com.ccesun.framework.util.StringUtils;
 @Component
 public class SearchIndexAdvice {
 
+	private static final String METHODNAME_TO_INTERCEPT = "save";
+	
 	private static final Log logger = LogFactory.getLog(SearchIndexAdvice.class);
 	
 	@After("target(com.ccesun.framework.core.service.IService)")
@@ -37,8 +39,8 @@ public class SearchIndexAdvice {
 		Object[] args = joinPoint.getArgs();
 
 		if (!StringUtils.isBlank(methodName) 
-				&& "save".equals(methodName)
-				&& args.length == 1 
+				&& METHODNAME_TO_INTERCEPT.equals(methodName)
+				//&& args.length == 1 
 				&& args[0] != null) {
 			Object bean = args[0];
 			SearchableBean searchableBean = bean.getClass().getAnnotation(SearchableBean.class);
