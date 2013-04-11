@@ -52,10 +52,7 @@ public class ContactServiceTest {
 			put("name", "测");
 		}};
 		
-		// 要查询的结果字段，需在bean上设置过@SearchableField
-		String[] fields = new String[] {"name", "phone"};
-		
-		Page<Contact> contactPage = SearchUtils.findPage(pageRequest, Contact.class, fields, paramMap);
+		Page<Contact> contactPage = SearchUtils.findPage(pageRequest, Contact.class, paramMap);
 		
 		for (Contact one : contactPage.getContent()) {
 			System.out.println(one.getName());

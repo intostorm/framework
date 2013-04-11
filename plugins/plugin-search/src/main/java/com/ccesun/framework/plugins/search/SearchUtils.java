@@ -61,7 +61,7 @@ public class SearchUtils {
 	 * @param params 查询条件
 	 * @return 符合条件的分页对象
 	 */
-	public static <T> Page<T> findPage(PageRequest pageRequest, Class<T> clazz, String[] fieldNames, Map<String, String> params) {
+	public static <T> Page<T> findPage(PageRequest pageRequest, Class<T> clazz, Map<String, String> params) {
 		
 		int pageNo = pageRequest.getPageNo();
 		int pageSize = pageRequest.getPageSize();
@@ -81,7 +81,7 @@ public class SearchUtils {
 			ScoreDoc [] docs = topCollector.topDocs((pageNo - 1) * pageSize, pageSize).scoreDocs;  
 			for(ScoreDoc scdoc : docs){  
 				Document doc = searcher.doc(scdoc.doc);
-				T bean = parseBean(doc, clazz, fieldNames);
+				T bean = parseBean(doc, clazz);
 				content.add(bean);  
 			}
 			
@@ -93,9 +93,10 @@ public class SearchUtils {
             
 	}
 	
-	private static <T> T parseBean(Document doc, Class<T> clazz, String[] fieldNames) {
+	private static <T> T parseBean(Document doc, Class<T> clazz) {
 		
 		try {
+			String[] fieldNames = getFieldNames(clazz);
 			T instance = clazz.newInstance();
 			for (String fieldName : fieldNames) {
 				String value = ((Field) doc.getFieldable(fieldName)).stringValue();
@@ -108,6 +109,23 @@ public class SearchUtils {
 			return null;
 		}
 		
+	}
+	
+	private static String[] getFieldNames(Class<?> clazz) {
+		List<String> tempResult = new ArrayList<String>();
+		java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+		for (java.lang.reflect.Field field : fields) {
+			SearchableField searchableField = field.getAnnotation(SearchableField.class);
+			if (searchableField != null && Field.Store.YES.equals(searchableField.store())) {
+				String fieldName = searchableField.value();
+				
+				if (StringUtils.isBlank(fieldName))
+					fieldName = field.getName();
+				
+				tempResult.add(fieldName);
+			}
+		}
+		return tempResult.toArray(new String[0]);
 	}
 	
 	private static <T> Query getQuery(Class<T> clazz, Map<String, String> params) {

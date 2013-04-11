@@ -23,6 +23,9 @@
         <dependent-module archiveName="plugin-staticpage-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-staticpage/plugin-staticpage">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="plugin-search-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/plugin-search/plugin-search">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/sample/target/classes"/>
         <property name="context-root" value="sample"/>
     </wb-module>
