@@ -12,6 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ccesun.framework.core.dao.support.Page;
+import com.ccesun.framework.core.dao.support.PageRequest;
+import com.ccesun.framework.plugins.search.SearchUtils;
+import com.ccesun.sample.domain.Contact;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/app-context.xml"})
 public class ContactServiceTest {
@@ -29,6 +34,33 @@ public class ContactServiceTest {
 
 	@Test
 	public void testSave() {
+		Contact contact = new Contact();
+		contact.setName("测试一");
+		contact.setPhone("15500000001");
+		
+		contactService.save(contact);
+	}
+	
+	@SuppressWarnings("serial")
+	@Test
+	public void testSearch() {
+		
+		PageRequest pageRequest = new PageRequest(1, 10);
+		
+		// 查询条件，需在bean上设置过@SearchableField，且index不能是Index.NO
+		Map<String, String> paramMap = new HashMap<String, String>() {{
+			put("name", "测");
+		}};
+		
+		// 要查询的结果字段，需在bean上设置过@SearchableField
+		String[] fields = new String[] {"name", "phone"};
+		
+		Page<Contact> contactPage = SearchUtils.findPage(pageRequest, Contact.class, fields, paramMap);
+		
+		for (Contact one : contactPage.getContent()) {
+			System.out.println(one.getName());
+			System.out.println(one.getPhone());
+		}
 	}
 
 	@Test

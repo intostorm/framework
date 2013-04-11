@@ -50,6 +50,11 @@
 			<version>${framework-version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.ccesun.framework</groupId>
+			<artifactId>plugin-search</artifactId>
+			<version>${framework-version}</version>
+		</dependency>
+		<dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>

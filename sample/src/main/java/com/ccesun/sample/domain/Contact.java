@@ -7,13 +7,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.lucene.document.Field.Index;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.ccesun.framework.core.dao.support.IEntity;
 import com.ccesun.framework.plugins.dictionary.DictValue;
+import com.ccesun.framework.plugins.search.SearchableBean;
+import com.ccesun.framework.plugins.search.SearchableField;
 
 @Entity
 @Table(name="contact")
+@SearchableBean
 public class Contact implements IEntity<Integer> {
 	
 	private static final long serialVersionUID = 1992475237L;
@@ -27,6 +31,7 @@ public class Contact implements IEntity<Integer> {
 	/** 姓名 */
 	@Column(name="NAME")
 	@NotBlank(message="{field.contact.name}")
+	@SearchableField(index=Index.ANALYZED)
 	private String name;
 	
 	/** 性别 */
@@ -36,6 +41,7 @@ public class Contact implements IEntity<Integer> {
 	
 	/** 电话 */
 	@Column(name="PHONE")
+	@SearchableField(index=Index.ANALYZED)
 	private String phone;
 	
 	/** 地区 */
