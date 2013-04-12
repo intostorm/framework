@@ -46,7 +46,7 @@ public class ${materialDetail.material.domainName} implements IEntity<${material
 	<#else>
 	@Column(name="${pcMapping.columnName}")
 	</#if>
-	private ${pcMapping.propertyType} ${pcMapping.propertyName};
+	protected ${pcMapping.propertyType} ${pcMapping.propertyName};
 </#list>
 <#list materialDetail.pcMappings as pcMapping>
 	

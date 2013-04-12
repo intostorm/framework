@@ -53,7 +53,7 @@ public class SearchIndexAdvice {
 					indexWriter = new IndexWriter(new NIOFSDirectory(indexDir), indexWriterConfig);
 					Document document = new Document();
 	
-					Field[] fields = bean.getClass().getFields();
+					Field[] fields = bean.getClass().getDeclaredFields();
 	
 					for (Field field : fields) {
 						SearchableField searchableField = field.getAnnotation(SearchableField.class);
