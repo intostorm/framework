@@ -55,10 +55,9 @@ public class SearchUtils {
 	 * PageRequest pageRequest = new PageRequest(1, 10);<br>
 	 * Map<String, String> params = new HashMap<String, String>();<br>
 	 * params.put("name", "searchtest");<br>
-	 * Page<Contact> contactPage = SearchUtils.findPage(pageRequest, Contact.class, new String[] {"name", "areacode", "address"}, params);<br>
+	 * Page<Contact> contactPage = SearchUtils.findPage(pageRequest, Contact.class, params);<br>
 	 * @param pageRequest 分页条件
 	 * @param clazz 待查询的对象Class
-	 * @param fieldNames 查询结果的字段定义
 	 * @param params 查询条件
 	 * @return 符合条件的分页对象
 	 */

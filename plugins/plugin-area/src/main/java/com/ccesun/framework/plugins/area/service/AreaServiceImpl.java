@@ -35,7 +35,7 @@ public class AreaServiceImpl extends SearchFormSupportService<Area, String> impl
 		
 		if (endAreaLevel > 0) {
 			int len = AreaHelper.getLength(endAreaLevel);
-			query.where("LENGTH(o.areacode) < ?", len);
+			query.where("LENGTH(o.areacode) <= ?", len);
 		}
 		
 		return find(query);

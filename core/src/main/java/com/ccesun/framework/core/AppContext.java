@@ -76,7 +76,8 @@ public class AppContext {
     }
 
     public String getString(String key) {
-        return String.valueOf(this.contextMap.get(key));
+    	Object tmpValue = this.contextMap.get(key);
+        return tmpValue == null ? null : tmpValue.toString();
     }
 
     public int getInt(String key) {
