@@ -113,7 +113,7 @@ public class SearchUtils {
 	
 	private static String[] getFieldNames(Class<?> clazz) {
 		List<String> tempResult = new ArrayList<String>();
-		java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+		java.lang.reflect.Field[] fields = clazz.getFields();
 		for (java.lang.reflect.Field field : fields) {
 			SearchableField searchableField = field.getAnnotation(SearchableField.class);
 			if (searchableField != null && Field.Store.YES.equals(searchableField.store())) {

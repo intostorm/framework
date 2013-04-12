@@ -190,12 +190,26 @@ public class AreaHelper {
 		int level = getLevel(areaCode);
 		int nextLevel = level + 1;
 
-		Iterator<Map.Entry<String, Area>> iter = areas.entrySet().iterator();
-		while (iter.hasNext()) {
-			Map.Entry<String, Area> entry = iter.next();
-			if (getLevel(entry.getKey()) == nextLevel
-					&& entry.getKey().startsWith(areaCode)) {
-				results.put(entry.getKey(), entry.getValue());
+		if(nextLevel > cacheAreaLevel){
+			List<Area> tmpResult = areaService.findChildrenByPrarentCodeAndEndLevel(areaCode, nextLevel);
+			for (Area area : tmpResult) {
+				
+				if (area.getAreacode().startsWith(areaCode)
+						&& !area.getAreacode().equals(areaCode)
+						&& getLevel(area.getAreacode()) <= nextLevel) {
+	
+					results.put(area.getAreacode(), area);
+				}
+			}
+		} else {	
+		
+			Iterator<Map.Entry<String, Area>> iter = areas.entrySet().iterator();
+			while (iter.hasNext()) {
+				Map.Entry<String, Area> entry = iter.next();
+				if (getLevel(entry.getKey()) == nextLevel
+						&& entry.getKey().startsWith(areaCode)) {
+					results.put(entry.getKey(), entry.getValue());
+				}
 			}
 		}
 		return results;

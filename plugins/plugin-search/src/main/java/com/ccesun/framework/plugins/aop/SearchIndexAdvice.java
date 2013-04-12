@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import com.ccesun.framework.plugins.search.SearchUtils;
 import com.ccesun.framework.plugins.search.SearchableBean;
 import com.ccesun.framework.plugins.search.SearchableField;
-import com.ccesun.framework.util.BeanUtils;
 import com.ccesun.framework.util.StringUtils;
 
 @Aspect
@@ -54,7 +53,7 @@ public class SearchIndexAdvice {
 					indexWriter = new IndexWriter(new NIOFSDirectory(indexDir), indexWriterConfig);
 					Document document = new Document();
 	
-					Field[] fields = bean.getClass().getDeclaredFields();
+					Field[] fields = bean.getClass().getFields();
 	
 					for (Field field : fields) {
 						SearchableField searchableField = field.getAnnotation(SearchableField.class);
@@ -63,7 +62,8 @@ public class SearchIndexAdvice {
 		
 							String fieldValue = StringUtils.EMPTY;
 							try {
-								fieldValue = BeanUtils.getProperty(bean, field.getName());
+								//fieldValue = BeanUtils.getProperty(bean, field.getName());
+								fieldValue = field.get(bean) == null ? null : field.get(bean).toString();
 							} catch (Exception e) {
 							}
 		
