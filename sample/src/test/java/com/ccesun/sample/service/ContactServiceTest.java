@@ -35,8 +35,9 @@ public class ContactServiceTest {
 	@Test
 	public void testSave() {
 		Contact contact = new Contact();
-		contact.setName("测试一");
+		contact.setName("五");
 		contact.setPhone("15500000001");
+		//contact.setAbc("1111");
 		
 		contactService.save(contact);
 	}
@@ -49,7 +50,7 @@ public class ContactServiceTest {
 		
 		// 查询条件，需在bean上设置过@SearchableField，且index不能是Index.NO
 		Map<String, String> paramMap = new HashMap<String, String>() {{
-			put("name", "测");
+			put("name", "五");
 		}};
 		
 		Page<Contact> contactPage = SearchUtils.findPage(pageRequest, Contact.class, paramMap);

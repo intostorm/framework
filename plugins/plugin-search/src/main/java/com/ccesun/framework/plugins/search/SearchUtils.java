@@ -2,6 +2,7 @@ package com.ccesun.framework.plugins.search;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,7 @@ public class SearchUtils {
 	
 	private static String[] getFieldNames(Class<?> clazz) {
 		List<String> tempResult = new ArrayList<String>();
-		java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+		Collection<java.lang.reflect.Field> fields = BeanUtils.getAllFieldMap(clazz).values();
 		for (java.lang.reflect.Field field : fields) {
 			SearchableField searchableField = field.getAnnotation(SearchableField.class);
 			if (searchableField != null && Field.Store.YES.equals(searchableField.store())) {

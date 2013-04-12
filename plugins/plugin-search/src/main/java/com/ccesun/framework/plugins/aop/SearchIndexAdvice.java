@@ -2,6 +2,7 @@ package com.ccesun.framework.plugins.aop;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 import com.ccesun.framework.plugins.search.SearchUtils;
 import com.ccesun.framework.plugins.search.SearchableBean;
 import com.ccesun.framework.plugins.search.SearchableField;
+import com.ccesun.framework.util.BeanUtils;
 import com.ccesun.framework.util.StringUtils;
 
 @Aspect
@@ -53,7 +55,7 @@ public class SearchIndexAdvice {
 					indexWriter = new IndexWriter(new NIOFSDirectory(indexDir), indexWriterConfig);
 					Document document = new Document();
 	
-					Field[] fields = bean.getClass().getDeclaredFields();
+					Collection<Field> fields = BeanUtils.getAllFieldMap(bean.getClass()).values();
 	
 					for (Field field : fields) {
 						SearchableField searchableField = field.getAnnotation(SearchableField.class);
