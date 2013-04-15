@@ -82,6 +82,7 @@ public class SearchIndexAdvice implements DisposableBean {
 						SearchableField searchableField = field
 								.getAnnotation(SearchableField.class);
 						if (searchableField != null) {
+
 							field.setAccessible(true);
 		
 							String fieldValue = 
