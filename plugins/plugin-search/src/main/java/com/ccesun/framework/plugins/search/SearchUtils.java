@@ -66,30 +66,60 @@ public class SearchUtils {
 	 * 
 	 * @param pageRequest
 	 *            分页条件
-	 * @param clazz
+	 * @param target
 	 *            待查询的对象Class
 	 * @param params
 	 *            查询条件
 	 * @return 符合条件的分页对象
 	 */
-	public static <T> Page<T> findPage(PageRequest pageRequest, Class<T> clazz,
-			Map<String, String> params) {
+	public static <T> Page<T> findPage(PageRequest pageRequest,
+			Class<T> target, Map<String, String> params) {
 
-		Query query = getQuery(clazz, params);
-		return findPage(pageRequest, clazz, query);
+		Query query = getQuery(target, params);
+		return findPage(pageRequest, target, query);
 
 	}
 
 	/**
 	 * @param pageRequest
-	 * @param clazz
+	 * @param target
 	 * @param query
 	 *            可以自行构造多种查询规则进行检索
 	 * @return
 	 * @author mawm at 2013-4-12 下午4:11:49
 	 */
-	public static <T> Page<T> findPage(PageRequest pageRequest, Class<T> clazz,
-			Query query) {
+	public static <T> Page<T> findPage(PageRequest pageRequest,
+			Class<T> target, Query query) {
+		boolean addTargeClassQuery = true;
+		return findPage(pageRequest, target, query, addTargeClassQuery);
+	}
+
+	/**
+	 * @param pageRequest
+	 * @param target
+	 * @param query
+	 *            可以自行构造多种查询规则进行检索
+	 * @param addTargeClassQuery
+	 *            是否把当前target的类名称封装进去
+	 * @return
+	 * @author mawm at 2013-4-15 下午5:06:17
+	 */
+	public static <T> Page<T> findPage(PageRequest pageRequest,
+			Class<T> target, Query query, boolean addTargeClassQuery) {
+
+		Query queryAll = null;
+		if (addTargeClassQuery) {//把target添加到查询中
+			BooleanQuery bq = new BooleanQuery();
+			Query queryClazz = new TermQuery(new Term("className",
+					target.getName()));
+			bq.add(queryClazz, BooleanClause.Occur.MUST);
+			bq.add(query, BooleanClause.Occur.MUST);
+			queryAll = bq;
+
+		} else {
+			queryAll = query;
+		}
+
 		int pageNo = pageRequest.getPageNo();
 		int pageSize = pageRequest.getPageSize();
 
@@ -109,13 +139,13 @@ public class SearchUtils {
 
 			topCollector = TopScoreDocCollector
 					.create(searcher.maxDoc(), false);
-			searcher.search(query, topCollector);// ,
+			searcher.search(queryAll, topCollector);// ,
 
 			ScoreDoc[] docs = topCollector.topDocs((pageNo - 1) * pageSize,
 					pageSize).scoreDocs;
 			for (ScoreDoc scdoc : docs) {
 				Document doc = searcher.doc(scdoc.doc);
-				T bean = parseBean(doc, clazz);
+				T bean = parseBean(doc, target);
 				content.add(bean);
 			}
 			return new Page<T>(content, pageRequest,
@@ -202,22 +232,22 @@ public class SearchUtils {
 		return query;
 	}
 
-	public static <T> void deleteDocuments(Query query, Class<T> clazz) {
-		SearchIndexAdvice bean = AppContext.getInstance()
-				.getApplicationContext().getBean(SearchIndexAdvice.class);
-		if (bean != null) {
-			bean.deleteDocuments(query);
-		}
+	public static <T> void deleteDocuments(Query query, Class<T> target) {
+		// SearchIndexAdvice bean = AppContext.getInstance()
+		// .getApplicationContext().getBean(SearchIndexAdvice.class);
+		// if (bean != null) {
+		// bean.deleteDocuments(query);
+		// }
 	}
 
-	public static <T> void deleteDocuments(Term term, Class<T> clazz) {
-		SearchIndexAdvice bean = AppContext.getInstance()
-				.getApplicationContext().getBean(SearchIndexAdvice.class);
-		if (bean != null) {
-			bean.deleteDocuments(term);
-		}
+	public static <T> void deleteDocuments(Term term, Class<T> target) {
+		// SearchIndexAdvice bean = AppContext.getInstance()
+		// .getApplicationContext().getBean(SearchIndexAdvice.class);
+		// if (bean != null) {
+		// bean.deleteDocuments(term);
+		// }
 	}
-	
+
 	/**
 	 * @throws IOException
 	 * @author mawm at 2013-4-15 上午9:03:47
