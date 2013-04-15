@@ -35,7 +35,7 @@ public class ContactServiceTest {
 	@Test
 	public void testSave() {
 		Contact contact = new Contact();
-		contact.setName("七");
+		contact.setName("孕晚期调整饮食可减少分娩痛苦");
 		contact.setPhone(null);
 		//contact.setAbc("1111");
 		
@@ -50,7 +50,7 @@ public class ContactServiceTest {
 		
 		// 查询条件，需在bean上设置过@SearchableField，且index不能是Index.NO
 		Map<String, String> paramMap = new HashMap<String, String>() {{
-			put("name", "七");
+			put("name", "痛苦");
 		}};
 		
 		Page<Contact> contactPage = SearchUtils.findPage(pageRequest, Contact.class, paramMap);

@@ -79,7 +79,7 @@ public class SearchUtils {
 	/**
 	 * @param pageRequest
 	 * @param clazz
-	 * @param query
+	 * @param query 可以自行构造多种查询规则进行检索
 	 * @return
 	 * @author mawm at 2013-4-12 下午4:11:49
 	 */
