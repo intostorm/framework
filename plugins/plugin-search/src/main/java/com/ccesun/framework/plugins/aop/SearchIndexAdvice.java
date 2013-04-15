@@ -16,6 +16,8 @@ import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.NIOFSDirectory;
@@ -54,6 +56,12 @@ public class SearchIndexAdvice implements DisposableBean {
 		Analyzer analyzer = new IKAnalyzer();
 		// Analyzer luceneAnalyzer = new StandardAnalyzer(Version.LUCENE_36);
 		indexDirectory = new NIOFSDirectory(indexDir);
+
+		try {
+			SearchUtils.unlock(indexDirectory);
+		} catch (Exception e) {
+			logger.error("", e);
+		}
 		indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
 		indexWriter = new IndexWriter(indexDirectory, indexWriterConfig);
 	}
@@ -112,32 +120,60 @@ public class SearchIndexAdvice implements DisposableBean {
 					if (logger.isDebugEnabled())
 						logger.debug(String.format("%s was indexed.", bean
 								.getClass().toString()));
-
 					indexWriter.addDocument(document);
-
+					indexWriter.commit();
 				} catch (Exception e) {
 					if (logger.isWarnEnabled())
 						logger.warn(String.format("Could not index %s.", bean
 								.getClass().toString()), e);
 				} finally {
-					try {
-						indexWriter.close();
-					} catch (CorruptIndexException e) {
-						logger.error("", e);
-					} catch (IOException e) {
-						logger.error("", e);
-					}
+
 				}
 			}
 		}
 	}
 
+	/**
+	 * 用来进行存储之前删除文档,避免文档被重复索引,多个累积
+	 * 
+	 * @param query
+	 * @author mawm at 2013-4-15 上午9:13:12
+	 */
+	public void deleteDocuments(Query query) {
+		try {
+			indexWriter.deleteDocuments(query);
+		} catch (CorruptIndexException e) {
+			if (logger.isInfoEnabled())
+				logger.error("", e);
+		} catch (IOException e) {
+			if (logger.isInfoEnabled())
+				logger.error("", e);
+		}
+
+	}
+
+	/**
+	 * 用来进行存储之前删除文档,避免文档被重复索引,多个累积
+	 * 
+	 * @param term
+	 * @author mawm at 2013-4-15 上午9:12:22
+	 */
+	public void deleteDocuments(Term term) {
+		try {
+			indexWriter.deleteDocuments(term);
+		} catch (CorruptIndexException e) {
+			if (logger.isInfoEnabled())
+				logger.error("", e);
+		} catch (IOException e) {
+			if (logger.isInfoEnabled())
+				logger.error("", e);
+		}
+
+	}
+
 	@Override
 	public void destroy() throws Exception {
-		if (IndexWriter.isLocked(indexDirectory)) {
-			indexWriter.close();
-			IndexWriter.unlock(indexDirectory);
-		}
+		SearchUtils.unlock(indexDirectory);
 	}
 
 }
