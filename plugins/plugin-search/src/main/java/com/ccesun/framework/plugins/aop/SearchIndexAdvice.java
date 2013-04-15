@@ -83,14 +83,16 @@ public class SearchIndexAdvice implements DisposableBean {
 								.getAnnotation(SearchableField.class);
 						if (searchableField != null) {
 							field.setAccessible(true);
+		
+							String fieldValue = 
+									field.get(bean) == null 
+											? StringUtils.EMPTY 
+											: field.get(bean).toString();
+		
+							String fieldName = StringUtils.isBlank(searchableField.value()) 
+									? field.getName() 
+									: searchableField.value();
 
-							String fieldValue = StringUtils.EMPTY;
-							fieldValue = field.get(bean) == null ? "" : field
-									.get(bean).toString();
-
-							String fieldName = StringUtils
-									.isBlank(searchableField.value()) ? field
-									.getName() : searchableField.value();
 							org.apache.lucene.document.Field luceneField = new org.apache.lucene.document.Field(
 									fieldName, fieldValue,
 									searchableField.store(),
@@ -103,6 +105,7 @@ public class SearchIndexAdvice implements DisposableBean {
 					org.apache.lucene.document.Field luceneField = new org.apache.lucene.document.Field(
 							"className", bean.getClass().getName(), Store.YES,
 							Index.NOT_ANALYZED);
+					
 					document.add(luceneField);
 
 					if (logger.isDebugEnabled())
