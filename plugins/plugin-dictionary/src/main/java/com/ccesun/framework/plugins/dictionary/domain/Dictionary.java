@@ -7,14 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.ccesun.framework.core.dao.support.IEntity;
 
 @Entity
 @Table(name="SYS_DICT")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Dictionary implements IEntity<Integer> {
 	
 	private static final long serialVersionUID = 627178618L;

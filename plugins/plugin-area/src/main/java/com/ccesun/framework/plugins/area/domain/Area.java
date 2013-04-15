@@ -6,14 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.ccesun.framework.core.dao.support.IEntity;
 
 @Entity
 @Table(name = "SYS_AREA")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Area implements IEntity<String> {
 
 	private static final long serialVersionUID = -2532169399973048725L;
