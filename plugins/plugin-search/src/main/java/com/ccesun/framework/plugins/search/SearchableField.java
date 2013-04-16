@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Index;
 
 /**
  * <p>
@@ -277,5 +278,18 @@ public @interface SearchableField {
 	 * @return
 	 */
 	Field.Index index() default Field.Index.NO;
+
+	/**
+	 * @return 标记这个字段是否是主键字段,用来在进行删除索引的操作的时候被引用
+	 * @author mawm at 2013-4-15 下午3:34:07
+	 */
+	public boolean pk() default false;
+
+	/**
+	 * @return 当pk=true的时候,使用默认的设置值index =
+	 *         Index.NOT_ANALYZED,如果需要自己自定义,那么这个值设置为false
+	 * @author mawm at 2013-4-15 下午3:34:07
+	 */
+	public boolean pkUseDefault() default true;
 
 }

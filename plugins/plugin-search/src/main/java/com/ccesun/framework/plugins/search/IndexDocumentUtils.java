@@ -46,6 +46,22 @@ public final class IndexDocumentUtils {
 	}
 
 	/**
+	 * 取得属性的名称
+	 * 
+	 * @param ia
+	 * @param field
+	 * @return
+	 * @author mawm at 2013-4-16 上午9:10:00
+	 */
+	public static String getFieldName(SearchableField ia, Field field) {
+		// 对应的属性列名
+		String fieldName = StringUtils.isBlank(ia.value()) ? field.getName()
+				: ia.value();
+
+		return fieldName;
+	}
+
+	/**
 	 * 创建索引
 	 * 
 	 * @param bean
@@ -68,25 +84,53 @@ public final class IndexDocumentUtils {
 			String name = field.getName();
 			if (name.equals("serialVersionUID"))
 				continue;
-			fieldSize++;
+
 			SearchableField ia = field.getAnnotation(SearchableField.class);
 			if (ia != null) {
+				fieldSize++;
 				String value = getFieldValue(bean, field);
-				Store store = getStore(ia);
-				Index index = getIndex(ia);
 
 				// 对应的属性列名
-				String fieldName = StringUtils.isBlank(ia.value()) ? field
-						.getName() : ia.value();
+				String fieldName = getFieldName(ia, field);
+				org.apache.lucene.document.Field indexField = null;
+				if (ia.pk() && ia.pkUseDefault()) {
+					// 主键使用默认值
+					indexField = new org.apache.lucene.document.Field(
+							fieldName, value,
+							org.apache.lucene.document.Field.Store.YES,
+							org.apache.lucene.document.Field.Index.NOT_ANALYZED// 索引不分词
+					);
+				} else {
+					// 即使是主键,也使用配置的值
+					Store store = getStore(ia);
+					Index index = getIndex(ia);
 
-				org.apache.lucene.document.Field indexField = new org.apache.lucene.document.Field(
-						fieldName, value, store, index);
+					indexField = new org.apache.lucene.document.Field(
+							fieldName, value, store, index);
+				}
 
 				// 设置权重值
 				float boost = getBoost(ia);
 				indexField.setBoost(boost);
 				doc.add(indexField);
 			}
+			// 处理主键
+			// Id id = field.getAnnotation(Id.class);
+			// if (id != null) {
+			// // 对象主键也同时进行记录
+			// // 对应的属性列名
+			// String fieldName = field.getName();
+			// String value = getFieldValue(bean, field);
+			// org.apache.lucene.document.Field indexField = new
+			// org.apache.lucene.document.Field(
+			// fieldName, value,
+			// org.apache.lucene.document.Field.Store.YES,
+			// org.apache.lucene.document.Field.Index.NOT_ANALYZED// 索引不分词
+			// );
+			//
+			// doc.add(indexField);
+			// }
+
 		}
 
 		if (fieldSize > 0)
@@ -104,7 +148,7 @@ public final class IndexDocumentUtils {
 	 * @return 通过反射获取字段值
 	 * @author mawm at 2013-4-15 下午4:30:55
 	 */
-	private static <T> String getFieldValue(T bean, Field field) {
+	public static <T> String getFieldValue(T bean, Field field) {
 		try {
 			boolean isMatcher = false;
 			// String property = BeanUtils.getProperty(bean, fieldName);

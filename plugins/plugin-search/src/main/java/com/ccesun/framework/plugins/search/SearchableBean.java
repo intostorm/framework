@@ -14,4 +14,12 @@ public @interface SearchableBean {
 	 * @author mawm at 2013-4-15 下午3:56:55
 	 */
 	String dir() default "";
+
+	/**
+	 * 支持对已经存储的索引进行审查
+	 * 
+	 * @return
+	 * @author mawm at 2013-4-16 上午9:33:30
+	 */
+	boolean removeIndexAble() default true;
 }

@@ -1,13 +1,19 @@
 package com.ccesun.sample.service;
 
-import org.apache.log4j.Logger;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.util.Version;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ccesun.framework.core.AppContext;
 import com.ccesun.framework.core.dao.support.Page;
 import com.ccesun.framework.core.dao.support.PageRequest;
 import com.ccesun.framework.plugins.search.IndexDocumentUtils;
@@ -36,6 +43,8 @@ public class ContactServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
+		AppContext.getInstance().put("plugin.search.searchIndexDir",
+				"D:\\lunc1");
 	}
 
 	@After
@@ -66,6 +75,45 @@ public class ContactServiceTest {
 		}
 	}
 
+	/**
+	 * 用来测试保存之后的更新操作
+	 * 
+	 * @author mawm at 2013-4-16 上午9:43:07
+	 */
+	@Test
+	public void testSaveUpdate() {
+		long begin = logger.isDebugEnabled() ? System.currentTimeMillis() : 0;
+
+		List<Contact> list = new ArrayList<Contact>();
+		String[] names = new String[] { "孕晚期调整饮食可减少分娩痛苦", "小宝宝常吐奶 妈妈应对有妙招",
+				"产后消除妊娠纹 妙用鸡蛋来帮忙", "夏季穿齐B短裙增加患阴道炎危险", "宝宝不学爬长大学习更困难",
+				"怎样口服避孕药", "吉林省城镇计划生育家庭独生子女父母退休后奖励实施意见", "老人喝苹果醋有益健康", "牙疼很痛苦啊" };
+		for (String one : names) {
+			Contact contact = new Contact();
+			contact.setName(one);
+			contact.setPhone(null);
+			// contact.setAbc("1111");
+
+			Contact save = contactService.save(contact);
+			list.add(save);
+		}
+		if (logger.isDebugEnabled()) {
+			long time = System.currentTimeMillis() - begin;
+			String txt1 = String.format("%s-%s 耗时:%s毫秒", "新增操作完成", "", time);
+			logger.debug(txt1);
+		}
+		begin = logger.isDebugEnabled() ? System.currentTimeMillis() : 0;
+		for (Contact one : list) {
+			one.setName(one.getName() + one.getRecordId());
+			Contact save = contactService.save(one);
+		}
+		if (logger.isDebugEnabled()) {
+			long time = System.currentTimeMillis() - begin;
+			String txt1 = String.format("%s-%s 耗时:%s毫秒", "更新操作完成", "", time);
+			logger.debug(txt1);
+		}
+	}
+
 	@Test
 	public void testCreateDOc() {
 		Contact contact = new Contact();
@@ -76,22 +124,99 @@ public class ContactServiceTest {
 
 	@SuppressWarnings("serial")
 	@Test
-	public void testSearch() {
-
+	public void testSearchPhraseQuery() throws ParseException {
 		PageRequest pageRequest = new PageRequest(1, 10);
 
-		// 短语搜索（根据零碎的短语组合成新的词组进行搜索）
-		PhraseQuery query1 = new PhraseQuery();
+		{
+			// 短语搜索（根据零碎的短语组合成新的词组进行搜索）
+			PhraseQuery query1 = new PhraseQuery();
 
-		Term word1 = new Term("name", "痛苦");
-		Term word2 = new Term("name", "子女");
-		Term word3 = new Term("name", "妈妈");
-		query1.add(word1);
-		query1.add(word2);
-		query1.add(word3);
-		// 设置坡度
-		query1.setSlop(0);
+			Term word1 = new Term("name", "痛苦");
 
+			query1.add(word1);
+
+			// 设置坡度
+			query1.setSlop(10);
+
+			Page<Contact> contactPage = SearchUtils.findPage(pageRequest,
+					Contact.class, query1);
+
+			for (Contact one : contactPage.getContent()) {
+				System.out.println(String.format("%s-%s-%s", one.getRecordId(),
+						one.getName(), one.getPhone()));
+
+			}
+		}
+		System.out.println("----------------------------------");
+		{
+			// 短语搜索（根据零碎的短语组合成新的词组进行搜索）
+			PhraseQuery query1 = new PhraseQuery();
+
+			Term word1 = new Term("name", "痛苦");
+			Term word2 = new Term("name", "子女");
+			Term word3 = new Term("name", "妈妈");
+			query1.add(word1);
+			query1.add(word2);
+			query1.add(word3);
+			// 设置坡度
+			query1.setSlop(10);
+
+			Page<Contact> contactPage = SearchUtils.findPage(pageRequest,
+					Contact.class, query1);
+
+			for (Contact one : contactPage.getContent()) {
+				System.out.println(String.format("%s-%s-%s", one.getRecordId(),
+						one.getName(), one.getPhone()));
+
+			}
+		}
+		System.out.println("----------------------------------");
+		{
+			// 短语搜索（根据零碎的短语组合成新的词组进行搜索）
+			PhraseQuery query1 = new PhraseQuery();
+
+			Term word1 = new Term("name", "痛苦");
+			Term word2 = new Term("name", "子女");
+			Term word3 = new Term("name", "妈妈");
+			query1.add(word1);
+			query1.add(word2);
+			query1.add(word3);
+			// 设置坡度
+			query1.setSlop(10);
+
+			Page<Contact> contactPage = SearchUtils.findPage(pageRequest,
+					Contact.class, query1);
+
+			for (Contact one : contactPage.getContent()) {
+				System.out.println(String.format("%s-%s-%s", one.getRecordId(),
+						one.getName(), one.getPhone()));
+
+			}
+		}
+		System.out.println("----------------------------------");
+		{
+			Analyzer analyzer = SearchUtils.analyzer();
+			QueryParser qp = new QueryParser(Version.LUCENE_36, "name",
+					analyzer);
+
+			Query query1 = qp.parse("痛苦 子女");
+
+			Page<Contact> contactPage = SearchUtils.findPage(pageRequest,
+					Contact.class, query1);
+
+			for (Contact one : contactPage.getContent()) {
+				System.out.println(String.format("%s-%s-%s", one.getRecordId(),
+						one.getName(), one.getPhone()));
+
+			}
+		}
+	}
+
+	@SuppressWarnings("serial")
+	@Test
+	public void testSearchParseQuery() throws ParseException {
+		PageRequest pageRequest = new PageRequest(1, 10);
+		Query query1 = SearchUtils.parseQuery("name", "痛苦 子女 父母");
 		Page<Contact> contactPage = SearchUtils.findPage(pageRequest,
 				Contact.class, query1);
 

@@ -26,6 +26,7 @@ public class Contact implements IEntity<Integer> {
 	@Id
 	@GeneratedValue
 	@Column(name = "RECORD_ID")
+	@SearchableField(pk = true, index = Index.NOT_ANALYZED, parseHtml = false)
 	private Integer recordId;
 
 	/** 姓名 */

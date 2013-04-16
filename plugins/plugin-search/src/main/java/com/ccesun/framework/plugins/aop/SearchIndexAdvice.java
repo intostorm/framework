@@ -14,6 +14,7 @@ import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
@@ -73,24 +74,28 @@ public class SearchIndexAdvice implements DisposableBean {
 
 				Document doc = IndexDocumentUtils.createDocument(bean);
 				if (doc != null) {
-
 					File indexDir = IndexDocumentUtils
 							.getIndexDirectory(searchableBean);
 					// 实例化IKAnalyzer分词器
-					Analyzer analyzer = new IKAnalyzer();
+					Analyzer analyzer = SearchUtils.analyzer();
 					// Analyzer luceneAnalyzer = new
 					// StandardAnalyzer(Version.LUCENE_36);
 					indexDirectory = new NIOFSDirectory(indexDir);
-					// TODO 这里需要根据不同的配置,创建不同的索引目录
-					try {
-						SearchUtils.unlock(indexDirectory);
-					} catch (Exception e) {
-						logger.error("", e);
-					}
+					// TODO 这里需要根据缓存进行操作,不需要每次实例化!
+					// try {
+					// SearchUtils.unlock(indexDirectory);
+					// } catch (Exception e) {
+					// logger.error("", e);
+					// }
 					indexWriterConfig = new IndexWriterConfig(
 							Version.LUCENE_36, analyzer);
 					indexWriter = new IndexWriter(indexDirectory,
 							indexWriterConfig);
+
+					// 删除索引
+					if (searchableBean.removeIndexAble()) {
+						removeIndex(bean, clzss, indexWriter);
+					}
 
 					// 创建类的类名称索引
 					Field field = IndexDocumentUtils.createClassField(bean
@@ -128,6 +133,16 @@ public class SearchIndexAdvice implements DisposableBean {
 			long time = System.currentTimeMillis() - begin;
 			String txt1 = String.format("%s-%s 耗时:%s毫秒", "", "", time);
 			logger.debug(txt1);
+		}
+	}
+
+	private void removeIndex(Object bean, Class<?> clzss,
+			IndexWriter indexWriter) {
+		BooleanQuery pkquery = SearchUtils.makePKQuery(bean);
+		if (pkquery != null) {
+			boolean addTargetClassQuery = false;// pkquery中已经添加了
+			SearchUtils.deleteDocuments(indexWriter, pkquery, clzss,
+					addTargetClassQuery);
 		}
 	}
 
