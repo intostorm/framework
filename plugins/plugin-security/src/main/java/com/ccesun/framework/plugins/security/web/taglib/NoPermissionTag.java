@@ -10,14 +10,14 @@ public class NoPermissionTag extends BasePermissionTag {
 
 	private static final long serialVersionUID = 2314845771987747293L;
 	
-	private String permId;
+	private String permCode;
 
-	public String getPermId() {
-		return permId;
+	public String getPermCode() {
+		return permCode;
 	}
 
-	public void setPermId(String permId) {
-		this.permId = permId;
+	public void setPermCode(String permCode) {
+		this.permCode = permCode;
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class NoPermissionTag extends BasePermissionTag {
 			return EVAL_BODY_INCLUDE;
 		}
 
-		boolean hasPermission = SecurityUtils.hasPermission(token, permId);
+		boolean hasPermission = SecurityUtils.hasPermission(token, permCode);
 		
 		return hasPermission ? SKIP_BODY : EVAL_BODY_INCLUDE;
 	}
