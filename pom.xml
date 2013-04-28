@@ -16,7 +16,7 @@
 		<framework-version>2.0.1-SNAPSHOT</framework-version>
 		<java-version>1.6</java-version>
 	</properties>
-	<distributionManagement>
+	<!-- <distributionManagement>
 		<repository>
 			<id>releases</id>
 			<name>deploymentProxy</name>
@@ -31,7 +31,7 @@
 	      <id>project</id>
 		  <url>scp://project/</url>
         </site>
-	</distributionManagement>
+	</distributionManagement> -->
 	<build>
 		<pluginManagement>
 			<plugins>

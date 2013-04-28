@@ -1,5 +1,7 @@
 package com.ccesun.framework.core.spring;
 
+import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,7 +34,7 @@ public class RequestURIInterceptor extends HandlerInterceptorAdapter {
 		}
 		
 		String requestURI = request.getRequestURI();
-		String queryStr = request.getQueryString() == null ? "" : "?" + request.getQueryString();
+		String queryStr = request.getQueryString() == null ? "" : "?" + URLDecoder.decode(request.getQueryString(), "UTF-8");
 		
 		//if (requestURI.startsWith(request.getContextPath()))
 		//	requestURI = requestURI.substring(request.getContextPath().length());
